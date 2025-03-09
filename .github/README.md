@@ -4,6 +4,8 @@
 [![NuGet](https://img.shields.io/nuget/vpre/Umbraco.Community.Umbraco.Community.RollbackPreviewer?color=0273B3)](https://www.nuget.org/packages/Umbraco.Community.Umbraco.Community.RollbackPreviewer)
 [![GitHub license](https://img.shields.io/github/license/Rockerby/Umbraco.Community.RollbackPreviewer?color=8AB803)](../LICENSE)
 
+The project for release / updates is maintained [here](https://github.com/users/Rockerby/projects/2/views/1)  
+
 TODO: describe your package
 
 <!--
