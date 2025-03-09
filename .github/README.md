@@ -38,3 +38,4 @@ Contributions to this package are most welcome! Please read the [Contributing Gu
 
 Mike Masey came up with the idea  
 Matt Brailsford provided [the basis for converting internal models](https://gist.github.com/mattbrailsford/5f9638d357df59aeac1be8588a06c31e)
+Lotte Pitcher for her amazing [Opinionated Starter Kit](https://github.com/LottePitcher/opinionated-package-starter)
