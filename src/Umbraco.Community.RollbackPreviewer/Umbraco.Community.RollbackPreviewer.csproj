@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <StaticWebAssetBasePath>/</StaticWebAssetBasePath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Product>Umbraco.Community.Umbraco.Community.RollbackPreviewer</Product>
+    <PackageId>Umbraco.Community.Umbraco.Community.RollbackPreviewer</PackageId>
+    <Title>Umbraco .Community .Rollback Previewer </Title>
+    <Description>...</Description>
+    <PackageTags>umbraco;umbraco-marketplace</PackageTags>
+    <Authors>Richard Ockerby</Authors>
+    <Copyright>$([System.DateTime]::UtcNow.ToString(`yyyy`)) © Richard Ockerby</Copyright>
+    <PackageProjectUrl>https://github.com/Rockerby/Umbraco.Community.RollbackPreviewer</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Rockerby/Umbraco.Community.RollbackPreviewer</RepositoryUrl>
+    <PackageReadmeFile>README_nuget.md</PackageReadmeFile>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageIcon></PackageIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Umbraco.Cms.Web.Website" Version="*" />
+    <PackageReference Include="Umbraco.Cms.Web.Common" Version="*" />
+    <PackageReference Include="Umbraco.Cms.Api.Common" Version="*" />
+    <PackageReference Include="Umbraco.Cms.Api.Management" Version="*" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <!-- Dont include the client folder as part of packaging nuget build -->
+    <Content Remove="Client\**" />
+
+    <!-- However make the Umbraco-package.json included for dotnet pack or nuget package and visible to the solution -->
+    <None Include="Client\public\umbraco-package.json" Pack="false" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Include="..\..\docs\README_nuget.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>

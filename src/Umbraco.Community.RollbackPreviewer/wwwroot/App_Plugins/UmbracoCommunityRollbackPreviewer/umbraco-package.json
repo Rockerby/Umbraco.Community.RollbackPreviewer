@@ -1,0 +1,14 @@
+{
+  "id": "YourPackageName",
+  "name": "YourPackageName",
+  "version": "0.0.0",
+  "allowPackageTelemetry": true,
+  "extensions": [
+    {
+      "name": "Your Package Name Bundle",
+      "alias": "YourPackageName.Bundle",
+      "type": "bundle",
+      "js": "/App_Plugins/YourPackageName/your-package-name.js"
+    }
+  ]
+}

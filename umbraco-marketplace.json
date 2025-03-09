@@ -1,0 +1,14 @@
+{
+    "$schema": "https://marketplace.umbraco.com/umbraco-marketplace-schema.json", 
+    "AuthorDetails": {
+      "Name": "Richard Ockerby",
+      "ImageUrl": "https://github.com/Rockerby.png"
+    },
+    "Category": "",
+    "Description": "",
+    "LicenseTypes": [ "Free" ],
+    "IssueTrackerUrl": "https://github.com/Rockerby/Umbraco.Community.RollbackPreviewer/issues",
+    "PackageType": "Package",
+    "Tags": [],
+    "Title": "Umbraco Rollback Previewer"
+  }

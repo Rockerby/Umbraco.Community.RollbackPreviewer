@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33020.496
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C68EA443-DA47-4142-A321-B0FDC519EE13}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\CONTRIBUTING.md = ..\.github\CONTRIBUTING.md
+		..\.github\README.md = ..\.github\README.md
+		..\docs\README_nuget.md = ..\docs\README_nuget.md
+		..\umbraco-marketplace.json = ..\umbraco-marketplace.json
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Community.RollbackPreviewer.TestSite", "Umbraco.Community.RollbackPreviewer.TestSite\Umbraco.Community.RollbackPreviewer.TestSite.csproj", "{8519E669-BF33-4E74-A604-33C9B5556A69}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Community.RollbackPreviewer", "Umbraco.Community.RollbackPreviewer\Umbraco.Community.RollbackPreviewer.csproj", "{C6E25CFA-B352-431A-B769-70F6878DD836}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8519E669-BF33-4E74-A604-33C9B5556A69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8519E669-BF33-4E74-A604-33C9B5556A69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8519E669-BF33-4E74-A604-33C9B5556A69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8519E669-BF33-4E74-A604-33C9B5556A69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6E25CFA-B352-431A-B769-70F6878DD836}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6E25CFA-B352-431A-B769-70F6878DD836}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6E25CFA-B352-431A-B769-70F6878DD836}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6E25CFA-B352-431A-B769-70F6878DD836}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6F07004F-9903-4AEB-9ED0-BE57A0326D20}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,58 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+	Layout = null;
+}
+
+<h1>Hello homepage</h1>
+@Model.Value("testProperty")
+
+	<style type="text/css">
+		body { background: red; }
+		h1 { color: blue; }
+	</style>
+
+@if(String.IsNullOrEmpty(Context.Request.Query["cid"])){
+	<p>The above shows the most recent version, the below show the first and second version with an overlay comparison between the two.</p>
+	<div style="display:grid; grid-template: '1fr 1fr';">
+		<div>
+			<h1>Version 1</h1>
+			<iframe src="https://localhost:44355/?cid=@Model.Key&vid=1">
+			</iframe>
+		</div>
+		<div>
+			<h1>Version 2</h1>
+			<iframe src="https://localhost:44355/?cid=@Model.Key&vid=2">
+			</iframe>
+		</div>
+		<div>
+			<h1>Compare the two</h1>
+			<div class="comparison-wrapper">
+				
+				<iframe src="https://localhost:44355/?cid=@Model.Key&vid=1" class="iframe-master">
+				</iframe>
+				<iframe src="https://localhost:44355/?cid=@Model.Key&vid=2">
+				</iframe>
+
+			</div>
+		</div>
+	</div>
+
+
+	<style type="text/css">
+		iframe { width:100%; min-height:600px; }
+		.comparison-wrapper {
+			position:relative;
+		}
+		.comparison-wrapper iframe {
+			position:absolute;
+			left:0;
+			top:0;
+		}
+		.iframe-master {
+			z-index:10;
+			opacity:0.5;
+			filter: invert(1);
+		}
+	</style>
+}
