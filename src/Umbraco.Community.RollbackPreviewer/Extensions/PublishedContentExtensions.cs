@@ -213,14 +213,6 @@ namespace Umbraco.Community.RollbackPreviewer.Extensions
                 return PropertyType.ConvertInterToObject(_content, PropertyCacheLevel.Unknown, source, _isPreviewing);
             }
 
-            public object GetXPathValue(string culture = null, string segment = null)
-            {
-                var source = PropertyType.ConvertSourceToInter(_content, _sourceValue, _isPreviewing);
-
-                return null;//TODO: XPathValue converter
-                //PropertyType.ConvertInterToXPath(_content, PropertyCacheLevel.Unknown, source, _isPreviewing);
-            }
-
             public object? GetDeliveryApiValue(bool expanding, string? culture = null, string? segment = null)
             {
                 //TODO: Implement DeliveryApiValue
