@@ -1,11 +1,12 @@
-const a = [
+import { umbExtensionsRegistry as a } from "@umbraco-cms/backoffice/extension-registry";
+const e = [
   {
     name: "Your Package Name Entrypoint",
     alias: "YourPackageName.Entrypoint",
     type: "backofficeEntryPoint",
     js: () => import("./entrypoint-BeuuXQCY.js")
   }
-], e = [
+], o = [
   {
     name: "Your Package Name Dashboard",
     alias: "YourPackageName.Dashboard",
@@ -22,11 +23,21 @@ const a = [
       }
     ]
   }
-], o = [
-  ...a,
-  ...e
+];
+a.unregister("Umb.Modal.Rollback");
+const t = [
+  {
+    name: "Rollback Previewer",
+    alias: "Umb.Modal.Rollback",
+    type: "modal",
+    element: () => import("./rollback.element-B8mEFZ6B.js")
+  }
+], s = [
+  ...e,
+  ...o,
+  ...t
 ];
 export {
-  o as manifests
+  s as manifests
 };
 //# sourceMappingURL=your-package-name.js.map

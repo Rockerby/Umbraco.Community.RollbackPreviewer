@@ -8,7 +8,7 @@
       "name": "Your Package Name Bundle",
       "alias": "YourPackageName.Bundle",
       "type": "bundle",
-      "js": "/App_Plugins/YourPackageName/your-package-name.js"
+      "js": "/App_Plugins/UmbracoCommunityRollbackPreviewer/your-package-name.js"
     }
   ]
 }
