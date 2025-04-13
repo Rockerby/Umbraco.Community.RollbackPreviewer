@@ -68,6 +68,8 @@ export class RbpRollbackModalElement extends UmbModalBaseElement<UmbRollbackModa
   #currentDocument: UmbDocumentDetailModel | undefined;
   #currentAppCulture: string | undefined;
   #currentDatasetCulture: string | undefined;
+  #useJsonView: boolean = false;
+
 
   constructor() {
     super();
@@ -230,6 +232,13 @@ export class RbpRollbackModalElement extends UmbModalBaseElement<UmbRollbackModa
     this.modalContext?.reject();
   }
 
+  #switchView() {
+    this.#useJsonView = !this.#useJsonView;
+
+    console.log(this.#useJsonView);
+    this.requestUpdate();
+  }
+
   #onVersionClicked(id: string) {
     this.#selectVersion(id);
   }
@@ -341,13 +350,13 @@ export class RbpRollbackModalElement extends UmbModalBaseElement<UmbRollbackModa
   #renderSelectedVersion() {
     if (!this._selectedVersion)
       return html`
-				<uui-box id="box-right" style="display: flex; align-items: center; justify-content: center;"
+				<uui-box style="display: flex; align-items: center; justify-content: center;"
 					>No selected version</uui-box
 				>
 			`;
 
     return html`
-			<uui-box headline=${this.currentVersionHeader} id="box-right">
+			<uui-box headline=${this.currentVersionHeader}>
 				${unsafeHTML(this.localize.term('rollback_diffHelp'))}
 				<uui-table>
 					<uui-table-column style="width: 0"></uui-table-column>
@@ -385,15 +394,11 @@ export class RbpRollbackModalElement extends UmbModalBaseElement<UmbRollbackModa
 		`;
   }
 
-
-
   #renderSelectedVersionVisualPreview() {
-    console.log("vers", this._selectedVersion);
-    console.log("doc", this.#currentDocument);
 
     if (!this._selectedVersion)
       return html`
-				<uui-box id="box-right" style="display: flex; align-items: center; justify-content: center;"
+				<uui-box style="display: flex; align-items: center; justify-content: center;"
 					>No selected version</uui-box
 				>
 			`;
@@ -432,7 +437,10 @@ export class RbpRollbackModalElement extends UmbModalBaseElement<UmbRollbackModa
 
   override render() {
     return html`
-			<umb-body-layout headline="Visual Rollback Preview">
+			<umb-body-layout headline="Visual Rollback Preview" class=${this.#useJsonView ? "json-view" : "preview-view"}>
+      <uui-button slot="action-menu" look="secondary" @click=${this.#switchView} style="margin-right:24px">
+        <uui-icon name="icon-repeat" style="margin-right:4px"></uui-icon> ${this.#useJsonView ? "Visual difference" : "JSON difference"}</uui-button>
+
 				<div id="main">
 					<div id="box-left">
 						${this._availableVariants.length
@@ -443,7 +451,14 @@ export class RbpRollbackModalElement extends UmbModalBaseElement<UmbRollbackModa
 								`
         : nothing}
 						${this.#renderVersions()}
-					${this.#renderSelectedVersionVisualPreview()}
+					</div>
+					<div id="box-right">
+            
+            ${this.#useJsonView ? html`
+              ${this.#renderSelectedVersion()}
+              ` : html`
+              ${this.#renderSelectedVersionVisualPreview()}
+            `}
 					</div>
 
 				</div>
@@ -522,21 +537,36 @@ export class RbpRollbackModalElement extends UmbModalBaseElement<UmbRollbackModa
 			}
 
 			#main {
-				display: flex;
+        display: grid;
+        grid-template-columns: 500px 1fr;
 				gap: var(--uui-size-space-5);
 				width: 100%;
 				height: 100%;
 			}
+      .preview-view #main {
+        flex-direction:column;
+        grid-template-columns: 1fr;
+      }
+      .preview-view #box-left {
+        height: 300px;
+				max-width: 100%;
+
+      }
 
 			#versions-box {
 				--uui-box-default-padding: 0;
 			}
 
 			#box-left {
+				max-width: 500px;
 				flex: 1;
 				overflow: auto;
 				height: 100%;
 			}
+			#box-right {
+				flex: 1;
+      }
+
 
       .rollback-preview-wrapper {
         display: grid;
