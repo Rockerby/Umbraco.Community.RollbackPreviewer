@@ -36,6 +36,8 @@ namespace Umbraco.Community.RollbackPreviewer.Services
         private readonly PublishedContentConverter _publishedContentConverter;
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly IContentVersionService _contentVersionService;
+        private readonly IPublishedModelFactory _publishedModelFactory;
+
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ContentFinderByPageIdQuery" /> class.
@@ -45,6 +47,7 @@ namespace Umbraco.Community.RollbackPreviewer.Services
             IHttpContextAccessor httpContextAccessor, IContentService contentService,
             ICoreScopeProvider coreScopeProvider, IDocumentRepository documentRepository,
             IServiceScopeFactory scopeFactory, IContentVersionService contentVersionService,
+        IPublishedModelFactory publishedModelFactory,
             PublishedContentConverter publishedContentConverter)
         {
             _contentService = contentService;
@@ -55,6 +58,7 @@ namespace Umbraco.Community.RollbackPreviewer.Services
             _scopeFactory = scopeFactory;
             _logger = logger;
             _contentVersionService = contentVersionService;
+            _publishedModelFactory = publishedModelFactory;
         }
 
         /// <inheritdoc />
@@ -116,8 +120,9 @@ namespace Umbraco.Community.RollbackPreviewer.Services
                 content.CopyFrom(version, "*");
 
                 // Convert the IContent to IPublishedContent.
-                IPublishedContent pubContent = _publishedContentConverter.ToPublishedContent(content);
-
+                IPublishedContent? pubContent = _publishedContentConverter.ToPublishedContent(content)?
+                    .CreateModel(_publishedModelFactory);
+                
                 // Set the content that we "created" back to the pipeline
                 frequest.SetPublishedContent(pubContent);
 
@@ -163,21 +168,12 @@ namespace Umbraco.Community.RollbackPreviewer.Services
         /// <returns></returns>
         private async Task<IContent?> GetVersion(Guid versionId)
         {
-            //TODO: Check this is correct! Seems a little overkill to be locking something here when
-            // all we're doing is getting content (but might be the right way!)
-            // The ContentVersionService only seems to give meta, not an IContent
-            //using (ICoreScope scope = ScopeProvider.CreateCoreScope(autoComplete: true))
-            //{
-            //    scope.ReadLock(global::Umbraco.Cms.Core.Constants.Locks.ContentTree);
-            //    var allVersions = _documentRepository.GetVersion( GetAllVersions(contentId);
-            //    return allVersions.FirstOrDefault(a => a.Key == versionId);
-
-
-                Attempt<IContent?, ContentVersionOperationStatus> attempt =
-                    await _contentVersionService.GetAsync(versionId);
+            // The back office rollback viewer loads the versions in via GUID
+            // - this is how the management API get the version from said GUID
+            Attempt<IContent?, ContentVersionOperationStatus> attempt =
+                await _contentVersionService.GetAsync(versionId);
 
             return attempt.Result;
-            //}
         }
     }
 }
