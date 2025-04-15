@@ -93,12 +93,31 @@ export const rpRollbackStyles = [
       grid-template-columns: 1fr 1fr;
       gap: var(--uui-size-space-5);
     }
-    .rollback-preview-wrapper .iframe-wrapper {
+
+    .version-preview {
+      width: 48cqb;
     }
-    .rollback-preview-wrapper .iframe-wrapper iframe {
-      width: 100%;
-      height: 600px;
+
+    .iframe-wrapper {
+      transform-origin: 0 0;
+      transform: scale(0.6); // TODO: This should scale dynamically
+    }
+
+    .iframe-container {
+      width: var(--rp-iframe-width, 100%);
+      height: var(--rp-iframe-height, 600px);
+      transform: scale(var(--rp-iframe-scale, 1));
+      transform-origin: 0 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    iframe {
       border: none;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
     }
   `,
 ];
