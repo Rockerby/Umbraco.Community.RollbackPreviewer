@@ -1,14 +1,14 @@
 {
-  "id": "YourPackageName",
-  "name": "YourPackageName",
+  "id": "UmbracoCommunityRollbackPreviewer",
+  "name": "UmbracoCommunityRollbackPreviewer",
   "version": "0.0.0",
   "allowPackageTelemetry": true,
   "extensions": [
     {
-      "name": "Your Package Name Bundle",
-      "alias": "YourPackageName.Bundle",
+      "name": "Rollback Previewer",
+      "alias": "UmbracoCommunityRollbackPreviewer.Bundle",
       "type": "bundle",
-      "js": "/App_Plugins/UmbracoCommunityRollbackPreviewer/your-package-name.js"
+      "js": "/App_Plugins/UmbracoCommunityRollbackPreviewer/rollback-previewer.js"
     }
   ]
 }
