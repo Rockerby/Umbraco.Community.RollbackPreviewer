@@ -59,23 +59,10 @@ export const rpRollbackStyles = [
     }
 
     #main {
-      display: grid;
-      grid-template-columns: 500px 1fr;
+      display: flex;
       gap: var(--uui-size-space-5);
       width: 100%;
       height: 100%;
-    }
-    .preview-view #main {
-      flex-direction: column;
-      grid-template-columns: 1fr;
-    }
-    .preview-view #box-left {
-      height: 300px;
-      max-width: 100%;
-    }
-
-    #versions-box {
-      --uui-box-default-padding: 0;
     }
 
     #box-left {
@@ -84,39 +71,44 @@ export const rpRollbackStyles = [
       overflow: auto;
       height: 100%;
     }
+
     #box-right {
       flex: 1;
+      overflow: auto;
+      height: 100%;
     }
 
-    .rollback-preview-wrapper {
+    #versions-box {
+      --uui-box-default-padding: 0;
+    }
+
+    .preview-view {
+      #main {
+        display: grid;
+        place-content: start;
+        grid-template-columns: 1fr;
+        gap: var(--uui-size-space-5);
+        container-type: inline-size;
+        height: 100%;
+      }
+
+      #box-left {
+        max-height: 300px;
+        max-width: 100%;
+      }
+
+      #box-right {
+        width: 100cqw;
+      }
+    }
+
+    .rp-wrapper {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: var(--uui-size-space-5);
     }
 
-    .version-preview {
-      width: 48cqb;
-    }
-
-    .iframe-wrapper {
-      transform-origin: 0 0;
-      transform: scale(0.6); // TODO: This should scale dynamically
-    }
-
-    .iframe-container {
-      width: var(--rp-iframe-width, 100%);
-      height: var(--rp-iframe-height, 600px);
-      transform: scale(var(--rp-iframe-scale, 1));
-      transform-origin: 0 0;
-      overflow: hidden;
-      position: relative;
-    }
-
-    iframe {
-      border: none;
-      inset: 0;
-      width: 100%;
-      height: 100%;
+    .rp-container {
       overflow: hidden;
     }
   `,

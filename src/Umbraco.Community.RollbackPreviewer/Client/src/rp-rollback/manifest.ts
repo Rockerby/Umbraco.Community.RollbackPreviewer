@@ -9,5 +9,6 @@ export const manifests: any = [
     alias: "Umb.Modal.Rollback",
     type: 'modal',
     element: () => import("./rp-rollback-modal.element")
-  }
+  },
+
 ];

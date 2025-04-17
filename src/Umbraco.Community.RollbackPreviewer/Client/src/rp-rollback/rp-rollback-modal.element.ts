@@ -2,26 +2,15 @@ import {
   customElement,
   html,
   nothing,
-  unsafeHTML,
 } from "@umbraco-cms/backoffice/external/lit";
 import { rpRollbackStyles } from "./rp-rollback-modal.styles.js";
 import UmbRollbackModalElement from "../umbraco/rollback/modal/rollback-modal.element.js";
+import "./rp-iframe.element.js";
 
+// TODO: Rename this to just `rp-model`?
 @customElement("rp-rollback-modal")
 export class RpRollbackModalElement extends UmbRollbackModalElement {
   #useJsonView: boolean = false;
-
-  constructor() {
-    super();
-  }
-
-  connectedCallback(): void {
-    super.connectedCallback();
-
-    this.style.setProperty("--rp-iframe-height", "1080px");
-    this.style.setProperty("--rp-iframe-width", "1920px");
-    this.style.setProperty("--rp-iframe-scale", "0.6");
-  }
 
   #switchView() {
     this.#useJsonView = !this.#useJsonView;
@@ -41,29 +30,21 @@ export class RpRollbackModalElement extends UmbRollbackModalElement {
 
     return html`
       <uui-box headline=${this.currentVersionHeader} id="box-right">
-        <div>${unsafeHTML(this.localize.term("rollback_diffHelp"))}</div>
-        <div class="rollback-preview-wrapper">
-          <div class="version-preview">
+
+        <div class="rp-wrapper">
+          <div class="rp-container">
             <h3>Current version</h3>
-            <div class="iframe-wrapper">
-              <div class="iframe-container">
-                <iframe
-                  src="https://localhost:44355/?cid=${this.currentDocument
-                    ?.unique}"
-                ></iframe>
-              </div>
-            </div>
+            <rp-iframe
+              src="https://localhost:44355/?cid=${this.currentDocument?.unique}"
+            >
+            </rp-iframe>
           </div>
-          <div class="version-preview">
+          <div class="rp-container">
             <h3>Selected version</h3>
-            <div class="iframe-wrapper">
-              <div class="iframe-container">
-                <iframe
-                  src="https://localhost:44355/?cid=${this.currentDocument
-                    ?.unique}&vid=${this._selectedVersion.id}"
-                ></iframe>
-              </div>
-            </div>
+            <rp-iframe
+              src="https://localhost:44355/?cid=${this.currentDocument
+                ?.unique}&vid=${this._selectedVersion.id}"
+            ></rp-iframe>
           </div>
         </div>
       </uui-box>
