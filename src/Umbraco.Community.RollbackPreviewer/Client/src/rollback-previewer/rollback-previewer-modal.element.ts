@@ -39,17 +39,20 @@ export class RpRollbackModalElement extends UmbRollbackModalElement {
       `;
 
     return html`
-      <uui-box headline=${this.currentVersionHeader} id="box-right">
+      <uui-box id="box-right">
         <div class="rp-wrapper">
-          <div class="rp-container">
-            <h3>Current version</h3>
-            <rp-iframe
-              src="${this.#serverUrl}/${this.currentDocument?.unique}"
-            >
+          <div class="rp-container current">
+            <div>
+              <h4 class="uui-h4">Current version</h4>
+            </div>
+            <rp-iframe src="${this.#serverUrl}/${this.currentDocument?.unique}">
             </rp-iframe>
           </div>
-          <div class="rp-container">
-            <h3>Selected version</h3>
+          <div class="rp-container selected">
+            <div>
+              <h4 class="uui-h4">Selected version</h4>
+              <p class="uui-text">${this.currentVersionHeader}</p>
+            </div>
             <rp-iframe
               src="${this.#serverUrl}?cid=${this.currentDocument
                 ?.unique}&vid=${this._selectedVersion.id}"

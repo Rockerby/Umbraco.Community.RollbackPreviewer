@@ -2,7 +2,7 @@ import { css } from "@umbraco-cms/backoffice/external/lit";
 import { UmbRollbackModalElement } from "../umbraco/rollback/modal/rollback-modal.element";
 
 export const rpRollbackStyles = [
-  UmbRollbackModalElement.styles, // Importing the base styles from UmbRollbackModalElement
+  ...UmbRollbackModalElement.styles, // Importing the base styles from UmbRollbackModalElement
   css`
     .preview-view {
       #main {
@@ -10,8 +10,8 @@ export const rpRollbackStyles = [
         place-content: start;
         grid-template-columns: 1fr;
         gap: var(--uui-size-space-5);
-        container-type: inline-size;
         height: 100%;
+        container-type: inline-size;
       }
 
       #box-left {
@@ -26,12 +26,32 @@ export const rpRollbackStyles = [
 
     .rp-wrapper {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template: "current selected" / 1fr 1fr;
       gap: var(--uui-size-space-5);
     }
 
     .rp-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr auto;
       overflow: hidden;
+      container-type: inline-size;
+
+      .uui-h4 {
+        margin: 0;
+      }
+
+      .uui-text {
+        margin-top: 0.3rem;
+      }
+
+      &.current {
+        grid-area: current;
+      }
+
+      &.selected {
+        grid-area: selected;
+      }
     }
   `,
 ];

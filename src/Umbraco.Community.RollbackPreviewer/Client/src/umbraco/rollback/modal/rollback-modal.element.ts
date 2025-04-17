@@ -4,6 +4,7 @@
  * The main differences are:
  * - Converted a number of private properties and methods to public so they can be used in the custom rollback previewer. These are marked with a comment.
  * - Updated some imports to use @umbraco-cms/backoffice/document
+ * - Improved version selector to make it more accessible (keyboard navigable & improved colour contrast)
  */
 
 
@@ -287,7 +288,7 @@ export class UmbRollbackModalElement extends UmbModalBaseElement<UmbRollbackModa
 			return html`<uui-box headline=${this.localize.term('rollback_versions')}>No versions available</uui-box>`;
     }
 
-		return html` <uui-box id="versions-box" headline=${this.localize.term('rollback_versions')}>
+		return html` <uui-box id="versions-box" headline=${this.localize.term('rollback_versions')} headlineVariant="h4">
       ${repeat(
         this._versions,
         (item) => item.id,
@@ -543,11 +544,12 @@ export class UmbRollbackModalElement extends UmbModalBaseElement<UmbRollbackModa
       .rollback-item span {
         display: block;
         margin: 0;
-        opacity: 0.5;
       }
 
       .rollback-item .rollback-item-date {
-        opacity: 1;
+        margin-bottom: 0.1em;
+        font-size: 1.1rem;
+        font-weight: 600;
       }
 
       .rollback-item-version-button {

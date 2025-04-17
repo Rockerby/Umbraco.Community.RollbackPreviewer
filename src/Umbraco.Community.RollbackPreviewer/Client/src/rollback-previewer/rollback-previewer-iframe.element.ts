@@ -70,6 +70,7 @@ export class RpIframe extends LitElement {
       return null;
     }
 
+    // TODO: Add configurable title attribute for the iframe
     return html`
       <div id="wrapper">
           <iframe src=${this.src}></iframe>
@@ -82,6 +83,7 @@ export class RpIframe extends LitElement {
       :host {
         display: block;
         height: var(--rp-height, auto);
+        width: 100cqw;
       }
 
       #wrapper {
