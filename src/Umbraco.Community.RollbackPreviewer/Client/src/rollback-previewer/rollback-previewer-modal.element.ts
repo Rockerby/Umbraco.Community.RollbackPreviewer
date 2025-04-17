@@ -44,7 +44,7 @@ export class RpRollbackModalElement extends UmbRollbackModalElement {
           <div class="rp-container">
             <h3>Current version</h3>
             <rp-iframe
-              src="${this.#serverUrl}?cid=${this.currentDocument?.unique}"
+              src="${this.#serverUrl}/${this.currentDocument?.unique}"
             >
             </rp-iframe>
           </div>

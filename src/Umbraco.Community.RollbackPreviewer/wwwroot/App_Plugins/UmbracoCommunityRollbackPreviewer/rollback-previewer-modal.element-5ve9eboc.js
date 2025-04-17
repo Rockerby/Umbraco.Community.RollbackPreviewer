@@ -682,7 +682,7 @@ let T = class extends h {
           <div class="rp-container">
             <h3>Current version</h3>
             <rp-iframe
-              src="${y(this, $)}?cid=${(e = this.currentDocument) == null ? void 0 : e.unique}"
+              src="${y(this, $)}/${(e = this.currentDocument) == null ? void 0 : e.unique}"
             >
             </rp-iframe>
           </div>
@@ -772,4 +772,4 @@ export {
   T as RpRollbackModalElement,
   it as default
 };
-//# sourceMappingURL=rollback-previewer-modal.element-CsWCKA6c.js.map
+//# sourceMappingURL=rollback-previewer-modal.element-5ve9eboc.js.map
