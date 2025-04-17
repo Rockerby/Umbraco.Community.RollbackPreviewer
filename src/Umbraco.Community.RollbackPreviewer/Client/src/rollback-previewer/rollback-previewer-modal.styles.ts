@@ -1,87 +1,9 @@
 import { css } from "@umbraco-cms/backoffice/external/lit";
-import { UmbTextStyles } from "@umbraco-cms/backoffice/style";
+import { UmbRollbackModalElement } from "../umbraco/rollback/modal/rollback-modal.element";
 
 export const rpRollbackStyles = [
-  UmbTextStyles,
+  UmbRollbackModalElement.styles, // Importing the base styles from UmbRollbackModalElement
   css`
-    :host {
-      color: var(--uui-color-text);
-    }
-
-    #language-box {
-      margin-bottom: var(--uui-size-space-2);
-    }
-
-    #language-select {
-      width: 100%;
-    }
-
-    .diff-added,
-    ins {
-      background-color: #00c43e63;
-    }
-    .diff-removed,
-    del {
-      background-color: #ff35356a;
-    }
-    .rollback-item {
-      position: relative;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: var(--uui-size-space-5);
-      cursor: pointer;
-    }
-    .rollback-item::after {
-      content: "";
-      position: absolute;
-      inset: 2px;
-      display: block;
-      border: 2px solid transparent;
-      pointer-events: none;
-    }
-    .rollback-item.active::after,
-    .rollback-item:hover::after {
-      border-color: var(--uui-color-selected);
-    }
-    .rollback-item:not(.active):hover::after {
-      opacity: 0.5;
-    }
-    .rollback-item p {
-      margin: 0;
-      opacity: 0.5;
-    }
-    p.rollback-item-date {
-      opacity: 1;
-    }
-    .rollback-item uui-button {
-      white-space: nowrap;
-    }
-
-    #main {
-      display: flex;
-      gap: var(--uui-size-space-5);
-      width: 100%;
-      height: 100%;
-    }
-
-    #box-left {
-      max-width: 500px;
-      flex: 1;
-      overflow: auto;
-      height: 100%;
-    }
-
-    #box-right {
-      flex: 1;
-      overflow: auto;
-      height: 100%;
-    }
-
-    #versions-box {
-      --uui-box-default-padding: 0;
-    }
-
     .preview-view {
       #main {
         display: grid;
