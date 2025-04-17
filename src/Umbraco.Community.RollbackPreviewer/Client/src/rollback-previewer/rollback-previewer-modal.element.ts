@@ -4,14 +4,25 @@ import {
   nothing,
 } from "@umbraco-cms/backoffice/external/lit";
 import UmbRollbackModalElement from "../umbraco/rollback/modal/rollback-modal.element.js";
+import { UMB_APP_CONTEXT } from "@umbraco-cms/backoffice/app";
 
 import { rpRollbackStyles } from "./rollback-previewer-modal.styles.js";
 import "./rollback-previewer-iframe.element.js";
 
-// TODO: Rename this to just `rp-model`?
 @customElement("rp-rollback-modal")
 export class RpRollbackModalElement extends UmbRollbackModalElement {
   #useJsonView: boolean = false;
+  #serverUrl: string = "";
+
+  constructor() {
+    super();
+    this.#init();
+  }
+
+  async #init() {
+    const appContext = await this.getContext(UMB_APP_CONTEXT);
+    this.#serverUrl = appContext.getServerUrl();
+  }
 
   #switchView() {
     this.#useJsonView = !this.#useJsonView;
@@ -19,8 +30,6 @@ export class RpRollbackModalElement extends UmbRollbackModalElement {
   }
 
   renderSelectedVersionVisualPreview() {
-    // TODO: get the URL for the page to feed into the iframe
-
     if (!this._selectedVersion)
       return html`
         <uui-box
@@ -31,19 +40,18 @@ export class RpRollbackModalElement extends UmbRollbackModalElement {
 
     return html`
       <uui-box headline=${this.currentVersionHeader} id="box-right">
-
         <div class="rp-wrapper">
           <div class="rp-container">
             <h3>Current version</h3>
             <rp-iframe
-              src="https://localhost:44355/?cid=${this.currentDocument?.unique}"
+              src="${this.#serverUrl}?cid=${this.currentDocument?.unique}"
             >
             </rp-iframe>
           </div>
           <div class="rp-container">
             <h3>Selected version</h3>
             <rp-iframe
-              src="https://localhost:44355/?cid=${this.currentDocument
+              src="${this.#serverUrl}?cid=${this.currentDocument
                 ?.unique}&vid=${this._selectedVersion.id}"
             ></rp-iframe>
           </div>
