@@ -8,7 +8,6 @@ export const manifests: any = [
     name: "Rollback Previewer",
     alias: "Umb.Modal.Rollback",
     type: 'modal',
-    element: () => import("./rp-rollback-modal.element")
+    element: () => import("./rollback-previewer-modal.element")
   },
-
 ];

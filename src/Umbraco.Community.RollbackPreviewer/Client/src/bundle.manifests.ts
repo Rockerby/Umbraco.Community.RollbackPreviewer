@@ -1,4 +1,4 @@
-import { manifests as rpRollback } from './rp-rollback/manifest';
+import { manifests as rpRollback } from './rollback-previewer/manifest';
 
 // Job of the bundle is to collate all the manifests from different parts of the extension and load other manifests
 // We load this bundle from umbraco-package.json

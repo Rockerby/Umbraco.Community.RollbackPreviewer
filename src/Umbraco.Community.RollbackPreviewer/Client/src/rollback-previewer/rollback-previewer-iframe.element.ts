@@ -4,7 +4,6 @@ import {
   html,
   LitElement,
   property,
-  PropertyValues,
   state,
 } from "@umbraco-cms/backoffice/external/lit";
 

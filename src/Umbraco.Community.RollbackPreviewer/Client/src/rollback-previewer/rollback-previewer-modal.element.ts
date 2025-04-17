@@ -3,9 +3,10 @@ import {
   html,
   nothing,
 } from "@umbraco-cms/backoffice/external/lit";
-import { rpRollbackStyles } from "./rp-rollback-modal.styles.js";
 import UmbRollbackModalElement from "../umbraco/rollback/modal/rollback-modal.element.js";
-import "./rp-iframe.element.js";
+
+import { rpRollbackStyles } from "./rollback-previewer-modal.styles.js";
+import "./rollback-previewer-iframe.element.js";
 
 // TODO: Rename this to just `rp-model`?
 @customElement("rp-rollback-modal")
