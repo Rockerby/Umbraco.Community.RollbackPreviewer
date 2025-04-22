@@ -17,6 +17,9 @@ Add the package to an existing Umbraco website (v15+) from nuget:
 
 Once the package installed it will automatically replace the current Rollback modal within Umbraco.
 
+> [!IMPORTANT]  
+> The Rollback Previewer uses iFrames to function so you may need to adjust X-Frame-Options to see the preview
+
 ## Running locally
 
 Clone the repository.  
