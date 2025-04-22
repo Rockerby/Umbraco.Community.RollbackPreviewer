@@ -3,14 +3,16 @@ using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.PropertyEditors;
 using Umbraco.Extensions;
 using Umbraco.Cms.Core.Services;
+using Umbraco.Cms.Core;
 
 namespace Umbraco.Community.RollbackPreviewer.Extensions
 {
-    public class PublishedContentConverter(IContentTypeService ctBaseService, IPublishedContentTypeFactory pcTypeFactory)
+    public class PublishedContentConverter(IContentTypeService ctBaseService, IPublishedContentTypeFactory pcTypeFactory,
+        IContentService contentService)
     {
         public IPublishedContent ToPublishedContent(IContent content, bool isPreview = false)
         {
-            return new ContentExtensions.PublishedContentWrapper(content, isPreview, ctBaseService, pcTypeFactory);
+            return new ContentExtensions.PublishedContentWrapper(content, isPreview, ctBaseService, pcTypeFactory, contentService, this);
         }
     }
 
@@ -34,7 +36,8 @@ namespace Umbraco.Community.RollbackPreviewer.Extensions
             private readonly Lazy<IReadOnlyDictionary<string, PublishedCultureInfo>> _cultureInfos;
 
             public PublishedContentWrapper(IContent inner, bool isPreviewing,
-                IContentTypeService ctBaseService, IPublishedContentTypeFactory pcTypeFactory)
+                IContentTypeService ctBaseService, IPublishedContentTypeFactory pcTypeFactory,
+                IContentService contentService, PublishedContentConverter converter)
             {
                 _inner = inner ?? throw new NullReferenceException("inner");
                 _isPreviewing = isPreviewing;
@@ -60,17 +63,16 @@ namespace Umbraco.Community.RollbackPreviewer.Extensions
 
                 _parent = new Lazy<IPublishedContent>(() =>
                 {
-                    //TODO: Get parent node
-                    //return Current.Services.ContentService.GetById(_inner.ParentId)?.ToPublishedContent(_isPreviewing);
-                    return null;
+                    var p = contentService.GetById(_inner.ParentId);
+                    if (p == null)
+                        return null;
+                    return converter.ToPublishedContent(p);
                 });
 
                 _children = new Lazy<IEnumerable<IPublishedContent>>(() =>
                 {
-                    //TODO: Get children nodes
-                    //var c = Current.Services.ContentService.GetPagedChildren(_inner.Id, 0, 2000000000, out var totalRecords);
-                    //return c.Select(x => x.ToPublishedContent(_isPreviewing)).OrderBy(x => x.SortOrder);
-                    return null;
+                    var c = contentService.GetPagedChildren(_inner.Id, 0, 2000000000, out var totalRecords);
+                    return c.Select(x => converter.ToPublishedContent(x)).OrderBy(x => x.SortOrder);
                 });
 
                 _cultureInfos = new Lazy<IReadOnlyDictionary<string, PublishedCultureInfo>>(() =>

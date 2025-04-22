@@ -5,7 +5,7 @@ export default defineConfig({
     lib: {
       entry: "src/bundle.manifests.ts", // Bundle registers one or more manifests
       formats: ["es"],
-      fileName: "your-package-name",
+      fileName: "rollback-previewer",
     },
     outDir: "../wwwroot/App_Plugins/UmbracoCommunityRollbackPreviewer", // your web component will be saved in this location
     emptyOutDir: true,
