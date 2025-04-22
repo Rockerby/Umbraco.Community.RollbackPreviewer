@@ -6,7 +6,7 @@
 
 Enhance Umbraco's rollback functionality with visual rollback previews. This extension builds ontop of the existing Umbraco Rollback modal and allows for the JSON diff to be viewed as well as the visual diff.
 
-<img alt="Visual difference" src="https://github.com/Rockerby/Umbraco.Community.RollbackPreviewer/blob/develop/docs/screenshots/visual_diff.png">
+<img alt="Visual difference" src="https://github.com/Rockerby/Umbraco.Community.RollbackPreviewer/blob/develop/docs/screenshots/visual_diff.png"> 
 <img alt="JSON difference" src="https://github.com/Rockerby/Umbraco.Community.RollbackPreviewer/blob/develop/docs/screenshots/json_diff.png">
 
 ## Installation
@@ -19,12 +19,18 @@ Once the package installed it will automatically replace the current Rollback mo
 
 ## Running locally
 
-Clone the repository and start the sln file. Run the Umbraco project (uSync should automatically import, if not, go import everything) and head to the home node within the CMS. Make a change and go to the Info app and click the Rollback button.
+Clone the repository.  
+  
+Head into the `src\Umbraco.Community.RollbackPreviewer\Client` and run the following to start the dev server:  
+`npm ci`  
+`npm run dev`  
 
-Check out the Services.RollBackContentFinder for information on the fetching and displaying of the rollbacked version.
-
-Login: admin@example.com / 1234567890
-
+Open the sln file and run the Umbraco project, or head to `src\Umbraco.Community.RollbackPreviewer.TestSite` and run `dotnet run`, (uSync should automatically import, if not, go import everything) and head to the home node within the CMS. Make a change and go to the Info app and click the Rollback button to see the visual diff.  
+  
+Check out the Services.RollBackContentFinder for information on the fetching and displaying of the rollbacked version.  
+  
+Login: admin@example.com / 1234567890  
+  
 ## Contributing
 
 Contributions to this package are most welcome! Please read the [Contributing Guidelines](CONTRIBUTING.md).  
