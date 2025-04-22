@@ -7,13 +7,13 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Product>Umbraco.Community.Umbraco.Community.RollbackPreviewer</Product>
-    <PackageId>Umbraco.Community.Umbraco.Community.RollbackPreviewer</PackageId>
-    <Title>Umbraco .Community .Rollback Previewer </Title>
-    <Description>...</Description>
+    <Product>Umbraco.Community.RollbackPreviewer</Product>
+    <PackageId>Umbraco.Community.RollbackPreviewer</PackageId>
+    <Title>Umbraco Community Rollback Previewer </Title>
+    <Description>Enhance Umbraco's rollback functionality with visual rollback previews. This extension builds ontop of the existing Umbraco Rollback modal and allows for the JSON diff to be viewed as well as the visual diff.</Description>
     <PackageTags>umbraco;umbraco-marketplace</PackageTags>
-    <Authors>Richard Ockerby</Authors>
-    <Copyright>$([System.DateTime]::UtcNow.ToString(`yyyy`)) © Richard Ockerby</Copyright>
+    <Authors>Richard Ockerby, Mike Masey</Authors>
+    <Copyright>$([System.DateTime]::UtcNow.ToString(`yyyy`)) © Richard Ockerby, Mike Masey</Copyright>
     <PackageProjectUrl>https://github.com/Rockerby/Umbraco.Community.RollbackPreviewer</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Rockerby/Umbraco.Community.RollbackPreviewer</RepositoryUrl>
     <PackageReadmeFile>README_nuget.md</PackageReadmeFile>
