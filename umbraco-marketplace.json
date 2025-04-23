@@ -1,14 +1,14 @@
 {
     "$schema": "https://marketplace.umbraco.com/umbraco-marketplace-schema.json", 
     "AuthorDetails": {
-      "Name": "Richard Ockerby",
+      "Name": "Richard Ockerby and Mike Masey",
       "ImageUrl": "https://github.com/Rockerby.png"
     },
-    "Category": "",
-    "Description": "",
+    "Category": "Editor Tools",
+    "Description": "Enhance Umbraco's rollback functionality with visual rollback previews. This extension builds ontop of the existing Umbraco Rollback modal and allows for the JSON diff to be viewed as well as the visual diff.",
     "LicenseTypes": [ "Free" ],
     "IssueTrackerUrl": "https://github.com/Rockerby/Umbraco.Community.RollbackPreviewer/issues",
     "PackageType": "Package",
-    "Tags": [],
+    "Tags": ["rollback modal"],
     "Title": "Umbraco Rollback Previewer"
   }

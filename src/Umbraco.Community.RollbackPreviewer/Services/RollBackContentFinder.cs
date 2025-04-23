@@ -1,8 +1,13 @@
 using System;
 using System.Globalization;
+using System.Security.Claims;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Models;
@@ -11,7 +16,9 @@ using Umbraco.Cms.Core.Notifications;
 using Umbraco.Cms.Core.Persistence.Repositories;
 using Umbraco.Cms.Core.Routing;
 using Umbraco.Cms.Core.Scoping;
+using Umbraco.Cms.Core.Security;
 using Umbraco.Cms.Core.Services;
+using Umbraco.Cms.Core.Services.OperationStatus;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Infrastructure.Scoping;
 using Umbraco.Community.RollbackPreviewer.Extensions;
@@ -27,6 +34,10 @@ namespace Umbraco.Community.RollbackPreviewer.Services
         protected ICoreScopeProvider ScopeProvider { get; }
         private readonly IDocumentRepository _documentRepository;
         private readonly PublishedContentConverter _publishedContentConverter;
+        private readonly IServiceScopeFactory _scopeFactory;
+        private readonly IContentVersionService _contentVersionService;
+        private readonly IPublishedModelFactory _publishedModelFactory;
+
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ContentFinderByPageIdQuery" /> class.
@@ -35,6 +46,8 @@ namespace Umbraco.Community.RollbackPreviewer.Services
             ILogger<RollbackContentFinder> logger,
             IHttpContextAccessor httpContextAccessor, IContentService contentService,
             ICoreScopeProvider coreScopeProvider, IDocumentRepository documentRepository,
+            IServiceScopeFactory scopeFactory, IContentVersionService contentVersionService,
+        IPublishedModelFactory publishedModelFactory,
             PublishedContentConverter publishedContentConverter)
         {
             _contentService = contentService;
@@ -42,66 +55,110 @@ namespace Umbraco.Community.RollbackPreviewer.Services
             ScopeProvider = coreScopeProvider;
             _documentRepository = documentRepository;
             _publishedContentConverter = publishedContentConverter;
+            _scopeFactory = scopeFactory;
             _logger = logger;
+            _contentVersionService = contentVersionService;
+            _publishedModelFactory = publishedModelFactory;
         }
 
         /// <inheritdoc />
-        public Task<bool> TryFindContent(IPublishedRequestBuilder frequest)
+        public async Task<bool> TryFindContent(IPublishedRequestBuilder frequest)
         {
             try
             {
-                //TODO: Check things exist beofre trying to parse...
-                //TODO: Check that the user is logged in to the back office
-                //TODO: Security: do we need to consider if the logged in user has access to this node?
-                //      You wouldn't be able to get this unless you added in the query values
+                var req = _httpContextAccessor.HttpContext?.Request;
 
-                // Check for the content params to load in the content node and the version
-                Guid contentId = Guid.Parse(_httpContextAccessor.HttpContext.Request.Query["cid"]);
-                int versionId = Int32.Parse(_httpContextAccessor.HttpContext.Request.Query["vid"]);
+                // Make sure we have what we need
+                if (req?.Query == null || !req.Query.ContainsKey("cid") || !req.Query.ContainsKey("vid"))
+                {
+                    return false;
+                }
+
+                if (!Guid.TryParse(req.Query["cid"], out Guid contentId) ||
+                    !Guid.TryParse(req.Query["vid"], out Guid versionId))
+                {
+                    return false;
+                }
+
+                // Make sure a back office user is logged in. Not concerned about content node permissions
+                // just yet as we're not performing any write permissions.
+                // This does mean that if a user hits this with the right queries they just see the published content
+                if (!IsBackOfficeUserLoggedIn())
+                {
+                    return false;
+                }
 
                 // Get the current copy of the node
                 IContent? content = _contentService.GetById(contentId);
 
                 // Get the version
-                IContent? version = GetVersion(versionId);
-
-                //TODO: Do we need to make sure that the version belongs to the actual content?
+                IContent? version = await GetVersion(versionId);
 
                 // Good old null checks
                 if (content == null)
                 {
                     _logger.LogWarning("Unable to find content with GUID {0} as content is NULL", contentId.ToString());
-                    return Task.FromResult(false);
+                    return false;
                 }
                 else if (version == null)
                 {
                     _logger.LogWarning("Unable to find content with GUID {0} as version (with ID {1}) is NULL", contentId.ToString(), versionId);
-                    return Task.FromResult(false);
+                    return false;
                 }
                 else if (content.Trashed) //TODO: Do we care if it's in the bin? How does rollback work if content is in the bin?
                 {
                     _logger.LogWarning("Unable to find content with GUID {0} (and version {1}) as the content is trashed", contentId.ToString(), versionId);
-                    return Task.FromResult(false);
+                    return false;
+                }
+                else if (version.Id != content.Id)
+                {
+                    _logger.LogWarning("Requested version doesn't belong to the requested content. ContentID {0} / VersionID {1}", contentId, versionId);
+                    return false;
                 }
 
                 // Copy the changes from the version
                 content.CopyFrom(version, "*");
 
                 // Convert the IContent to IPublishedContent.
-                IPublishedContent pubContent = _publishedContentConverter.ToPublishedContent(content);
-
+                IPublishedContent? pubContent = _publishedContentConverter.ToPublishedContent(content)?
+                    .CreateModel(_publishedModelFactory);
+                
                 // Set the content that we "created" back to the pipeline
                 frequest.SetPublishedContent(pubContent);
 
                 // Return true to tell the system we have the content and not try anymore
-                return Task.FromResult(true);
+                return true;
             }
             catch (Exception ex)
             {
-                //TODO: Very generic
-                return Task.FromResult(false);
+                // We want something generic here as it could affect the entire site if the ContentFinder chain breaks!
+                _logger.LogError(ex, "Error while loading content for RollbackPreviewer");
+                return false;
             }
 
+        }
+
+        /// <summary>
+        /// Checks to make sure a back office user is logged in.
+        /// </summary>
+        /// <returns></returns>
+        private bool IsBackOfficeUserLoggedIn()
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                // We can't use the inbuilt backoffice accessor service as we're in the front end so we need
+                // to hook into the cookies to get the info that way. ContentFinders are singletons so we
+                // need to scope in the depency
+                // See: https://our.umbraco.com/forum/umbraco-9/106857-how-do-i-determine-if-a-backoffice-user-is-logged-in-from-a-razor-view
+                var _snapshot = scope.ServiceProvider.GetRequiredService<IOptionsSnapshot<CookieAuthenticationOptions>>();
+                CookieAuthenticationOptions cookieOptions = _snapshot.Get(Cms.Core.Constants.Security.BackOfficeAuthenticationType);
+
+                string backOfficeCookie = _httpContextAccessor.HttpContext?.Request.Cookies[cookieOptions.Cookie.Name!];
+                AuthenticationTicket unprotected = cookieOptions.TicketDataFormat.Unprotect(backOfficeCookie!);
+                ClaimsIdentity backOfficeIdentity = unprotected!.Principal.GetUmbracoIdentity();
+
+                return backOfficeIdentity != null;
+            }
         }
 
         /// <summary>
@@ -109,16 +166,14 @@ namespace Umbraco.Community.RollbackPreviewer.Services
         /// </summary>
         /// <param name="versionId"></param>
         /// <returns></returns>
-        private IContent? GetVersion(int versionId)
+        private async Task<IContent?> GetVersion(Guid versionId)
         {
-            //TODO: Check this is correct! Seems a little overkill to be locking something here when
-            // all we're doing is getting content (but might be the right way!)
-            // The ContentVersionService only seems to give meta, not an IContent
-            using (ICoreScope scope = ScopeProvider.CreateCoreScope(autoComplete: true))
-            {
-                scope.ReadLock(global::Umbraco.Cms.Core.Constants.Locks.ContentTree);
-                return _documentRepository.GetVersion(versionId);
-            }
+            // The back office rollback viewer loads the versions in via GUID
+            // - this is how the management API get the version from said GUID
+            Attempt<IContent?, ContentVersionOperationStatus> attempt =
+                await _contentVersionService.GetAsync(versionId);
+
+            return attempt.Result;
         }
     }
 }
