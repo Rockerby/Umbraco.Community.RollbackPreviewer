@@ -44,4 +44,5 @@ Check out the project for release / updates [here](https://github.com/users/Rock
 
 Mike Masey came up with the idea  
 Matt Brailsford provided [the basis for converting internal models](https://gist.github.com/mattbrailsford/5f9638d357df59aeac1be8588a06c31e)  
-Lotte Pitcher for her amazing [Opinionated Starter Kit](https://github.com/LottePitcher/opinionated-package-starter)
+Lotte Pitcher for her amazing [Opinionated Starter Kit](https://github.com/LottePitcher/opinionated-package-starter)  
+Rollback icon created by maswan - [Flaticon](https://www.flaticon.com/free-icons/rollback)
