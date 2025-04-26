@@ -74,11 +74,20 @@ namespace Umbraco.Community.RollbackPreviewer.Services
                     return false;
                 }
 
+#if NET9_0_OR_GREATER
+
                 if (!Guid.TryParse(req.Query["cid"], out Guid contentId) ||
                     !Guid.TryParse(req.Query["vid"], out Guid versionId))
                 {
                     return false;
                 }
+#else
+                if (!int.TryParse(req.Query["cid"], out int contentId) ||
+                    !int.TryParse(req.Query["vid"], out int versionId))
+                {
+                    return false;
+                }
+#endif
 
                 // Make sure a back office user is logged in. Not concerned about content node permissions
                 // just yet as we're not performing any write permissions.
@@ -122,7 +131,7 @@ namespace Umbraco.Community.RollbackPreviewer.Services
                 // Convert the IContent to IPublishedContent.
                 IPublishedContent? pubContent = _publishedContentConverter.ToPublishedContent(content)?
                     .CreateModel(_publishedModelFactory);
-                
+
                 // Set the content that we "created" back to the pipeline
                 frequest.SetPublishedContent(pubContent);
 
@@ -170,10 +179,24 @@ namespace Umbraco.Community.RollbackPreviewer.Services
         {
             // The back office rollback viewer loads the versions in via GUID
             // - this is how the management API get the version from said GUID
+#if NET9_0_OR_GREATER
             Attempt<IContent?, ContentVersionOperationStatus> attempt =
                 await _contentVersionService.GetAsync(versionId);
-
             return attempt.Result;
+#else
+            throw new NotImplementedException();
+#endif
+
+        }
+        private async Task<IContent?> GetVersion(int versionId)
+        {
+#if NET9_0_OR_GREATER
+            throw new NotImplementedException();
+#else
+            var contentVersion = _contentService.GetVersion(versionId);
+            return contentVersion;
+#endif
+
         }
     }
 }

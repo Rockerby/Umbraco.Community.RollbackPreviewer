@@ -220,6 +220,19 @@ namespace Umbraco.Community.RollbackPreviewer.Extensions
                 //TODO: Implement DeliveryApiValue
                 throw new NotImplementedException();
             }
+
+            /// <summary>
+            /// Version 13 specific
+            /// </summary>
+            /// <param name="culture"></param>
+            /// <param name="segment"></param>
+            /// <returns></returns>
+            /// <exception cref="NotImplementedException"></exception>
+            public object? GetXPathValue(string? culture = null, string? segment = null)
+            {
+                //TODO: Implement DeliveryApiValue
+                throw new NotImplementedException();
+            }
         }
 
 
