@@ -1,0 +1,12 @@
+{
+    "name": "Rollback Previewer",
+    "version": "1.0.0 beta",
+    "allowPackageTelemetry": false,
+    "css": [
+        "/App_Plugins/UmbracoCommunityRollbackPreviewer.v13/rollback/rollback.css"
+    ],
+    "javascript": [
+        "/App_Plugins/UmbracoCommunityRollbackPreviewer.v13/rollback/rollback.controller.js",
+        "/App_Plugins/UmbracoCommunityRollbackPreviewer.v13/rollback/rollback.decorator.service.js"
+    ]
+}
