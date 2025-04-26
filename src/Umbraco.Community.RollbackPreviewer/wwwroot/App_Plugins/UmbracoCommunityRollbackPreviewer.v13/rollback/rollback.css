@@ -20,6 +20,7 @@
   display: grid;
   grid-template: "current selected" / 1fr 1fr;
   gap: var(--uui-size-space-5);
+  height: var(--rp-height);
 }
 
 .rp-container {
@@ -83,4 +84,11 @@ iframe {
 
 .rp-container .uui-h4 {
     padding-bottom:14px;
+}
+.ml-sm {
+    margin-left:20px;
+}
+.empty-padd {
+  padding-top:40px;
+  padding-bottom:40px;
 }

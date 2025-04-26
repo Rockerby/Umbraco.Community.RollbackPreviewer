@@ -36,9 +36,12 @@
       vm.totalPages = 1;
       vm.totalItems = 0;
 
+      let baseUrl = '/';
+
       // find the current version for invariant nodes
       if ($scope.model.node.variants.length === 1) {
         vm.currentVersion = $scope.model.node.variants[0];
+        baseUrl = $scope.model.node.urls[0];
       }
 
       // find the current version for nodes with variants
@@ -49,8 +52,14 @@
 
         // preselect the language in the dropdown
         if (active) {
+
           vm.selectedLanguage = active;
           vm.currentVersion = active;
+          
+          var url = _.find($scope.model.node.urls, function (v) {
+            return v.culture == active.language.culture;
+          });
+          baseUrl = url.text;
         }
       }
 
@@ -66,13 +75,11 @@
       assetsService.loadJs('lib/jsdiff/diff.js', $scope).then(function () {
 
         getVersions().then(function () {
+          vm.currentIframeUrl = baseUrl + "?cid=" + $scope.model.node.id + "&vid=" + vm.previousVersions[0].versionId;
           vm.loading = false;
         });
 
       });
-      console.log($scope.model.node);
-
-      vm.currentIframeUrl = '/' + $scope.model.node.id;
     }
 
     

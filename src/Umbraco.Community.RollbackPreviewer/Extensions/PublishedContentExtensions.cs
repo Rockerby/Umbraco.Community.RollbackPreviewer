@@ -8,11 +8,11 @@ using Umbraco.Cms.Core;
 namespace Umbraco.Community.RollbackPreviewer.Extensions
 {
     public class PublishedContentConverter(IContentTypeService ctBaseService, IPublishedContentTypeFactory pcTypeFactory,
-        IContentService contentService)
+        IContentService contentService, IPublishedModelFactory publishedModelFactory)
     {
         public IPublishedContent ToPublishedContent(IContent content, bool isPreview = false)
         {
-            return new ContentExtensions.PublishedContentWrapper(content, isPreview, ctBaseService, pcTypeFactory, contentService, this);
+            return new ContentExtensions.PublishedContentWrapper(content, isPreview, ctBaseService, pcTypeFactory, contentService, publishedModelFactory, this);
         }
     }
 
@@ -37,7 +37,7 @@ namespace Umbraco.Community.RollbackPreviewer.Extensions
 
             public PublishedContentWrapper(IContent inner, bool isPreviewing,
                 IContentTypeService ctBaseService, IPublishedContentTypeFactory pcTypeFactory,
-                IContentService contentService, PublishedContentConverter converter)
+                IContentService contentService, IPublishedModelFactory publishedModelFactory, PublishedContentConverter converter)
             {
                 _inner = inner ?? throw new NullReferenceException("inner");
                 _isPreviewing = isPreviewing;
@@ -66,13 +66,13 @@ namespace Umbraco.Community.RollbackPreviewer.Extensions
                     var p = contentService.GetById(_inner.ParentId);
                     if (p == null)
                         return null;
-                    return converter.ToPublishedContent(p);
+                    return converter.ToPublishedContent(p).CreateModel(publishedModelFactory);
                 });
 
                 _children = new Lazy<IEnumerable<IPublishedContent>>(() =>
                 {
                     var c = contentService.GetPagedChildren(_inner.Id, 0, 2000000000, out var totalRecords);
-                    return c.Select(x => converter.ToPublishedContent(x)).OrderBy(x => x.SortOrder);
+                    return c.Select(x => converter.ToPublishedContent(x).CreateModel(publishedModelFactory)).OrderBy(x => x.SortOrder);
                 });
 
                 _cultureInfos = new Lazy<IReadOnlyDictionary<string, PublishedCultureInfo>>(() =>
