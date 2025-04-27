@@ -41,7 +41,7 @@
       // find the current version for invariant nodes
       if ($scope.model.node.variants.length === 1) {
         vm.currentVersion = $scope.model.node.variants[0];
-        baseUrl = $scope.model.node.urls[0];
+        baseUrl = $scope.model.node.urls[0].text;
       }
 
       // find the current version for nodes with variants
