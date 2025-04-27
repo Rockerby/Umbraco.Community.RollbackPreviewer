@@ -73,7 +73,7 @@ namespace Umbraco.Community.RollbackPreviewer.Services
                 {
                     return false;
                 }
-                bool skipVersion = false;
+
 #if NET9_0_OR_GREATER
 
                 if (!Guid.TryParse(req.Query["cid"], out Guid contentId) ||
@@ -87,7 +87,6 @@ namespace Umbraco.Community.RollbackPreviewer.Services
                 {
                     return false;
                 }
-                skipVersion = versionId < 0;
 #endif
 
                 // Make sure a back office user is logged in. Not concerned about content node permissions
@@ -110,7 +109,7 @@ namespace Umbraco.Community.RollbackPreviewer.Services
                     _logger.LogWarning("Unable to find content with GUID {0} as content is NULL", contentId.ToString());
                     return false;
                 }
-                else if (!skipVersion && version == null)
+                else if (version == null)
                 {
                     _logger.LogWarning("Unable to find content with GUID {0} as version (with ID {1}) is NULL", contentId.ToString(), versionId);
                     return false;
@@ -120,17 +119,14 @@ namespace Umbraco.Community.RollbackPreviewer.Services
                     _logger.LogWarning("Unable to find content with GUID {0} (and version {1}) as the content is trashed", contentId.ToString(), versionId);
                     return false;
                 }
-                else if (!skipVersion && version?.Id != content.Id)
+                else if (version?.Id != content.Id)
                 {
                     _logger.LogWarning("Requested version doesn't belong to the requested content. ContentID {0} / VersionID {1}", contentId, versionId);
                     return false;
                 }
 
-                if (!skipVersion)
-                {
-                    // Copy the changes from the version
-                    content.CopyFrom(version, "*");
-                }
+                // Copy the changes from the version
+                content.CopyFrom(version, "*");
 
                 // Convert the IContent to IPublishedContent.
                 IPublishedContent? pubContent = _publishedContentConverter.ToPublishedContent(content)?
