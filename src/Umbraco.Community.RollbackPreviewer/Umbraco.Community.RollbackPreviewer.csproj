@@ -23,14 +23,14 @@
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
-    <PackageReference Include="Umbraco.Cms.Web.Common" Version="13.*" />
+    <PackageReference Include="Umbraco.Cms.Web.Common" Version="[13,14)" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net9.0'">
     <PackageReference Include="Umbraco.Cms.Api.Common" Version="15.*" />
     <PackageReference Include="Umbraco.Cms.Api.Management" Version="15.*" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <!-- Dont include the client folder as part of packaging nuget build -->
     <Content Remove="Client\**" />
@@ -38,7 +38,7 @@
     <!-- However make the Umbraco-package.json included for dotnet pack or nuget package and visible to the solution -->
     <None Include="Client\public\umbraco-package.json" Pack="false" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <None Include="..\..\docs\README_nuget.md">
       <Pack>True</Pack>
