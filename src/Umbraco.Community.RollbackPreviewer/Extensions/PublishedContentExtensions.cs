@@ -184,6 +184,13 @@ namespace Umbraco.Community.RollbackPreviewer.Extensions
                 : this(propertyType, PropertyCacheLevel.Unknown) // cache level is ignored
             {
                 _sourceValue = property?.GetValue();
+
+                if (_sourceValue == null)
+                {
+                    // Block properties return null for GetValue...
+                    _sourceValue = property?.Values?.FirstOrDefault()?.EditedValue;
+                }
+
                 _content = content;
                 _isPreviewing = isPreviewing;
             }
