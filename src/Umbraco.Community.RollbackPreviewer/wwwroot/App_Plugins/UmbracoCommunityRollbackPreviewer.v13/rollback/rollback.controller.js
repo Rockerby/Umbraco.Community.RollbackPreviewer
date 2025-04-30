@@ -55,11 +55,12 @@
 
           vm.selectedLanguage = active;
           vm.currentVersion = active;
-          
+
           var url = _.find($scope.model.node.urls, function (v) {
             return v.culture == active.language.culture;
           });
           baseUrl = url.text;
+          console.log(url)
         }
       }
 
@@ -71,22 +72,31 @@
         vm.labels.choose = data[1];
       });
 
+      let query = ``;
+      if (vm.currentVersion.language && vm.currentVersion.language.culture) {
+        query += `?culture=${vm.currentVersion.language.culture}`;
+      }
+      vm.currentIframeUrl = `/${$scope.model.node.id}${query}`;
+
       // Load in diff library
       assetsService.loadJs('lib/jsdiff/diff.js', $scope).then(function () {
-
         getVersions().then(function () {
-          vm.currentIframeUrl = baseUrl + "?cid=" + $scope.model.node.id + "&vid=" + vm.previousVersions[0].versionId;
           vm.loading = false;
         });
 
       });
     }
 
-    
-
     function changeLanguage(language) {
       vm.currentVersion = language;
       vm.pageNumber = 1;
+
+      let query = ``;
+      if (language && language.culture) {
+        query += `?culture=${language.culture}`;
+      }
+      vm.currentIframeUrl = `/${$scope.model.node.id}${query}`;
+
       getVersions();
     }
 
@@ -117,7 +127,13 @@
             vm.previousVersion = data;
             vm.previousVersion.versionId = version.versionId;
             vm.previousVersion.displayValue = version.displayValue + ' - ' + version.username;
-            vm.previousVersion.iframeUrl = '/?cid=' + $scope.model.node.id + '&vid=' + version.versionId;
+
+            let query = `cid=${$scope.model.node.id}&vid=${version.versionId}`;
+            if(culture) {
+              query += `&culture=${culture}`;
+            }
+
+            vm.previousVersion.iframeUrl = `/?${query}`;
             createDiff(vm.currentVersion, vm.previousVersion);
 
             const changed = (part) => part.added || part.removed;
