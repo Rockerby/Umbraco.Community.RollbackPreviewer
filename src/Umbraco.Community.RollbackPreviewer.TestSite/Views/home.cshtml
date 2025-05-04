@@ -25,3 +25,33 @@
         </div>
     </article>
 }
+
+
+@if (Model.Grid != null)
+{
+    <article>
+    GRID
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-10 mx-auto">
+                    @await Html.GetBlockGridHtmlAsync(Model.Grid)
+                </div>
+            </div>
+        </div>
+    </article>
+}
+
+
+@if (Model.AnotherGrid != null)
+{
+    <article>
+    AnotherGrid
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-10 mx-auto">
+                    @await Html.GetBlockGridHtmlAsync(Model.AnotherGrid)
+                </div>
+            </div>
+        </div>
+    </article>
+}
