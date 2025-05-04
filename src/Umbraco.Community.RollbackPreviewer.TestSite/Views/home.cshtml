@@ -3,9 +3,13 @@
 @using Clean.Core.Models.ViewModels
 @using ContentModels = Umbraco.Cms.Web.Common.PublishedModels
 
+@inject IVariationContextAccessor _variationContextAccessor
+
 @{
     Layout = "master.cshtml";
 }
+
+<p>CURRENT CULTURE: @_variationContextAccessor.VariationContext.Culture</p>
 
 @await Html.PartialAsync("~/Views/Partials/pageHeader.cshtml", new PageHeaderViewModel(Model.Name, Model.Title, Model.Subtitle, Model.MainImage))
 

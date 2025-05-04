@@ -38,6 +38,7 @@ namespace Umbraco.Community.RollbackPreviewer.Services
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly IContentVersionService _contentVersionService;
         private readonly IPublishedModelFactory _publishedModelFactory;
+        private readonly IVariationContextAccessor _variationContextAccessor;
 
 
         /// <summary>
@@ -48,7 +49,8 @@ namespace Umbraco.Community.RollbackPreviewer.Services
             IHttpContextAccessor httpContextAccessor, IContentService contentService,
             ICoreScopeProvider coreScopeProvider, IDocumentRepository documentRepository,
             IServiceScopeFactory scopeFactory, IContentVersionService contentVersionService,
-        IPublishedModelFactory publishedModelFactory,
+            IPublishedModelFactory publishedModelFactory,
+            IVariationContextAccessor variationContextAccessor,
             PublishedContentConverter publishedContentConverter)
         {
             _contentService = contentService;
@@ -60,6 +62,7 @@ namespace Umbraco.Community.RollbackPreviewer.Services
             _logger = logger;
             _contentVersionService = contentVersionService;
             _publishedModelFactory = publishedModelFactory;
+            _variationContextAccessor = variationContextAccessor;
         }
 
         /// <inheritdoc />
@@ -133,8 +136,19 @@ namespace Umbraco.Community.RollbackPreviewer.Services
                     return false;
                 }
 
-                // Copy the changes from the version
-                content.CopyFrom(version, "*");
+                try
+                {
+                    // Set the new culture on the variation accessor and push it into the request pipeline
+                    _variationContextAccessor.VariationContext = new VariationContext(culture);
+                    frequest.SetCulture(culture);
+                    // Copy the changes from the version
+                    content.CopyFrom(version, culture);
+                }
+                catch (CultureNotFoundException cnfe)
+                {
+                    _logger.LogWarning("Requested culture " + culture + " does not exist");
+                    return false;
+                }
 
                 // Convert the IContent to IPublishedContent.
                 IPublishedContent? pubContent = _publishedContentConverter.ToPublishedContent(content, culture)?
