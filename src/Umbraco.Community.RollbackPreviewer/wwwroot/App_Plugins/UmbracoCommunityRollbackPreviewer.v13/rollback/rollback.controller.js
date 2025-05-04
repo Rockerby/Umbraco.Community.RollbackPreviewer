@@ -60,7 +60,6 @@
             return v.culture == active.language.culture;
           });
           baseUrl = url.text;
-          console.log(url)
         }
       }
 
@@ -73,8 +72,8 @@
       });
 
       let query = ``;
-      if (vm.currentVersion.language && vm.currentVersion.language.culture) {
-        query += `?culture=${vm.currentVersion.language.culture}`;
+      if (vm.selectedLanguage) {
+        query += `?culture=${vm.selectedLanguage.language.culture}`;
       }
       vm.currentIframeUrl = `/${$scope.model.node.id}${query}`;
 
@@ -92,10 +91,19 @@
       vm.pageNumber = 1;
 
       let query = ``;
-      if (language && language.culture) {
-        query += `?culture=${language.culture}`;
+
+      if (language.language) {
+        query += `?culture=${language.language.culture}`;
       }
       vm.currentIframeUrl = `/${$scope.model.node.id}${query}`;
+
+      // Set the previous URL too
+      let prevQuery = `cid=${$scope.model.node.id}&vid=${vm.previousVersion.versionId}`;
+      if (language.language) {
+        prevQuery += `&culture=${language.language.culture}`;
+      }
+
+      vm.previousVersion.iframeUrl = `/?${prevQuery}`;
 
       getVersions();
     }
@@ -122,6 +130,7 @@
         const culture = $scope.model.node.variants.length > 1 ? vm.currentVersion.language.culture : null;
 
         vm.previousVersion = null;
+
         contentResource.getRollbackVersion(version.versionId, culture)
           .then(function (data) {
             vm.previousVersion = data;
@@ -129,7 +138,8 @@
             vm.previousVersion.displayValue = version.displayValue + ' - ' + version.username;
 
             let query = `cid=${$scope.model.node.id}&vid=${version.versionId}`;
-            if(culture) {
+
+            if (culture) {
               query += `&culture=${culture}`;
             }
 
