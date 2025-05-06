@@ -155,10 +155,10 @@
                   <div class="rp-container selected">
                     <div>
                       <h4 class="uui-h4">Selected version <a class="uui-text ml-sm" href="{{vm.previousVersion.iframeUrl}}" target="_blank">Open in a new window</a></h4>
-                      
+
                     </div>
                     <div class="iframe-wrapper" ng-if="vm.previousVersion">
-                      <iframe src="{{vm.previousVersion.iframeUrl}}"></iframe>
+                      <iframe src="{{vm.previousVersion.iframeUrl}}" id="rollbackPreviewerRight"></iframe>
                     </div>
                   </div>
                 </div>

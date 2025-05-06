@@ -106,6 +106,7 @@
       vm.previousVersion.iframeUrl = `/?${prevQuery}`;
 
       getVersions();
+      setupScrollSync();
     }
 
     function canRollback(version) {
@@ -151,6 +152,11 @@
 
             vm.loadingDiff = false;
             vm.rollbackButtonDisabled = !vm.diffHasChanges;
+
+             if (!vm.showJsonDiff) {
+              setupScrollSync();
+            }
+
           }, function () {
             vm.loadingDiff = false;
           });
@@ -317,8 +323,6 @@
       vm.pageNumber = pageNumber;
       getVersions();
     }
-
-
     const device = {
       alias: "desktop",
       label: "Desktop",
@@ -332,11 +336,112 @@
     function switchView() {
       vm.showJsonDiff = !vm.showJsonDiff;
       vm.containerClasses = vm.showJsonDiff ? 'side-by-side' : 'top-down';
+
+      // If switching to visual diff view, setup scroll sync after a small delay to allow for rendering
+      if (!vm.showJsonDiff) {
+        setTimeout(setupScrollSync, 100);
+      }
     }
 
-    var updateIframeDevice = () => {
-      var leftPreview = document.querySelector('.rp-container.current');
-      var clientWidth = (window.outerWidth - 200) / 2;
+    // Setup scroll synchronization between left and right iframes
+    const setupScrollSync = () => {
+      // Wait a bit to ensure iframes are fully loaded
+      setTimeout(() => {
+        const iframes = [
+          document.getElementById('rollbackPreviewerLeft'),
+          document.getElementById('rollbackPreviewerRight')
+        ];
+
+        // Make sure both iframes exist
+        if (!iframes[0] || !iframes[1]) return;
+
+        // Set up onload handlers to reset scroll positions
+        iframes.forEach(iframe => {
+          iframe.onload = () => {
+            resetScrollPositions(iframes);
+          };
+        });
+
+        // Create a named function for the event listener so it can be removed
+        function handleScroll(e) {
+          const scrolledIframe = e.currentTarget.frameElement;
+          const otherIframes = iframes.filter(item => item !== scrolledIframe);
+
+          otherIframes.forEach(otherIframe => {
+            otherIframe.contentWindow.removeEventListener('scroll', handleScroll);
+            syncScroll(scrolledIframe, otherIframe);
+            window.requestAnimationFrame(() => {
+              otherIframe.contentWindow.addEventListener('scroll', handleScroll);
+            });
+          });
+        }
+
+        // Add scroll event listeners to both iframes
+        iframes.forEach(iframe => {
+          iframe.contentWindow.addEventListener('scroll', handleScroll);
+        });
+      }, 300);
+    };
+
+    // Reset scroll positions of all iframes to top
+    const resetScrollPositions = (iframes) => {
+      try {
+        iframes.forEach(iframe => {
+          if (iframe && iframe.contentWindow) {
+            iframe.contentWindow.scrollTo({
+              top: 0,
+              left: 0,
+              behavior: 'instant'
+            });
+          }
+        });
+      } catch (e) {
+        console.error('Error resetting scroll positions:', e);
+      }
+    };
+
+    // Synchronize scroll between source and target iframes using percentage-based calculation
+    const syncScroll = (scrolledIframe, targetIframe) => {
+      if (!scrolledIframe || !targetIframe) return;
+
+      try {
+        // Get document objects
+        const scrolledDoc = scrolledIframe.contentDocument || scrolledIframe.contentWindow.document;
+        const targetDoc = targetIframe.contentDocument || targetIframe.contentWindow.document;
+
+        if (!scrolledDoc || !targetDoc) return;
+
+        // Calculate vertical scroll percentage
+        const scrolledEle = scrolledDoc.documentElement || scrolledDoc.body;
+        const targetEle = targetDoc.documentElement || targetDoc.body;
+
+        const maxScrollTop = scrolledEle.scrollHeight - scrolledEle.clientHeight;
+        const scrolledPercent = maxScrollTop > 0 ? scrolledEle.scrollTop / maxScrollTop : 0;
+
+        const targetMaxScrollTop = targetEle.scrollHeight - targetEle.clientHeight;
+        const targetTop = scrolledPercent * targetMaxScrollTop;
+
+        // Calculate horizontal scroll percentage if needed
+        const maxScrollLeft = scrolledEle.scrollWidth - scrolledEle.clientWidth;
+        const scrolledWidthPercent = maxScrollLeft > 0 ? scrolledEle.scrollLeft / maxScrollLeft : 0;
+
+        const targetMaxScrollLeft = targetEle.scrollWidth - targetEle.clientWidth;
+        const targetLeft = scrolledWidthPercent * targetMaxScrollLeft;
+
+        // Apply scroll to target iframe
+        targetIframe.contentWindow.scrollTo({
+          top: targetTop,
+          left: targetLeft,
+          behavior: 'instant'
+        });
+      } catch (e) {
+        console.error('Error syncing scroll:', e);
+      }
+    };
+
+    const updateIframeDevice = () => {
+      const leftPreview = document.querySelector('.rp-container.current');
+      let clientWidth = (window.outerWidth - 200) / 2;
       if (leftPreview) {
         clientWidth = leftPreview.clientWidth;
       }
@@ -351,11 +456,16 @@
       vm.visualDiffContainerStyles += `--rp-iframe-scale: ${scale};`;
       vm.visualDiffContainerStyles += `--rp-height: ${this._device.demensions.height * scale}px;`;
     }
+      onInit();
 
-    onInit();
-
-    window.onresize(updateIframeDevice);
+    // Use proper addEventListener for resize events
+    window.addEventListener('resize', updateIframeDevice);
     updateIframeDevice();
+
+    // Setup scroll sync after initial load if we're in visual diff mode
+    if (!vm.showJsonDiff) {
+      setTimeout(setupScrollSync, 1000);
+    }
 
   }
 
