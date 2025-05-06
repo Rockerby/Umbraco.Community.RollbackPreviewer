@@ -45,7 +45,7 @@ export class RpRollbackModalElement extends UmbRollbackModalElement {
             <div>
               <h4 class="uui-h4">Current version</h4>
             </div>
-            <rp-iframe src="${this.#serverUrl}/${this.currentDocument?.unique}">
+            <rp-iframe src="${this.#serverUrl}/${this.currentDocument?.unique}?culture=${this._selectedCulture}">
             </rp-iframe>
           </div>
           <div class="rp-container selected">
@@ -55,7 +55,7 @@ export class RpRollbackModalElement extends UmbRollbackModalElement {
             </div>
             <rp-iframe
               src="${this.#serverUrl}?cid=${this.currentDocument
-                ?.unique}&vid=${this._selectedVersion.id}"
+                ?.unique}&vid=${this._selectedVersion.id}&culture=${this._selectedCulture}"
             ></rp-iframe>
           </div>
         </div>

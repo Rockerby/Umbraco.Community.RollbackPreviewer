@@ -14,9 +14,9 @@ import { UmbTextStyles as _e } from "@umbraco-cms/backoffice/style";
 import { UmbUserItemRepository as ye } from "@umbraco-cms/backoffice/user";
 import { UMB_PROPERTY_DATASET_CONTEXT as ge } from "@umbraco-cms/backoffice/property";
 import { UMB_APP_LANGUAGE_CONTEXT as we, UmbLanguageItemRepository as Ce } from "@umbraco-cms/backoffice/language";
-import { UMB_ENTITY_CONTEXT as ke } from "@umbraco-cms/backoffice/entity";
-import { UmbVariantId as Ve } from "@umbraco-cms/backoffice/variant";
-import { UMB_ACTION_EVENT_CONTEXT as $e } from "@umbraco-cms/backoffice/action";
+import { UMB_ENTITY_CONTEXT as $e } from "@umbraco-cms/backoffice/entity";
+import { UmbVariantId as ke } from "@umbraco-cms/backoffice/variant";
+import { UMB_ACTION_EVENT_CONTEXT as Ve } from "@umbraco-cms/backoffice/action";
 import { UmbRequestReloadStructureForEntityEvent as xe, UmbEntityUpdatedEvent as Ee } from "@umbraco-cms/backoffice/entity-action";
 import { UMB_APP_CONTEXT as De } from "@umbraco-cms/backoffice/app";
 var b;
@@ -90,19 +90,19 @@ var Se = Object.defineProperty, ze = Object.getOwnPropertyDescriptor, te = (e) =
   for (var r = s > 1 ? void 0 : s ? ze(t, i) : t, a = e.length - 1, o; a >= 0; a--)
     (o = e[a]) && (r = (s ? o(t, i, r) : o(r)) || r);
   return s && r && Se(t, i, r), r;
-}, A = (e, t, i) => t.has(e) || te("Cannot " + i), v = (e, t, i) => (A(e, t, "read from private field"), i ? i.call(e) : t.get(e)), k = (e, t, i) => t.has(e) ? te("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, i), Z = (e, t, i, s) => (A(e, t, "write to private field"), t.set(e, i), i), d = (e, t, i) => (A(e, t, "access private method"), i), V, H, P, z, U, c, I, J, X, ie, re, se, N, ae;
+}, A = (e, t, i) => t.has(e) || te("Cannot " + i), v = (e, t, i) => (A(e, t, "read from private field"), i ? i.call(e) : t.get(e)), $ = (e, t, i) => t.has(e) ? te("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, i), Z = (e, t, i, s) => (A(e, t, "write to private field"), t.set(e, i), i), d = (e, t, i) => (A(e, t, "access private method"), i), k, H, P, z, U, c, I, J, X, ie, re, se, N, ae;
 let h = class extends me {
   constructor() {
-    super(), k(this, c), this._versions = [], this._selectedCulture = null, this._isInvariant = !0, this._availableVariants = [], this._diffs = [], k(this, V, new Ie(this)), k(this, H, new ye(this)), k(this, P, {
+    super(), $(this, c), this._versions = [], this._selectedCulture = null, this._isInvariant = !0, this._availableVariants = [], this._diffs = [], $(this, k, new Ie(this)), $(this, H, new ye(this)), $(this, P, {
       day: "numeric",
       month: "long",
       hour: "numeric",
       minute: "2-digit"
-    }), k(this, z), k(this, U), this.consumeContext(ge, (e) => {
+    }), $(this, z), $(this, U), this.consumeContext(ge, (e) => {
       Z(this, U, e.getVariantId().culture ?? void 0), d(this, c, I).call(this);
     }), this.consumeContext(we, (e) => {
       Z(this, z, e.getAppCulture()), d(this, c, I).call(this);
-    }), this.consumeContext(ke, async (e) => {
+    }), this.consumeContext($e, async (e) => {
       var o;
       if (e.getEntityType() !== j)
         throw new Error(`Entity type is not ${j}`);
@@ -113,7 +113,7 @@ let h = class extends me {
       if (!i) return;
       this.currentDocument = i;
       const s = ((o = this.currentDocument) == null ? void 0 : o.variants) ?? [];
-      this._isInvariant = s.length === 1 && new Ve(s[0].culture).isInvariant(), d(this, c, I).call(this);
+      this._isInvariant = s.length === 1 && new ke(s[0].culture).isInvariant(), d(this, c, I).call(this);
       const r = s.map((n) => n.culture).filter((n) => n !== null), { data: a } = await new Ce(this).requestItems(r);
       a ? this._availableVariants = a.map((n) => ({
         name: n.name,
@@ -126,12 +126,12 @@ let h = class extends me {
   async onRollback() {
     var u, _, C;
     if (!this._selectedVersion) return;
-    const e = this._selectedVersion.id, t = this._selectedCulture ?? void 0, { error: i } = await v(this, V).rollback(e, t);
+    const e = this._selectedVersion.id, t = this._selectedCulture ?? void 0, { error: i } = await v(this, k).rollback(e, t);
     if (i) return;
     const s = (u = this.currentDocument) == null ? void 0 : u.unique, r = (_ = this.currentDocument) == null ? void 0 : _.entityType;
     if (!s || !r)
       throw new Error("Document unique or entity type is not set");
-    const a = await this.getContext($e), o = new xe({ unique: s, entityType: r });
+    const a = await this.getContext(Ve), o = new xe({ unique: s, entityType: r });
     a.dispatchEvent(o);
     const n = new Ee({ unique: s, entityType: r });
     a.dispatchEvent(n), this.value = {}, (C = this.modalContext) == null || C.submit();
@@ -267,7 +267,7 @@ let h = class extends me {
     `;
   }
 };
-V = /* @__PURE__ */ new WeakMap();
+k = /* @__PURE__ */ new WeakMap();
 H = /* @__PURE__ */ new WeakMap();
 P = /* @__PURE__ */ new WeakMap();
 z = /* @__PURE__ */ new WeakMap();
@@ -281,7 +281,7 @@ J = async function() {
   var a, o, n;
   if (!((a = this.currentDocument) != null && a.unique))
     throw new Error("Document unique is not set");
-  const { data: e } = await v(this, V).requestVersionsByDocumentId(
+  const { data: e } = await v(this, k).requestVersionsByDocumentId(
     (o = this.currentDocument) == null ? void 0 : o.unique,
     this._selectedCulture ?? void 0
   );
@@ -307,7 +307,7 @@ X = async function(e) {
     this._selectedVersion = void 0, this._diffs = [];
     return;
   }
-  const { data: i } = await v(this, V).requestVersionById(e);
+  const { data: i } = await v(this, k).requestVersionById(e);
   if (!i) {
     this._selectedVersion = void 0, this._diffs = [];
     return;
@@ -327,7 +327,7 @@ ie = function(e) {
   d(this, c, X).call(this, e);
 };
 re = function(e, t, i) {
-  e.preventDefault(), e.stopImmediatePropagation(), v(this, V).setPreventCleanup(t, i);
+  e.preventDefault(), e.stopImmediatePropagation(), v(this, k).setPreventCleanup(t, i);
   const s = this._versions.find((r) => r.id === t);
   s && (s.preventCleanup = i, this.requestUpdate("_versions"));
 };
@@ -650,10 +650,10 @@ var Oe = Object.getOwnPropertyDescriptor, oe = (e) => {
   for (var r = s > 1 ? void 0 : s ? Oe(t, i) : t, a = e.length - 1, o; a >= 0; a--)
     (o = e[a]) && (r = o(r) || r);
   return r;
-}, L = (e, t, i) => t.has(e) || oe("Cannot " + i), y = (e, t, i) => (L(e, t, "read from private field"), i ? i.call(e) : t.get(e)), O = (e, t, i) => t.has(e) ? oe("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, i), ne = (e, t, i, s) => (L(e, t, "write to private field"), t.set(e, i), i), ee = (e, t, i) => (L(e, t, "access private method"), i), f, $, S, le, ue;
+}, L = (e, t, i) => t.has(e) || oe("Cannot " + i), y = (e, t, i) => (L(e, t, "read from private field"), i ? i.call(e) : t.get(e)), O = (e, t, i) => t.has(e) ? oe("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, i), ne = (e, t, i, s) => (L(e, t, "write to private field"), t.set(e, i), i), ee = (e, t, i) => (L(e, t, "access private method"), i), f, V, S, le, ue;
 let T = class extends h {
   constructor() {
-    super(), O(this, S), O(this, f, !1), O(this, $, ""), ee(this, S, le).call(this);
+    super(), O(this, S), O(this, f, !1), O(this, V, ""), ee(this, S, le).call(this);
   }
   renderSelectedVersionVisualPreview() {
     var e, t;
@@ -664,7 +664,7 @@ let T = class extends h {
             <div>
               <h4 class="uui-h4">Current version</h4>
             </div>
-            <rp-iframe src="${y(this, $)}/${(e = this.currentDocument) == null ? void 0 : e.unique}">
+            <rp-iframe src="${y(this, V)}/${(e = this.currentDocument) == null ? void 0 : e.unique}?culture=${this._selectedCulture}">
             </rp-iframe>
           </div>
           <div class="rp-container selected">
@@ -673,7 +673,7 @@ let T = class extends h {
               <p class="uui-text">${this.currentVersionHeader}</p>
             </div>
             <rp-iframe
-              src="${y(this, $)}?cid=${(t = this.currentDocument) == null ? void 0 : t.unique}&vid=${this._selectedVersion.id}"
+              src="${y(this, V)}?cid=${(t = this.currentDocument) == null ? void 0 : t.unique}&vid=${this._selectedVersion.id}&culture=${this._selectedCulture}"
             ></rp-iframe>
           </div>
         </div>
@@ -738,11 +738,11 @@ let T = class extends h {
   }
 };
 f = /* @__PURE__ */ new WeakMap();
-$ = /* @__PURE__ */ new WeakMap();
+V = /* @__PURE__ */ new WeakMap();
 S = /* @__PURE__ */ new WeakSet();
 le = async function() {
   const e = await this.getContext(De);
-  ne(this, $, e.getServerUrl());
+  ne(this, V, e.getServerUrl());
 };
 ue = function() {
   ne(this, f, !y(this, f)), this.requestUpdate();
@@ -756,4 +756,4 @@ export {
   T as RpRollbackModalElement,
   it as default
 };
-//# sourceMappingURL=rollback-previewer-modal.element-PifQ2g-c.js.map
+//# sourceMappingURL=rollback-previewer-modal.element-J8aaGtSp.js.map
