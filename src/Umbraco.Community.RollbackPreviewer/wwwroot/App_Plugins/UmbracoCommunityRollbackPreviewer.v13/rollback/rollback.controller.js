@@ -337,32 +337,29 @@
       vm.showJsonDiff = !vm.showJsonDiff;
       vm.containerClasses = vm.showJsonDiff ? 'side-by-side' : 'top-down';
 
-      // If switching to visual diff view, setup scroll sync after a small delay to allow for rendering
+      // If switching to visual diff view, setup scroll sync after a small delay to allow for rendering. A little hacky i know
       if (!vm.showJsonDiff) {
         setTimeout(setupScrollSync, 100);
       }
     }
 
-    // Setup scroll synchronization between left and right iframes
+
     const setupScrollSync = () => {
-      // Wait a bit to ensure iframes are fully loaded
+      // Wait a bit to ensure iframes are fully loaded, again a bit hacky but it works for now
       setTimeout(() => {
         const iframes = [
           document.getElementById('rollbackPreviewerLeft'),
           document.getElementById('rollbackPreviewerRight')
         ];
 
-        // Make sure both iframes exist
         if (!iframes[0] || !iframes[1]) return;
 
-        // Set up onload handlers to reset scroll positions
         iframes.forEach(iframe => {
           iframe.onload = () => {
             resetScrollPositions(iframes);
           };
         });
 
-        // Create a named function for the event listener so it can be removed
         function handleScroll(e) {
           const scrolledIframe = e.currentTarget.frameElement;
           const otherIframes = iframes.filter(item => item !== scrolledIframe);
@@ -376,14 +373,12 @@
           });
         }
 
-        // Add scroll event listeners to both iframes
         iframes.forEach(iframe => {
           iframe.contentWindow.addEventListener('scroll', handleScroll);
         });
-      }, 300);
+      }, 200);
     };
 
-    // Reset scroll positions of all iframes to top
     const resetScrollPositions = (iframes) => {
       try {
         iframes.forEach(iframe => {
@@ -405,7 +400,6 @@
       if (!scrolledIframe || !targetIframe) return;
 
       try {
-        // Get document objects
         const scrolledDoc = scrolledIframe.contentDocument || scrolledIframe.contentWindow.document;
         const targetDoc = targetIframe.contentDocument || targetIframe.contentWindow.document;
 
@@ -458,13 +452,12 @@
     }
       onInit();
 
-    // Use proper addEventListener for resize events
     window.addEventListener('resize', updateIframeDevice);
     updateIframeDevice();
 
     // Setup scroll sync after initial load if we're in visual diff mode
     if (!vm.showJsonDiff) {
-      setTimeout(setupScrollSync, 1000);
+      setTimeout(setupScrollSync, 400);
     }
 
   }
