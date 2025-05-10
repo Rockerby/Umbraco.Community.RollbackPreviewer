@@ -14,6 +14,7 @@ using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Notifications;
 using Umbraco.Cms.Core.Persistence.Repositories;
+using Umbraco.Cms.Core.PropertyEditors;
 using Umbraco.Cms.Core.Routing;
 using Umbraco.Cms.Core.Scoping;
 using Umbraco.Cms.Core.Security;
@@ -37,6 +38,7 @@ namespace Umbraco.Community.RollbackPreviewer.Services
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly IContentVersionService _contentVersionService;
         private readonly IPublishedModelFactory _publishedModelFactory;
+        private readonly IVariationContextAccessor _variationContextAccessor;
 
 
         /// <summary>
@@ -47,7 +49,8 @@ namespace Umbraco.Community.RollbackPreviewer.Services
             IHttpContextAccessor httpContextAccessor, IContentService contentService,
             ICoreScopeProvider coreScopeProvider, IDocumentRepository documentRepository,
             IServiceScopeFactory scopeFactory, IContentVersionService contentVersionService,
-        IPublishedModelFactory publishedModelFactory,
+            IPublishedModelFactory publishedModelFactory,
+            IVariationContextAccessor variationContextAccessor,
             PublishedContentConverter publishedContentConverter)
         {
             _contentService = contentService;
@@ -59,6 +62,7 @@ namespace Umbraco.Community.RollbackPreviewer.Services
             _logger = logger;
             _contentVersionService = contentVersionService;
             _publishedModelFactory = publishedModelFactory;
+            _variationContextAccessor = variationContextAccessor;
         }
 
         /// <inheritdoc />
@@ -74,11 +78,20 @@ namespace Umbraco.Community.RollbackPreviewer.Services
                     return false;
                 }
 
+#if NET9_0_OR_GREATER
+
                 if (!Guid.TryParse(req.Query["cid"], out Guid contentId) ||
                     !Guid.TryParse(req.Query["vid"], out Guid versionId))
                 {
                     return false;
                 }
+#else
+                if (!int.TryParse(req.Query["cid"], out int contentId) ||
+                    !int.TryParse(req.Query["vid"], out int versionId))
+                {
+                    return false;
+                }
+#endif
 
                 // Make sure a back office user is logged in. Not concerned about content node permissions
                 // just yet as we're not performing any write permissions.
@@ -86,6 +99,13 @@ namespace Umbraco.Community.RollbackPreviewer.Services
                 if (!IsBackOfficeUserLoggedIn())
                 {
                     return false;
+                }
+
+                var culture = req.Query["culture"].ToString();
+
+                if (culture.IsNullOrWhiteSpace())
+                {
+                    culture = null;
                 }
 
                 // Get the current copy of the node
@@ -110,19 +130,36 @@ namespace Umbraco.Community.RollbackPreviewer.Services
                     _logger.LogWarning("Unable to find content with GUID {0} (and version {1}) as the content is trashed", contentId.ToString(), versionId);
                     return false;
                 }
-                else if (version.Id != content.Id)
+                else if (version?.Id != content.Id)
                 {
                     _logger.LogWarning("Requested version doesn't belong to the requested content. ContentID {0} / VersionID {1}", contentId, versionId);
                     return false;
                 }
 
-                // Copy the changes from the version
-                content.CopyFrom(version, "*");
+                try
+                {
+                    // Set the new culture on the variation accessor and push it into the request pipeline
+                    _variationContextAccessor.VariationContext = new VariationContext(culture);
+                    frequest.SetCulture(culture);
+                    // Copy the changes from the version
+                    content.CopyFrom(version, culture);
+                }
+                catch (CultureNotFoundException cnfe)
+                {
+                    _logger.LogWarning("Requested culture " + culture + " does not exist");
+                    return false;
+                }
 
                 // Convert the IContent to IPublishedContent.
-                IPublishedContent? pubContent = _publishedContentConverter.ToPublishedContent(content)?
+                IPublishedContent? pubContent = _publishedContentConverter.ToPublishedContent(content, culture)?
                     .CreateModel(_publishedModelFactory);
-                
+
+                if (pubContent == null)
+                {
+                    _logger.LogWarning("Unable to convert content with GUID {0} to IPublishedContent", contentId.ToString());
+                    return false;
+                }
+
                 // Set the content that we "created" back to the pipeline
                 frequest.SetPublishedContent(pubContent);
 
@@ -155,7 +192,7 @@ namespace Umbraco.Community.RollbackPreviewer.Services
 
                 string backOfficeCookie = _httpContextAccessor.HttpContext?.Request.Cookies[cookieOptions.Cookie.Name!];
                 AuthenticationTicket unprotected = cookieOptions.TicketDataFormat.Unprotect(backOfficeCookie!);
-                ClaimsIdentity backOfficeIdentity = unprotected!.Principal.GetUmbracoIdentity();
+                ClaimsIdentity backOfficeIdentity = unprotected?.Principal.GetUmbracoIdentity();
 
                 return backOfficeIdentity != null;
             }
@@ -170,10 +207,24 @@ namespace Umbraco.Community.RollbackPreviewer.Services
         {
             // The back office rollback viewer loads the versions in via GUID
             // - this is how the management API get the version from said GUID
+#if NET9_0_OR_GREATER
             Attempt<IContent?, ContentVersionOperationStatus> attempt =
                 await _contentVersionService.GetAsync(versionId);
-
             return attempt.Result;
+#else
+            throw new NotImplementedException();
+#endif
+
+        }
+        private async Task<IContent?> GetVersion(int versionId)
+        {
+#if NET9_0_OR_GREATER
+            throw new NotImplementedException();
+#else
+            var contentVersion = _contentService.GetVersion(versionId);
+            return contentVersion;
+#endif
+
         }
     }
 }

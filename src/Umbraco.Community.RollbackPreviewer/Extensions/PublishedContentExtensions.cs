@@ -8,11 +8,11 @@ using Umbraco.Cms.Core;
 namespace Umbraco.Community.RollbackPreviewer.Extensions
 {
     public class PublishedContentConverter(IContentTypeService ctBaseService, IPublishedContentTypeFactory pcTypeFactory,
-        IContentService contentService)
+        IContentService contentService, IPublishedModelFactory publishedModelFactory)
     {
-        public IPublishedContent ToPublishedContent(IContent content, bool isPreview = false)
+        public IPublishedContent ToPublishedContent(IContent content, string? culture, bool isPreview = false)
         {
-            return new ContentExtensions.PublishedContentWrapper(content, isPreview, ctBaseService, pcTypeFactory, contentService, this);
+            return new ContentExtensions.PublishedContentWrapper(content, culture, isPreview, ctBaseService, pcTypeFactory, contentService, publishedModelFactory, this);
         }
     }
 
@@ -35,9 +35,9 @@ namespace Umbraco.Community.RollbackPreviewer.Extensions
             private readonly Lazy<IEnumerable<IPublishedContent>> _children;
             private readonly Lazy<IReadOnlyDictionary<string, PublishedCultureInfo>> _cultureInfos;
 
-            public PublishedContentWrapper(IContent inner, bool isPreviewing,
+            public PublishedContentWrapper(IContent inner, string? culture, bool isPreviewing,
                 IContentTypeService ctBaseService, IPublishedContentTypeFactory pcTypeFactory,
-                IContentService contentService, PublishedContentConverter converter)
+                IContentService contentService, IPublishedModelFactory publishedModelFactory, PublishedContentConverter converter)
             {
                 _inner = inner ?? throw new NullReferenceException("inner");
                 _isPreviewing = isPreviewing;
@@ -56,7 +56,7 @@ namespace Umbraco.Community.RollbackPreviewer.Extensions
                     .Select(x =>
                     {
                         var p = _inner.Properties.SingleOrDefault(xx => xx.Alias == x.Alias);
-                        return new PublishedPropertyWrapper(this, x, p, _isPreviewing);
+                        return new PublishedPropertyWrapper(this, x, p, culture, _isPreviewing);
                     })
                     .Cast<IPublishedProperty>()
                     .ToArray());
@@ -66,13 +66,13 @@ namespace Umbraco.Community.RollbackPreviewer.Extensions
                     var p = contentService.GetById(_inner.ParentId);
                     if (p == null)
                         return null;
-                    return converter.ToPublishedContent(p);
+                    return converter.ToPublishedContent(p, culture).CreateModel(publishedModelFactory);
                 });
 
                 _children = new Lazy<IEnumerable<IPublishedContent>>(() =>
                 {
                     var c = contentService.GetPagedChildren(_inner.Id, 0, 2000000000, out var totalRecords);
-                    return c.Select(x => converter.ToPublishedContent(x)).OrderBy(x => x.SortOrder);
+                    return c.Select(x => converter.ToPublishedContent(x, culture).CreateModel(publishedModelFactory)).OrderBy(x => x.SortOrder);
                 });
 
                 _cultureInfos = new Lazy<IReadOnlyDictionary<string, PublishedCultureInfo>>(() =>
@@ -180,10 +180,17 @@ namespace Umbraco.Community.RollbackPreviewer.Extensions
             private readonly IPublishedContent _content;
             private readonly bool _isPreviewing;
 
-            public PublishedPropertyWrapper(IPublishedContent content, IPublishedPropertyType propertyType, IProperty property, bool isPreviewing)
+            public PublishedPropertyWrapper(IPublishedContent content,  IPublishedPropertyType propertyType, IProperty property, string? culture, bool isPreviewing)
                 : this(propertyType, PropertyCacheLevel.Unknown) // cache level is ignored
             {
-                _sourceValue = property?.GetValue();
+                _sourceValue = property?.GetValue(culture);
+
+                if (_sourceValue == null)
+                {
+                    // Block properties return null for GetValue...
+                    _sourceValue = property?.Values?.FirstOrDefault()?.EditedValue;
+                }
+
                 _content = content;
                 _isPreviewing = isPreviewing;
             }
@@ -216,6 +223,19 @@ namespace Umbraco.Community.RollbackPreviewer.Extensions
             }
 
             public object? GetDeliveryApiValue(bool expanding, string? culture = null, string? segment = null)
+            {
+                //TODO: Implement DeliveryApiValue
+                throw new NotImplementedException();
+            }
+
+            /// <summary>
+            /// Version 13 specific
+            /// </summary>
+            /// <param name="culture"></param>
+            /// <param name="segment"></param>
+            /// <returns></returns>
+            /// <exception cref="NotImplementedException"></exception>
+            public object? GetXPathValue(string? culture = null, string? segment = null)
             {
                 //TODO: Implement DeliveryApiValue
                 throw new NotImplementedException();
