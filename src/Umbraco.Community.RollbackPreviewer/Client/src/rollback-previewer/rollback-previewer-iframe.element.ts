@@ -5,6 +5,7 @@ import {
   LitElement,
   property,
   state,
+  query
 } from "@umbraco-cms/backoffice/external/lit";
 
 export interface RollbackPreviewDevice {
@@ -33,9 +34,11 @@ export class RpIframe extends LitElement {
   @state()
   _device: RollbackPreviewDevice = device;
 
+  @query("iframe")
+  iframe: HTMLIFrameElement | null | undefined;
+
   connectedCallback(): void {
     super.connectedCallback();
-    console.log("connected", this.src);
 
     if (!this.src) {
       console.error("No src provided for rollback previewer iframe");
@@ -58,6 +61,18 @@ export class RpIframe extends LitElement {
     this.style.setProperty("--rp-device-height", `${this._device.demensions.height}px`);
     this.style.setProperty("--rp-iframe-scale", `${scale}`);
     this.style.setProperty("--rp-height", `${this._device.demensions.height * scale}px`);
+  }
+
+  resetScrollPosition() {
+    this.setScrollPosition(0, 0);
+  }
+
+  setScrollPosition(positionY: number = 0, positionX: number = 0) {
+    this.iframe?.contentWindow?.scrollTo({
+      top: positionY,
+      left: positionX,
+      behavior: 'instant'
+    });
   }
 
   // This is a LitElement specific method that is called when the element is first rendered

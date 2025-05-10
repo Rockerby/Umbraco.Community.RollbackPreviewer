@@ -2,17 +2,25 @@ import {
   customElement,
   html,
   nothing,
+  query,
 } from "@umbraco-cms/backoffice/external/lit";
 import UmbRollbackModalElement from "../umbraco/rollback/modal/rollback-modal.element.js";
 import { UMB_APP_CONTEXT } from "@umbraco-cms/backoffice/app";
 
 import { rpRollbackStyles } from "./rollback-previewer-modal.styles.js";
 import "./rollback-previewer-iframe.element.js";
+import RpIframe from "./rollback-previewer-iframe.element.js";
 
 @customElement("rp-rollback-modal")
 export class RpRollbackModalElement extends UmbRollbackModalElement {
   #useJsonView: boolean = false;
   #serverUrl: string = "";
+
+  @query("#rollbackPreviewerLeft")
+  rollbackPreviewerLeft: RpIframe | null | undefined;
+
+  @query("#rollbackPreviewerRight")
+  rollbackPreviewerRight: RpIframe | null | undefined;
 
   constructor() {
     super();
@@ -24,9 +32,116 @@ export class RpRollbackModalElement extends UmbRollbackModalElement {
     this.#serverUrl = appContext.getServerUrl();
   }
 
-  #switchView() {
+  async #switchView() {
     this.#useJsonView = !this.#useJsonView;
     this.requestUpdate();
+
+    if (!this.#useJsonView) {
+      await this.updateComplete;
+      setTimeout(() => {
+        this.#setupScrollSync();
+    }, 300);
+    }
+  }
+
+  #setupScrollSync() {
+    if (!this.rollbackPreviewerLeft || !this.rollbackPreviewerRight) return;
+
+    const iframes = [this.rollbackPreviewerLeft, this.rollbackPreviewerRight];
+
+    iframes.forEach((iframe) => {
+      if (iframe === null) return;
+
+      iframe.onload = () => {
+        iframe.resetScrollPosition();
+      };
+    });
+
+    const handleScroll = (e: Event) => {
+      const scrolledWindow = e.currentTarget as Window;
+      const scrolledIframe = scrolledWindow?.frameElement as HTMLIFrameElement;
+      const otherIframes = iframes.filter(
+        (item) => item.iframe !== scrolledIframe
+      ).map(item => item.iframe);
+
+      if (!scrolledIframe) return;
+
+      otherIframes.forEach((otherIframe) => {
+        if (!otherIframe) return;
+        otherIframe.contentWindow?.removeEventListener(
+          "scroll",
+          handleScroll
+        );
+
+        this.#syncScroll(scrolledIframe, otherIframe);
+
+        window.requestAnimationFrame(() => {
+          otherIframe?.contentWindow?.addEventListener(
+            "scroll",
+            handleScroll
+          );
+        });
+      });
+    };
+
+    iframes.forEach((iframe) => {
+      iframe.iframe?.contentWindow?.addEventListener("scroll", handleScroll);
+    });
+  }
+
+  #syncScroll(
+    scrolledIframe: HTMLIFrameElement,
+    targetIframe: HTMLIFrameElement
+  ) {
+    if (!scrolledIframe || !targetIframe) return;
+
+    try {
+      const scrolledDoc =
+        scrolledIframe.contentDocument ||
+        scrolledIframe.contentWindow?.document;
+      const targetDoc =
+        targetIframe.contentDocument ||
+        targetIframe.contentWindow?.document;
+
+      if (!scrolledDoc || !targetDoc) return;
+
+      // Calculate vertical scroll percentage
+      const scrolledEle = scrolledDoc.documentElement || scrolledDoc.body;
+      const targetEle = targetDoc.documentElement || targetDoc.body;
+
+      const maxScrollTop = scrolledEle.scrollHeight - scrolledEle.clientHeight;
+      const scrolledPercent =
+        maxScrollTop > 0 ? scrolledEle.scrollTop / maxScrollTop : 0;
+
+      const targetMaxScrollTop =
+        targetEle.scrollHeight - targetEle.clientHeight;
+      const targetTop = scrolledPercent * targetMaxScrollTop;
+
+      // Calculate horizontal scroll percentage if needed
+      const maxScrollLeft = scrolledEle.scrollWidth - scrolledEle.clientWidth;
+      const scrolledWidthPercent =
+        maxScrollLeft > 0 ? scrolledEle.scrollLeft / maxScrollLeft : 0;
+
+      const targetMaxScrollLeft = targetEle.scrollWidth - targetEle.clientWidth;
+      const targetLeft = scrolledWidthPercent * targetMaxScrollLeft;
+
+      // Apply scroll to target iframe
+      targetIframe.contentWindow?.scrollTo({
+        top: targetTop,
+        left: targetLeft,
+        behavior: "instant",
+      });
+    } catch (e) {
+      console.error("Error syncing scroll:", e);
+    }
+  }
+
+  // This is a LitElement specific method that is called when the element is first rendered
+  updated(): void {
+    // This is a hack for now to wait for the iframe to load before setting up the scroll sync
+    setTimeout(() => {
+      this.#setupScrollSync();
+    }, 300);
   }
 
   renderSelectedVersionVisualPreview() {
@@ -45,7 +160,11 @@ export class RpRollbackModalElement extends UmbRollbackModalElement {
             <div>
               <h4 class="uui-h4">Current version</h4>
             </div>
-            <rp-iframe src="${this.#serverUrl}/${this.currentDocument?.unique}">
+            <rp-iframe
+              id="rollbackPreviewerLeft"
+              src="${this.#serverUrl}/${this.currentDocument
+                ?.unique}?culture=${this._selectedCulture}"
+            >
             </rp-iframe>
           </div>
           <div class="rp-container selected">
@@ -54,8 +173,10 @@ export class RpRollbackModalElement extends UmbRollbackModalElement {
               <p class="uui-text">${this.currentVersionHeader}</p>
             </div>
             <rp-iframe
+              id="rollbackPreviewerRight"
               src="${this.#serverUrl}?cid=${this.currentDocument
-                ?.unique}&vid=${this._selectedVersion.id}"
+                ?.unique}&vid=${this._selectedVersion.id}&culture=${this
+                ._selectedCulture}"
             ></rp-iframe>
           </div>
         </div>

@@ -3,9 +3,13 @@
 @using Clean.Core.Models.ViewModels
 @using ContentModels = Umbraco.Cms.Web.Common.PublishedModels
 
+@inject IVariationContextAccessor _variationContextAccessor
+
 @{
     Layout = "master.cshtml";
 }
+
+<p>CURRENT CULTURE: @_variationContextAccessor.VariationContext.Culture</p>
 
 @await Html.PartialAsync("~/Views/Partials/pageHeader.cshtml", new PageHeaderViewModel(Model.Name, Model.Title, Model.Subtitle, Model.MainImage))
 
@@ -16,6 +20,36 @@
             <div class="row">
                 <div class="col-lg-8 col-md-10 mx-auto">
                     @Html.GetBlockListHtml(Model.ContentRows)
+                </div>
+            </div>
+        </div>
+    </article>
+}
+
+
+@if (Model.Grid != null)
+{
+    <article>
+    GRID
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-10 mx-auto">
+                    @await Html.GetBlockGridHtmlAsync(Model.Grid)
+                </div>
+            </div>
+        </div>
+    </article>
+}
+
+
+@if (Model.AnotherGrid != null)
+{
+    <article>
+    AnotherGrid
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-10 mx-auto">
+                    @await Html.GetBlockGridHtmlAsync(Model.AnotherGrid)
                 </div>
             </div>
         </div>
