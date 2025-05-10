@@ -1,4 +1,4 @@
-﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Home>
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Home>
 
 @using Clean.Core.Models.ViewModels
 @using ContentModels = Umbraco.Cms.Web.Common.PublishedModels
@@ -6,6 +6,8 @@
 
 @{
     Layout = "master.cshtml";
+
+    IPublishedContent child = Model.FirstChild();
 }
 
 <p>CURRENT CULTURE: @_variationContextAccessor.VariationContext.Culture</p>
@@ -29,4 +31,9 @@
             </div>
         </div>
     </article>
+}
+
+@if(child != null)
+{
+    <h2>Child: @child.Name</h2>
 }
