@@ -14,6 +14,7 @@ using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Notifications;
 using Umbraco.Cms.Core.Persistence.Repositories;
+using Umbraco.Cms.Core.PropertyEditors;
 using Umbraco.Cms.Core.Routing;
 using Umbraco.Cms.Core.Scoping;
 using Umbraco.Cms.Core.Security;
@@ -37,6 +38,7 @@ namespace Umbraco.Community.RollbackPreviewer.Services
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly IContentVersionService _contentVersionService;
         private readonly IPublishedModelFactory _publishedModelFactory;
+        private readonly IVariationContextAccessor _variationContextAccessor;
 
 
         /// <summary>
@@ -47,7 +49,8 @@ namespace Umbraco.Community.RollbackPreviewer.Services
             IHttpContextAccessor httpContextAccessor, IContentService contentService,
             ICoreScopeProvider coreScopeProvider, IDocumentRepository documentRepository,
             IServiceScopeFactory scopeFactory, IContentVersionService contentVersionService,
-        IPublishedModelFactory publishedModelFactory,
+            IPublishedModelFactory publishedModelFactory,
+            IVariationContextAccessor variationContextAccessor,
             PublishedContentConverter publishedContentConverter)
         {
             _contentService = contentService;
@@ -59,6 +62,7 @@ namespace Umbraco.Community.RollbackPreviewer.Services
             _logger = logger;
             _contentVersionService = contentVersionService;
             _publishedModelFactory = publishedModelFactory;
+            _variationContextAccessor = variationContextAccessor;
         }
 
         /// <inheritdoc />
@@ -97,6 +101,13 @@ namespace Umbraco.Community.RollbackPreviewer.Services
                     return false;
                 }
 
+                var culture = req.Query["culture"].ToString();
+
+                if (culture.IsNullOrWhiteSpace())
+                {
+                    culture = null;
+                }
+
                 // Get the current copy of the node
                 IContent? content = _contentService.GetById(contentId);
 
@@ -125,12 +136,29 @@ namespace Umbraco.Community.RollbackPreviewer.Services
                     return false;
                 }
 
-                // Copy the changes from the version
-                content.CopyFrom(version, "*");
+                try
+                {
+                    // Set the new culture on the variation accessor and push it into the request pipeline
+                    _variationContextAccessor.VariationContext = new VariationContext(culture);
+                    frequest.SetCulture(culture);
+                    // Copy the changes from the version
+                    content.CopyFrom(version, culture);
+                }
+                catch (CultureNotFoundException cnfe)
+                {
+                    _logger.LogWarning("Requested culture " + culture + " does not exist");
+                    return false;
+                }
 
                 // Convert the IContent to IPublishedContent.
-                IPublishedContent? pubContent = _publishedContentConverter.ToPublishedContent(content)?
+                IPublishedContent? pubContent = _publishedContentConverter.ToPublishedContent(content, culture)?
                     .CreateModel(_publishedModelFactory);
+
+                if (pubContent == null)
+                {
+                    _logger.LogWarning("Unable to convert content with GUID {0} to IPublishedContent", contentId.ToString());
+                    return false;
+                }
 
                 // Set the content that we "created" back to the pipeline
                 frequest.SetPublishedContent(pubContent);
