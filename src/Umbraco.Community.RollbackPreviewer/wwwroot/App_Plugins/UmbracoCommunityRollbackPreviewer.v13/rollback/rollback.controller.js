@@ -103,7 +103,7 @@
         prevQuery += `&culture=${language.language.culture}`;
       }
 
-      vm.previousVersion.iframeUrl = `/?${prevQuery}`;
+      vm.previousVersion.iframeUrl = `/ucrbp?${prevQuery}`;
 
       getVersions();
       setupScrollSync();
@@ -144,7 +144,7 @@
               query += `&culture=${culture}`;
             }
 
-            vm.previousVersion.iframeUrl = `/?${query}`;
+            vm.previousVersion.iframeUrl = `/ucrbp?${query}`;
             createDiff(vm.currentVersion, vm.previousVersion);
 
             const changed = (part) => part.added || part.removed;

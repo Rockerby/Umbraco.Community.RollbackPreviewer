@@ -697,7 +697,7 @@ let E = class extends h {
             </div>
             <rp-iframe
               id="rollbackPreviewerRight"
-              src="${_(this, D)}?cid=${(t = this.currentDocument) == null ? void 0 : t.unique}&vid=${this._selectedVersion.id}&culture=${this._selectedCulture}"
+              src="${_(this, D)}/ucrbp?cid=${(t = this.currentDocument) == null ? void 0 : t.unique}&vid=${this._selectedVersion.id}&culture=${this._selectedCulture}"
             ></rp-iframe>
           </div>
         </div>
@@ -835,4 +835,4 @@ export {
   E as RpRollbackModalElement,
   ct as default
 };
-//# sourceMappingURL=rollback-previewer-modal.element-CQM-GdKg.js.map
+//# sourceMappingURL=rollback-previewer-modal.element-CwAgVoiF.js.map
