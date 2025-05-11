@@ -174,7 +174,7 @@ export class RpRollbackModalElement extends UmbRollbackModalElement {
             </div>
             <rp-iframe
               id="rollbackPreviewerRight"
-              src="${this.#serverUrl}?cid=${this.currentDocument
+              src="${this.#serverUrl}/ucrbp?cid=${this.currentDocument
                 ?.unique}&vid=${this._selectedVersion.id}&culture=${this
                 ._selectedCulture}"
             ></rp-iframe>
