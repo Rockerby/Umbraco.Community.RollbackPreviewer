@@ -138,9 +138,12 @@ namespace Umbraco.Community.RollbackPreviewer.Services
 
                 try
                 {
-                    // Set the new culture on the variation accessor and push it into the request pipeline
-                    _variationContextAccessor.VariationContext = new VariationContext(culture);
-                    frequest.SetCulture(culture);
+                    if (culture != null)
+                    {
+                        // Set the new culture on the variation accessor and push it into the request pipeline
+                        _variationContextAccessor.VariationContext = new VariationContext(culture);
+                        frequest.SetCulture(culture);
+                    }
                     // Copy the changes from the version
                     content.CopyFrom(version, culture);
                 }
