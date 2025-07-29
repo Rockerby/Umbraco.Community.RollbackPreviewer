@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import {
   customElement,
   html,
@@ -5,7 +7,7 @@ import {
   query,
 } from "@umbraco-cms/backoffice/external/lit";
 import UmbRollbackModalElement from "../umbraco/rollback/modal/rollback-modal.element.js";
-import { UMB_APP_CONTEXT } from "@umbraco-cms/backoffice/app";
+// import { UMB_BACKOFFICE_CONTEXT } from "@umbraco-cms/backoffice";
 
 import { rpRollbackStyles } from "./rollback-previewer-modal.styles.js";
 import "./rollback-previewer-iframe.element.js";
@@ -28,8 +30,8 @@ export class RpRollbackModalElement extends UmbRollbackModalElement {
   }
 
   async #init() {
-    const appContext = await this.getContext(UMB_APP_CONTEXT);
-    this.#serverUrl = appContext.getServerUrl();
+    const appContext = await this.getContext('UmbBackofficeContext');
+    this.#serverUrl = appContext.serverUrl;
   }
 
   async #switchView() {
@@ -244,7 +246,7 @@ export class RpRollbackModalElement extends UmbRollbackModalElement {
 
   static override styles = rpRollbackStyles;
 }
-
+console.log("Ran the ele");
 export default RpRollbackModalElement;
 
 declare global {
