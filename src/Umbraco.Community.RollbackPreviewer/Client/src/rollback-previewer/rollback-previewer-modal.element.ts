@@ -246,7 +246,7 @@ export class RpRollbackModalElement extends UmbRollbackModalElement {
 
   static override styles = rpRollbackStyles;
 }
-console.log("Ran the ele");
+
 export default RpRollbackModalElement;
 
 declare global {
