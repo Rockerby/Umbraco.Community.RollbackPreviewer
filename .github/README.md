@@ -20,7 +20,7 @@ Once the package installed it will automatically replace the current Rollback mo
 > [!IMPORTANT]  
 > The Rollback Previewer uses iFrames to function so you may need to adjust X-Frame-Options to see the preview
 
-## Running locally (v15)
+## Running locally (v15/v16/v17)
 
 Clone the repository.  
   
@@ -28,7 +28,7 @@ Head into the `src\Umbraco.Community.RollbackPreviewer\Client` and run the follo
 `npm ci`  
 `npm run dev`  
 
-Open the sln file and run the Umbraco project, or head to `src\Umbraco.Community.RollbackPreviewer.TestSite` and run `dotnet run`, (uSync should automatically import, if not, go import everything) and head to the home node within the CMS. Make a change and go to the Info app and click the Rollback button to see the visual diff.  
+Open the sln file and run the Umbraco project, or head to the version you want (e.g. `src\Umbraco.Community.RollbackPreviewer.TestSite.v17`) and run `dotnet run`, (uSync will automatically import, if not, go import everything) and head to the home node within the CMS. Make a change and go to the Info app and click the Rollback button to see the visual diff.  
   
 Check out the Services.RollBackContentFinder for information on the fetching and displaying of the rollbacked version.  
   
@@ -40,7 +40,7 @@ Clone the repository.
   
 Head into the `src\Umbraco.Community.RollbackPreviewer\wwwroot\App_Plugins\UmbracoCommunityRollbackPreviewer.v13` and edit the files as you like. They are pushed through to the site via RCL and there are no npm tasks to run.
 
-Open the sln file and run the Umbraco project, or head to `src\Umbraco.Community.RollbackPreviewer.TestSite.v13` and run `dotnet run`, (uSync should automatically import, if not, go import everything) and head to the home node within the CMS. Make a change and go to the Info app and click the Rollback button to see the visual diff.  
+Open the sln file and run the Umbraco project, or head to `src\Umbraco.Community.RollbackPreviewer.TestSite.v13` and run `dotnet run`, (uSync will automatically import, if not, go import everything) and head to the home node within the CMS. Make a change and go to the Info app and click the Rollback button to see the visual diff.  
   
 Check out the Services.RollBackContentFinder for information on the fetching and displaying of the rollbacked version.  
   
