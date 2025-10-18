@@ -1,17 +1,11 @@
-@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Home>
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Home>
 
 @using Clean.Core.Models.ViewModels
 @using ContentModels = Umbraco.Cms.Web.Common.PublishedModels
-@inject IVariationContextAccessor _variationContextAccessor
 
 @{
     Layout = "master.cshtml";
-
-    IPublishedContent child = Model.FirstChild();
 }
-
-<p>CURRENT CULTURE: @_variationContextAccessor.VariationContext.Culture</p>
-
 
 @await Html.PartialAsync("~/Views/Partials/pageHeader.cshtml", new PageHeaderViewModel(Model.Name, Model.Title, Model.Subtitle, Model.MainImage))
 
@@ -24,16 +18,6 @@
                     @Html.GetBlockListHtml(Model.ContentRows)
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-8 col-md-10 mx-auto">
-                    @Html.GetBlockGridHtml(Model.ContentGrid)
-                </div>
-            </div>
         </div>
     </article>
-}
-
-@if(child != null)
-{
-    <h2>Child: @child.Name</h2>
 }
