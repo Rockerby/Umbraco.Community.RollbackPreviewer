@@ -731,7 +731,7 @@ v = /* @__PURE__ */ new WeakMap();
 D = /* @__PURE__ */ new WeakMap();
 g = /* @__PURE__ */ new WeakSet();
 fe = async function() {
-  pe(this, D, "https://localhost:44365");
+  pe(this, D, window.location.origin);
 };
 ve = async function() {
   pe(this, v, !_(this, v)), this.requestUpdate(), _(this, v) || (await this.updateComplete, setTimeout(() => {
@@ -800,4 +800,4 @@ export {
   E as RpRollbackModalElement,
   at as default
 };
-//# sourceMappingURL=rollback-previewer-modal.element-CcTljVxe.js.map
+//# sourceMappingURL=rollback-previewer-modal.element-DCHM2ZUs.js.map

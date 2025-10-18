@@ -5,9 +5,6 @@ import {
   query,
 } from "@umbraco-cms/backoffice/external/lit";
 import UmbRollbackModalElement from "../umbraco/rollback/modal/rollback-modal.element.js";
-//TODO: How do we get the app context?
-//import { UMB_APP_CONTEXT } from "@umbraco-cms/backoffice/app";
-
 import { rpRollbackStyles } from "./rollback-previewer-modal.styles.js";
 import "./rollback-previewer-iframe.element.js";
 import RpIframe from "./rollback-previewer-iframe.element.js";
@@ -29,8 +26,9 @@ export class RpRollbackModalElement extends UmbRollbackModalElement {
   }
 
   async #init() {
-    //const appContext = await this.getContext(UMB_APP_CONTEXT);
-    this.#serverUrl = 'https://localhost:44365';//appContext.getServerUrl();
+    // This is how the server URL is fetched in the Umbraco codebase. See below for ref:
+    // https://github.com/umbraco/Umbraco-CMS/blob/fb0f719c7df9da96c514f1ed5bafd511e7218d5a/src/Umbraco.Web.UI.Client/src/apps/app/app.element.ts
+    this.#serverUrl = window.location.origin;
   }
 
   async #switchView() {
