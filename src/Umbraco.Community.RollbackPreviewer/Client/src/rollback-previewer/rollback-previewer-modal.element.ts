@@ -5,7 +5,8 @@ import {
   query,
 } from "@umbraco-cms/backoffice/external/lit";
 import UmbRollbackModalElement from "../umbraco/rollback/modal/rollback-modal.element.js";
-import { UMB_APP_CONTEXT } from "@umbraco-cms/backoffice/app";
+//TODO: How do we get the app context?
+//import { UMB_APP_CONTEXT } from "@umbraco-cms/backoffice/app";
 
 import { rpRollbackStyles } from "./rollback-previewer-modal.styles.js";
 import "./rollback-previewer-iframe.element.js";
@@ -28,8 +29,8 @@ export class RpRollbackModalElement extends UmbRollbackModalElement {
   }
 
   async #init() {
-    const appContext = await this.getContext(UMB_APP_CONTEXT);
-    this.#serverUrl = appContext.getServerUrl();
+    //const appContext = await this.getContext(UMB_APP_CONTEXT);
+    this.#serverUrl = 'https://localhost:44365';//appContext.getServerUrl();
   }
 
   async #switchView() {
