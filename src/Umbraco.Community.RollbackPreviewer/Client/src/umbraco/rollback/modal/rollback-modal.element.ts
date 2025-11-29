@@ -1,24 +1,57 @@
-// @ts-nocheck
+/**
+ * Developer Note:
+ * This version of the default rollback modal as be slightly modified to support the our custom rollback previewer.
+ * The main differences are:
+ * - Converted a number of private properties and methods to public so they can be used in the custom rollback previewer. These are marked with a comment.
+ * - Updated some imports to use @umbraco-cms/backoffice/document
+ * - Improved version selector to make it more accessible (keyboard navigable & improved colour contrast)
+ */
+
+// import { UMB_DOCUMENT_ENTITY_TYPE } from '../../constants.js';
+// import { UmbRollbackRepository } from '../repository/rollback.repository.js';
+// import { UmbDocumentDetailRepository } from '../../repository/index.js';
+// import type { UmbDocumentDetailModel } from '../../types.js';
+// import type { UmbRollbackModalData, UmbRollbackModalValue } from './types.js';
+// import { diffWords, type UmbDiffChange } from '@umbraco-cms/backoffice/utils';
+// import { css, customElement, html, nothing, repeat, state, unsafeHTML } from '@umbraco-cms/backoffice/external/lit';
+// import { UmbModalBaseElement } from '@umbraco-cms/backoffice/modal';
+// import { UmbTextStyles } from '@umbraco-cms/backoffice/style';
+// import { UmbUserItemRepository } from '@umbraco-cms/backoffice/user';
+// import { UMB_PROPERTY_DATASET_CONTEXT } from '@umbraco-cms/backoffice/property';
+// import type { UUISelectEvent } from '@umbraco-cms/backoffice/external/uui';
+// import { UMB_APP_LANGUAGE_CONTEXT, UmbLanguageItemRepository } from '@umbraco-cms/backoffice/language';
+// import { UMB_ENTITY_CONTEXT } from '@umbraco-cms/backoffice/entity';
+// import { UmbVariantId } from '@umbraco-cms/backoffice/variant';
+//
+// import '../../modals/shared/document-variant-language-picker.element.js';
+// import { UMB_ACTION_EVENT_CONTEXT } from '@umbraco-cms/backoffice/action';
+// import { UmbEntityUpdatedEvent, UmbRequestReloadStructureForEntityEvent } from '@umbraco-cms/backoffice/entity-action';
+
+
 import { UMB_DOCUMENT_ENTITY_TYPE } from "@umbraco-cms/backoffice/document";
-import { UmbRollbackRepository } from '../repository/rollback.repository.js';
+import { UmbRollbackRepository } from "../repository/rollback.repository.js";
 import { UmbDocumentDetailRepository } from "@umbraco-cms/backoffice/document";
 import type { UmbDocumentDetailModel } from "@umbraco-cms/backoffice/document";
-
-import type { UmbRollbackModalData, UmbRollbackModalValue } from './types.js';
+import type { UmbRollbackModalData, UmbRollbackModalValue } from "./types.js";
 import { diffWords, type UmbDiffChange } from '@umbraco-cms/backoffice/utils';
-import { css, customElement, html, nothing, repeat, state, unsafeHTML } from '@umbraco-cms/backoffice/external/lit';
-import { UmbModalBaseElement } from '@umbraco-cms/backoffice/modal';
-import { UmbTextStyles } from '@umbraco-cms/backoffice/style';
-import { UmbUserItemRepository } from '@umbraco-cms/backoffice/user';
-import { UMB_PROPERTY_DATASET_CONTEXT } from '@umbraco-cms/backoffice/property';
-import type { UUISelectEvent } from '@umbraco-cms/backoffice/external/uui';
-import { UMB_APP_LANGUAGE_CONTEXT, UmbLanguageItemRepository } from '@umbraco-cms/backoffice/language';
-import { UMB_ENTITY_CONTEXT } from '@umbraco-cms/backoffice/entity';
-import { UmbVariantId } from '@umbraco-cms/backoffice/variant';
+import { css, customElement, html, nothing, repeat, state, unsafeHTML } from "@umbraco-cms/backoffice/external/lit";
+import { UmbModalBaseElement } from "@umbraco-cms/backoffice/modal";
+import { UmbTextStyles } from "@umbraco-cms/backoffice/style";
+import { UmbUserItemRepository } from "@umbraco-cms/backoffice/user";
+import { UMB_PROPERTY_DATASET_CONTEXT } from "@umbraco-cms/backoffice/property";
+import type { UUISelectEvent } from "@umbraco-cms/backoffice/external/uui";
+import { UMB_APP_LANGUAGE_CONTEXT, UmbLanguageItemRepository } from "@umbraco-cms/backoffice/language";
+import { UMB_ENTITY_CONTEXT } from "@umbraco-cms/backoffice/entity";
+import { UmbVariantId } from "@umbraco-cms/backoffice/variant";
+// import "../../modals/shared/document-variant-language-picker.element.js";
+import { UMB_ACTION_EVENT_CONTEXT } from "@umbraco-cms/backoffice/action";
+import { UmbEntityUpdatedEvent, UmbRequestReloadStructureForEntityEvent } from "@umbraco-cms/backoffice/entity-action";
 
-//import '../../modals/shared/document-variant-language-picker.element.js';
-import { UMB_ACTION_EVENT_CONTEXT } from '@umbraco-cms/backoffice/action';
-import { UmbEntityUpdatedEvent, UmbRequestReloadStructureForEntityEvent } from '@umbraco-cms/backoffice/entity-action';
+
+
+
+
+
 
 type DocumentVersion = {
 	id: string;
@@ -67,20 +100,21 @@ export class UmbRollbackModalElement extends UmbModalBaseElement<UmbRollbackModa
 		minute: '2-digit',
 	};
 
+	// Change Note - Converted to public method
 	currentDocument: UmbDocumentDetailModel | undefined;
-	currentAppCulture: string | undefined;
-	currentDatasetCulture: string | undefined;
+	#currentAppCulture: string | undefined;
+	#currentDatasetCulture: string | undefined;
 
 	constructor() {
 		super();
 
 		this.consumeContext(UMB_PROPERTY_DATASET_CONTEXT, (instance) => {
-			this.currentDatasetCulture = instance?.getVariantId().culture ?? undefined;
+			this.#currentDatasetCulture = instance?.getVariantId().culture ?? undefined;
 			this.#selectCulture();
 		});
 
 		this.consumeContext(UMB_APP_LANGUAGE_CONTEXT, (instance) => {
-			this.currentAppCulture = instance?.getAppCulture();
+			this.#currentAppCulture = instance?.getAppCulture();
 			this.#selectCulture();
 		});
 
@@ -125,7 +159,7 @@ export class UmbRollbackModalElement extends UmbModalBaseElement<UmbRollbackModa
 	}
 
 	#selectCulture() {
-		const contextCulture = this.currentDatasetCulture ?? this.currentAppCulture ?? null;
+		const contextCulture = this.#currentDatasetCulture ?? this.#currentAppCulture ?? null;
 		this._selectedCulture = this._isInvariant ? null : contextCulture;
 	}
 
@@ -265,6 +299,7 @@ export class UmbRollbackModalElement extends UmbModalBaseElement<UmbRollbackModa
 		return str.replace(/^['"]|['"]$/g, '');
 	}
 
+	// Change Note - Converted to public method
 	renderCultureSelect() {
 		return html`
 			<uui-select
@@ -313,14 +348,14 @@ export class UmbRollbackModalElement extends UmbModalBaseElement<UmbRollbackModa
 		if (!this._selectedVersion) return;
 
 		const currentPropertyValues = this.currentDocument?.values.filter(
-			(x:any) => x.culture === this._selectedCulture || !x.culture,
+			(x) => x.culture === this._selectedCulture || !x.culture,
 		); // When invariant, culture is undefined or null.
 
 		if (!currentPropertyValues) {
 			throw new Error('Current property values are not set');
 		}
 
-		const currentName = this.currentDocument?.variants.find((x:any) => x.culture === this._selectedCulture)?.name;
+		const currentName = this.currentDocument?.variants.find((x) => x.culture === this._selectedCulture)?.name;
 
 		if (!currentName) {
 			throw new Error('Current name is not set');
@@ -332,7 +367,7 @@ export class UmbRollbackModalElement extends UmbModalBaseElement<UmbRollbackModa
 		diffs.push({ alias: 'name', diff: nameDiff });
 
 		this._selectedVersion.properties.forEach((item) => {
-			const draftValue = currentPropertyValues.find((x:any) => x.alias === item.alias);
+			const draftValue = currentPropertyValues.find((x) => x.alias === item.alias);
 
 			if (!draftValue) return;
 
@@ -346,6 +381,7 @@ export class UmbRollbackModalElement extends UmbModalBaseElement<UmbRollbackModa
 		this._diffs = [...diffs];
 	}
 
+	// Change Note - Converted to public method
 	renderSelectedVersion() {
 		if (!this._selectedVersion)
 			return html`
