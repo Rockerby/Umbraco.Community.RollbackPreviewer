@@ -4,6 +4,9 @@
 [![NuGet](https://img.shields.io/nuget/vpre/Umbraco.Community.RollbackPreviewer?color=0273B3)](https://www.nuget.org/packages/Umbraco.Community.RollbackPreviewer)
 [![GitHub license](https://img.shields.io/github/license/Rockerby/Umbraco.Community.RollbackPreviewer?color=8AB803)](../LICENSE)
 
+> [!NOTE]
+> With the release of Umbraco 17 we will be following the Umbraco release version numbers - so RollBackPreviewer v2 is for Umbraco 16 and under, the rest will follow v17, v18 etc
+
 Enhance Umbraco's rollback functionality with visual rollback previews. This extension builds ontop of the existing Umbraco Rollback modal and allows for the JSON diff to be viewed as well as the visual diff.
 
 <img alt="Visual difference" src="https://github.com/Rockerby/Umbraco.Community.RollbackPreviewer/blob/develop/docs/screenshots/visual_diff.png"> 
