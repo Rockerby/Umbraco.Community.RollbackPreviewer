@@ -31,6 +31,9 @@ export class RpIframe extends LitElement {
   @property({ type: String })
   public src = "";
 
+  @property({ type: String })
+  public secret: string | null = null;
+
   @state()
   _device: RollbackPreviewDevice = device;
 
@@ -78,7 +81,10 @@ export class RpIframe extends LitElement {
   async copyUrlToClipboard() {
     if (!this.src) return;
 
-    const urlWithSecret = `${this.src}&secret=`;
+    // Only append secret if it exists
+    const urlWithSecret = this.secret
+      ? `${this.src}&secret=${encodeURIComponent(this.secret)}`
+      : this.src;
 
     try {
       await navigator.clipboard.writeText(urlWithSecret);

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
+using Umbraco.Cms.Api.Management.OpenApi;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Routing;
@@ -24,6 +25,14 @@ namespace Umbraco.Community.RollbackPreviewer.Composers
 
             // Set the options from configuration
             builder.Services.Configure<Configuration.RollbackPreviewerOptions>(builder.Config.GetSection(Configuration.RollbackPreviewerOptions.SectionName));
+
+            // Configure Swagger/OpenAPI for the custom API
+            builder.Services.Configure<UmbSwaggerGenOptions>(options =>
+            {
+                options.DocumentName = "UmbracoCommunityRollbackPreviewer";
+                options.ApiName = "Umbraco Community Rollback Previewer API";
+                options.ApiVersion = "Latest";
+            });
         }
     }
 }

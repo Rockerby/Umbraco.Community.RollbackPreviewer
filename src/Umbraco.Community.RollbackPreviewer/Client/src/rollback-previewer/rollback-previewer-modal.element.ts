@@ -8,11 +8,13 @@ import UmbRollbackModalElement from "../umbraco/rollback/modal/rollback-modal.el
 import { rpRollbackStyles } from "./rollback-previewer-modal.styles.js";
 import "./rollback-previewer-iframe.element.js";
 import RpIframe from "./rollback-previewer-iframe.element.js";
+import { RollbackPreviewerConfigService } from "./rollback-previewer-config.service.js";
 
 @customElement("rp-rollback-modal")
 export class RpRollbackModalElement extends UmbRollbackModalElement {
   #useJsonView: boolean = false;
   #serverUrl: string = "";
+  #previewSecret: string | null = null;
 
   @query("#rollbackPreviewerLeft")
   rollbackPreviewerLeft: RpIframe | null | undefined;
@@ -29,6 +31,12 @@ export class RpRollbackModalElement extends UmbRollbackModalElement {
     // This is how the server URL is fetched in the Umbraco codebase. See below for ref:
     // https://github.com/umbraco/Umbraco-CMS/blob/fb0f719c7df9da96c514f1ed5bafd511e7218d5a/src/Umbraco.Web.UI.Client/src/apps/app/app.element.ts
     this.#serverUrl = window.location.origin;
+
+    // Fetch the preview configuration to get the secret for shareable URLs
+    const config = await RollbackPreviewerConfigService.getConfiguration();
+    if (config?.enableFrontendPreviewAuthorisation) {
+      this.#previewSecret = config.frontendPreviewAuthorisationSecret;
+    }
   }
 
   async #switchView() {
@@ -163,6 +171,7 @@ export class RpRollbackModalElement extends UmbRollbackModalElement {
               id="rollbackPreviewerLeft"
               src="${this.#serverUrl}/${this.currentDocument
                 ?.unique}?culture=${this._selectedCulture}"
+              .secret=${this.#previewSecret}
             >
             </rp-iframe>
           </div>
@@ -176,6 +185,7 @@ export class RpRollbackModalElement extends UmbRollbackModalElement {
               src="${this.#serverUrl}/ucrbp?cid=${this.currentDocument
                 ?.unique}&vid=${this._selectedVersion.id}&culture=${this
                 ._selectedCulture}"
+              .secret=${this.#previewSecret}
             ></rp-iframe>
           </div>
         </div>
