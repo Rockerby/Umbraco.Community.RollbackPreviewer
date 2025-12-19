@@ -21,6 +21,9 @@ namespace Umbraco.Community.RollbackPreviewer.Composers
             builder.ContentFinders().InsertBefore<ContentFinderByUrl, RollbackContentFinder>();
 #endif
             builder.Services.AddTransient<PublishedContentConverter>();
+
+            // Set the options from configuration
+            builder.Services.Configure<Configuration.RollbackPreviewerOptions>(builder.Config.GetSection(Configuration.RollbackPreviewerOptions.SectionName));
         }
     }
 }

@@ -84,10 +84,11 @@ export class RpIframe extends LitElement {
     if (!this.src) {
       return null;
     }
-
+    
     // TODO: Add configurable title attribute for the iframe
     return html`
       <div id="wrapper">
+          <p>${this.src}&secret=</p>
           <iframe src=${this.src}></iframe>
       </div>
     `;

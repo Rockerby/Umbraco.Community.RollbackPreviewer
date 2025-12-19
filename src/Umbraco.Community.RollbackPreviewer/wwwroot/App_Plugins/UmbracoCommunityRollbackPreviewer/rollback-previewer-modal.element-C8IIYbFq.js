@@ -581,6 +581,7 @@ let k = class extends $e {
   render() {
     return this.src ? u`
       <div id="wrapper">
+          <p>${this.src}&secret=</p>
           <iframe src=${this.src}></iframe>
       </div>
     ` : null;
@@ -800,4 +801,4 @@ export {
   E as RpRollbackModalElement,
   at as default
 };
-//# sourceMappingURL=rollback-previewer-modal.element-DCHM2ZUs.js.map
+//# sourceMappingURL=rollback-previewer-modal.element-C8IIYbFq.js.map
