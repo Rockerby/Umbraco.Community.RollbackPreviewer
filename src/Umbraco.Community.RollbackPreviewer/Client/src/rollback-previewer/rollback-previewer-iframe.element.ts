@@ -106,16 +106,14 @@ export class RpIframe extends LitElement {
 
     return html`
       <div id="wrapper">
-          <button
+          <uui-button
             id="copy-url-btn"
             @click=${this.copyUrlToClipboard}
-            title="Copy shareable preview URL to clipboard"
-            aria-label="Copy shareable preview URL to clipboard">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-            </svg>
-          </button>
+            look="secondary"
+            label="Copy shareable preview URL to clipboard"
+            compact>
+            <uui-icon name="icon-link"></uui-icon>
+          </uui-button>
           <iframe src=${this.src}></iframe>
       </div>
     `;
@@ -143,30 +141,6 @@ export class RpIframe extends LitElement {
         top: 8px;
         right: 8px;
         z-index: 1000;
-        background-color: #6b7280;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        padding: 8px 12px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        font-size: 14px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        transition: background-color 0.2s ease;
-      }
-
-      #copy-url-btn:hover {
-        background-color: #4b5563;
-      }
-
-      #copy-url-btn:active {
-        background-color: #374151;
-      }
-
-      #copy-url-btn svg {
-        flex-shrink: 0;
       }
 
       iframe {
