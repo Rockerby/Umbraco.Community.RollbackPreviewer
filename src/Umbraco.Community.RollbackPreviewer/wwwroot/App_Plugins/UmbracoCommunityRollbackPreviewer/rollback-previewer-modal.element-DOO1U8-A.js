@@ -2,22 +2,22 @@ var te = (e) => {
   throw TypeError(e);
 };
 var ie = (e, t, i) => t.has(e) || te("Cannot " + i);
-var f = (e, t, i) => (ie(e, t, "read from private field"), i ? i.call(e) : t.get(e)), W = (e, t, i) => t.has(e) ? te("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, i), B = (e, t, i, r) => (ie(e, t, "write to private field"), r ? r.call(e, i) : t.set(e, i), i);
-import { html as u, repeat as re, unsafeHTML as we, nothing as L, css as H, state as $, customElement as J, property as ge, query as G, LitElement as $e } from "@umbraco-cms/backoffice/external/lit";
-import { UMB_DOCUMENT_ENTITY_TYPE as se, UmbDocumentDetailRepository as Ce } from "@umbraco-cms/backoffice/document";
+var v = (e, t, i) => (ie(e, t, "read from private field"), i ? i.call(e) : t.get(e)), I = (e, t, i) => t.has(e) ? te("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, i), B = (e, t, i, r) => (ie(e, t, "write to private field"), r ? r.call(e, i) : t.set(e, i), i);
+import { html as u, repeat as re, unsafeHTML as ge, nothing as N, css as H, state as x, customElement as J, property as we, query as G, LitElement as xe } from "@umbraco-cms/backoffice/external/lit";
+import { UMB_DOCUMENT_ENTITY_TYPE as se, UmbDocumentDetailRepository as ke } from "@umbraco-cms/backoffice/document";
 import { DocumentVersionService as S } from "@umbraco-cms/backoffice/external/backend-api";
 import { tryExecute as T } from "@umbraco-cms/backoffice/resources";
-import { UmbControllerBase as xe } from "@umbraco-cms/backoffice/class-api";
+import { UmbControllerBase as Ce } from "@umbraco-cms/backoffice/class-api";
 import { diffWords as oe } from "@umbraco-cms/backoffice/utils";
-import { UmbModalBaseElement as Ve } from "@umbraco-cms/backoffice/modal";
-import { UmbTextStyles as ke } from "@umbraco-cms/backoffice/style";
+import { UmbModalBaseElement as $e } from "@umbraco-cms/backoffice/modal";
+import { UmbTextStyles as Ve } from "@umbraco-cms/backoffice/style";
 import { UmbUserItemRepository as Ee } from "@umbraco-cms/backoffice/user";
 import { UMB_PROPERTY_DATASET_CONTEXT as Pe } from "@umbraco-cms/backoffice/property";
 import { UMB_APP_LANGUAGE_CONTEXT as De, UmbLanguageItemRepository as Se } from "@umbraco-cms/backoffice/language";
 import { UMB_ENTITY_CONTEXT as Te } from "@umbraco-cms/backoffice/entity";
-import { UmbVariantId as qe } from "@umbraco-cms/backoffice/variant";
-import { UMB_ACTION_EVENT_CONTEXT as Re } from "@umbraco-cms/backoffice/action";
-import { UmbRequestReloadStructureForEntityEvent as ze, UmbEntityUpdatedEvent as Ue } from "@umbraco-cms/backoffice/entity-action";
+import { UmbVariantId as Re } from "@umbraco-cms/backoffice/variant";
+import { UMB_ACTION_EVENT_CONTEXT as Ue } from "@umbraco-cms/backoffice/action";
+import { UmbRequestReloadStructureForEntityEvent as qe, UmbEntityUpdatedEvent as ze } from "@umbraco-cms/backoffice/entity-action";
 var y;
 class Oe {
   /**
@@ -26,7 +26,7 @@ class Oe {
    * @memberof UmbRollbackServerDataSource
    */
   constructor(t) {
-    W(this, y);
+    I(this, y);
     B(this, y, t);
   }
   /**
@@ -37,7 +37,7 @@ class Oe {
    * @memberof UmbRollbackServerDataSource
    */
   getVersionsByDocumentId(t, i) {
-    return T(f(this, y), S.getDocumentVersion({ query: { documentId: t, culture: i } }));
+    return T(v(this, y), S.getDocumentVersion({ query: { documentId: t, culture: i } }));
   }
   /**
    * Get a specific version by id
@@ -46,11 +46,11 @@ class Oe {
    * @memberof UmbRollbackServerDataSource
    */
   getVersionById(t) {
-    return T(f(this, y), S.getDocumentVersionById({ path: { id: t } }));
+    return T(v(this, y), S.getDocumentVersionById({ path: { id: t } }));
   }
   setPreventCleanup(t, i) {
     return T(
-      f(this, y),
+      v(this, y),
       S.putDocumentVersionByIdPreventCleanup({
         path: { id: t },
         query: { preventCleanup: i }
@@ -59,51 +59,51 @@ class Oe {
   }
   rollback(t, i) {
     return T(
-      f(this, y),
+      v(this, y),
       S.postDocumentVersionByIdRollback({ path: { id: t }, query: { culture: i } })
     );
   }
 }
 y = new WeakMap();
-var w;
-class Ie extends xe {
+var g;
+class Me extends Ce {
   constructor(i) {
     super(i);
-    W(this, w);
-    B(this, w, new Oe(this));
+    I(this, g);
+    B(this, g, new Oe(this));
   }
   async requestVersionsByDocumentId(i, r) {
-    return await f(this, w).getVersionsByDocumentId(i, r);
+    return await v(this, g).getVersionsByDocumentId(i, r);
   }
   async requestVersionById(i) {
-    return await f(this, w).getVersionById(i);
+    return await v(this, g).getVersionById(i);
   }
   async setPreventCleanup(i, r) {
-    return await f(this, w).setPreventCleanup(i, r);
+    return await v(this, g).setPreventCleanup(i, r);
   }
   async rollback(i, r) {
-    return await f(this, w).rollback(i, r);
+    return await v(this, g).rollback(i, r);
   }
 }
-w = new WeakMap();
-var Me = Object.defineProperty, We = Object.getOwnPropertyDescriptor, ne = (e) => {
+g = new WeakMap();
+var We = Object.defineProperty, Ie = Object.getOwnPropertyDescriptor, ne = (e) => {
   throw TypeError(e);
-}, C = (e, t, i, r) => {
-  for (var s = r > 1 ? void 0 : r ? We(t, i) : t, l = e.length - 1, o; l >= 0; l--)
+}, k = (e, t, i, r) => {
+  for (var s = r > 1 ? void 0 : r ? Ie(t, i) : t, l = e.length - 1, o; l >= 0; l--)
     (o = e[l]) && (s = (r ? o(t, i, s) : o(s)) || s);
-  return r && s && Me(t, i, s), s;
-}, X = (e, t, i) => t.has(e) || ne("Cannot " + i), m = (e, t, i) => (X(e, t, "read from private field"), i ? i.call(e) : t.get(e)), x = (e, t, i) => t.has(e) ? ne("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, i), le = (e, t, i, r) => (X(e, t, "write to private field"), t.set(e, i), i), d = (e, t, i) => (X(e, t, "access private method"), i), V, Y, q, z, U, c, R, F, j, ae, ue, ce, A, de;
-let h = class extends Ve {
+  return r && s && We(t, i, s), s;
+}, X = (e, t, i) => t.has(e) || ne("Cannot " + i), b = (e, t, i) => (X(e, t, "read from private field"), i ? i.call(e) : t.get(e)), C = (e, t, i) => t.has(e) ? ne("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, i), le = (e, t, i, r) => (X(e, t, "write to private field"), t.set(e, i), i), d = (e, t, i) => (X(e, t, "access private method"), i), $, Y, R, q, z, c, U, F, j, ae, ue, ce, A, de;
+let h = class extends $e {
   constructor() {
-    super(), x(this, c), this._versions = [], this._selectedCulture = null, this._isInvariant = !0, this._availableVariants = [], this._diffs = [], x(this, V, new Ie(this)), x(this, Y, new Ee(this)), x(this, q, {
+    super(), C(this, c), this._versions = [], this._selectedCulture = null, this._isInvariant = !0, this._availableVariants = [], this._diffs = [], C(this, $, new Me(this)), C(this, Y, new Ee(this)), C(this, R, {
       day: "numeric",
       month: "long",
       hour: "numeric",
       minute: "2-digit"
-    }), x(this, z), x(this, U), this.consumeContext(Pe, (e) => {
-      le(this, U, (e == null ? void 0 : e.getVariantId().culture) ?? void 0), d(this, c, R).call(this);
+    }), C(this, q), C(this, z), this.consumeContext(Pe, (e) => {
+      le(this, z, (e == null ? void 0 : e.getVariantId().culture) ?? void 0), d(this, c, U).call(this);
     }), this.consumeContext(De, (e) => {
-      le(this, z, e == null ? void 0 : e.getAppCulture()), d(this, c, R).call(this);
+      le(this, q, e == null ? void 0 : e.getAppCulture()), d(this, c, U).call(this);
     }), this.consumeContext(Te, async (e) => {
       var o;
       if (!e) return;
@@ -112,11 +112,11 @@ let h = class extends Ve {
       const t = e.getUnique();
       if (!t)
         throw new Error("Document unique is not set");
-      const { data: i } = await new Ce(this).requestByUnique(t);
+      const { data: i } = await new ke(this).requestByUnique(t);
       if (!i) return;
       this.currentDocument = i;
       const r = ((o = this.currentDocument) == null ? void 0 : o.variants) ?? [];
-      this._isInvariant = r.length === 1 && new qe(r[0].culture).isInvariant(), d(this, c, R).call(this);
+      this._isInvariant = r.length === 1 && new Re(r[0].culture).isInvariant(), d(this, c, U).call(this);
       const s = r.map((n) => n.culture).filter((n) => n !== null), { data: l } = await new Se(this).requestItems(s);
       l ? this._availableVariants = l.map((n) => ({
         name: n.name,
@@ -126,20 +126,20 @@ let h = class extends Ve {
     });
   }
   async onRollback() {
-    var a, p, b;
+    var a, p, m;
     if (!this._selectedVersion) return;
-    const e = this._selectedVersion.id, t = this._selectedCulture ?? void 0, { error: i } = await m(this, V).rollback(e, t);
+    const e = this._selectedVersion.id, t = this._selectedCulture ?? void 0, { error: i } = await b(this, $).rollback(e, t);
     if (i) return;
     const r = (a = this.currentDocument) == null ? void 0 : a.unique, s = (p = this.currentDocument) == null ? void 0 : p.entityType;
     if (!r || !s)
       throw new Error("Document unique or entity type is not set");
-    const l = await this.getContext(Re);
+    const l = await this.getContext(Ue);
     if (!l)
       throw new Error("Action event context not found");
-    const o = new ze({ unique: r, entityType: s });
+    const o = new qe({ unique: r, entityType: s });
     l.dispatchEvent(o);
-    const n = new Ue({ unique: r, entityType: s });
-    l.dispatchEvent(n), this.value = {}, (b = this.modalContext) == null || b.submit();
+    const n = new ze({ unique: r, entityType: s });
+    l.dispatchEvent(n), this.value = {}, (m = this.modalContext) == null || m.submit();
   }
   onCancel() {
     var e;
@@ -169,7 +169,7 @@ let h = class extends Ve {
 							class="rollback-item ${((t = this._selectedVersion) == null ? void 0 : t.id) === e.id ? "active" : ""}">
 							<div>
 								<p class="rollback-item-date">
-									<umb-localize-date date="${e.date}" .options=${m(this, q)}></umb-localize-date>
+									<umb-localize-date date="${e.date}" .options=${b(this, R)}></umb-localize-date>
 								</p>
 								<p>${e.user}</p>
 								<p>${e.isCurrentlyPublishedVersion ? this.localize.term("rollback_currentPublishedVersion") : ""}</p>
@@ -188,7 +188,7 @@ let h = class extends Ve {
   renderSelectedVersion() {
     return this._selectedVersion ? u`
 			<uui-box headline=${this.currentVersionHeader} id="box-right">
-				${we(this.localize.term("rollback_diffHelp"))}
+				${ge(this.localize.term("rollback_diffHelp"))}
 				<uui-table>
 					<uui-table-column style="width: 0"></uui-table-column>
 					<uui-table-column></uui-table-column>
@@ -208,7 +208,7 @@ let h = class extends Ve {
 									<uui-table-cell>
 										${t ? t.diff.map(
           (i) => i.added ? u`<span class="diff-added">${i.value}</span>` : i.removed ? u`<span class="diff-removed">${i.value}</span>` : i.value
-        ) : L}
+        ) : N}
 									</uui-table-cell>
 								</uui-table-row>
 							`;
@@ -224,7 +224,7 @@ let h = class extends Ve {
   }
   get currentVersionHeader() {
     var e, t;
-    return this.localize.date(((e = this._selectedVersion) == null ? void 0 : e.date) ?? /* @__PURE__ */ new Date(), m(this, q)) + " - " + ((t = this._selectedVersion) == null ? void 0 : t.user);
+    return this.localize.date(((e = this._selectedVersion) == null ? void 0 : e.date) ?? /* @__PURE__ */ new Date(), b(this, R)) + " - " + ((t = this._selectedVersion) == null ? void 0 : t.user);
   }
   render() {
     return u`
@@ -235,7 +235,7 @@ let h = class extends Ve {
 									<uui-box id="language-box" headline=${this.localize.term("general_language")}>
 										${this.renderCultureSelect()}
 									</uui-box>
-								` : L}
+								` : N}
 						${this.renderVersions()}
 					</div>
 					${this.renderSelectedVersion()}
@@ -257,31 +257,31 @@ let h = class extends Ve {
 		`;
   }
 };
-V = /* @__PURE__ */ new WeakMap();
+$ = /* @__PURE__ */ new WeakMap();
 Y = /* @__PURE__ */ new WeakMap();
+R = /* @__PURE__ */ new WeakMap();
 q = /* @__PURE__ */ new WeakMap();
 z = /* @__PURE__ */ new WeakMap();
-U = /* @__PURE__ */ new WeakMap();
 c = /* @__PURE__ */ new WeakSet();
-R = function() {
-  const e = m(this, U) ?? m(this, z) ?? null;
+U = function() {
+  const e = b(this, z) ?? b(this, q) ?? null;
   this._selectedCulture = this._isInvariant ? null : e;
 };
 F = async function() {
   var l, o, n;
   if (!((l = this.currentDocument) != null && l.unique))
     throw new Error("Document unique is not set");
-  const { data: e } = await m(this, V).requestVersionsByDocumentId(
+  const { data: e } = await b(this, $).requestVersionsByDocumentId(
     (o = this.currentDocument) == null ? void 0 : o.unique,
     this._selectedCulture ?? void 0
   );
   if (!e) return;
-  const t = [], i = [...new Set(e == null ? void 0 : e.items.map((a) => a.user.id))], { data: r } = await m(this, Y).requestItems(i);
+  const t = [], i = [...new Set(e == null ? void 0 : e.items.map((a) => a.user.id))], { data: r } = await b(this, Y).requestItems(i);
   e == null || e.items.forEach((a) => {
     var p;
     a.isCurrentDraftVersion || t.push({
       date: a.versionDate,
-      user: ((p = r == null ? void 0 : r.find((b) => b.unique === a.user.id)) == null ? void 0 : p.name) || this.localize.term("general_unknownUser"),
+      user: ((p = r == null ? void 0 : r.find((m) => m.unique === a.user.id)) == null ? void 0 : p.name) || this.localize.term("general_unknownUser"),
       isCurrentlyPublishedVersion: a.isCurrentPublishedVersion,
       id: a.id,
       preventCleanup: a.preventCleanup
@@ -297,7 +297,7 @@ j = async function(e) {
     this._selectedVersion = void 0, this._diffs = [];
     return;
   }
-  const { data: i } = await m(this, V).requestVersionById(e);
+  const { data: i } = await b(this, $).requestVersionById(e);
   if (!i) {
     this._selectedVersion = void 0, this._diffs = [];
     return;
@@ -317,7 +317,7 @@ ae = function(e) {
   d(this, c, j).call(this, e);
 };
 ue = function(e, t, i) {
-  e.preventDefault(), e.stopImmediatePropagation(), m(this, V).setPreventCleanup(t, i);
+  e.preventDefault(), e.stopImmediatePropagation(), b(this, $).setPreventCleanup(t, i);
   const r = this._versions.find((s) => s.id === t);
   r && (r.preventCleanup = i, this.requestUpdate("_versions"));
 };
@@ -341,14 +341,14 @@ de = async function() {
     throw new Error("Current name is not set");
   const i = [], r = oe(t, this._selectedVersion.name);
   i.push({ alias: "name", diff: r }), this._selectedVersion.properties.forEach((n) => {
-    const a = e.find((M) => M.alias === n.alias);
+    const a = e.find((W) => W.alias === n.alias);
     if (!a) return;
-    const p = d(this, c, A).call(this, JSON.stringify(a.value)), b = d(this, c, A).call(this, JSON.stringify(n.value)), I = oe(p, b);
-    i.push({ alias: n.alias, diff: I });
+    const p = d(this, c, A).call(this, JSON.stringify(a.value)), m = d(this, c, A).call(this, JSON.stringify(n.value)), M = oe(p, m);
+    i.push({ alias: n.alias, diff: M });
   }), this._diffs = [...i];
 };
 h.styles = [
-  ke,
+  Ve,
   H`
 			:host {
 				color: var(--uui-color-text);
@@ -461,25 +461,25 @@ h.styles = [
 			}
 		`
 ];
-C([
-  $()
+k([
+  x()
 ], h.prototype, "_versions", 2);
-C([
-  $()
+k([
+  x()
 ], h.prototype, "_selectedVersion", 2);
-C([
-  $()
+k([
+  x()
 ], h.prototype, "_selectedCulture", 2);
-C([
-  $()
+k([
+  x()
 ], h.prototype, "_isInvariant", 2);
-C([
-  $()
+k([
+  x()
 ], h.prototype, "_availableVariants", 2);
-C([
-  $()
+k([
+  x()
 ], h.prototype, "_diffs", 2);
-h = C([
+h = k([
   J("umb-rollback-modal")
 ], h);
 const Be = [
@@ -537,10 +537,10 @@ const Be = [
     }
   `
 ];
-var Ne = Object.defineProperty, Le = Object.getOwnPropertyDescriptor, O = (e, t, i, r) => {
-  for (var s = r > 1 ? void 0 : r ? Le(t, i) : t, l = e.length - 1, o; l >= 0; l--)
+var Le = Object.defineProperty, Ne = Object.getOwnPropertyDescriptor, O = (e, t, i, r) => {
+  for (var s = r > 1 ? void 0 : r ? Ne(t, i) : t, l = e.length - 1, o; l >= 0; l--)
     (o = e[l]) && (s = (r ? o(t, i, s) : o(s)) || s);
-  return r && s && Ne(t, i, s), s;
+  return r && s && Le(t, i, s), s;
 };
 const Ae = {
   alias: "desktop",
@@ -550,7 +550,7 @@ const Ae = {
     height: 1080
   }
 };
-let k = class extends $e {
+let V = class extends xe {
   constructor() {
     super(...arguments), this.src = "", this._device = Ae;
   }
@@ -574,6 +574,15 @@ let k = class extends $e {
       behavior: "instant"
     });
   }
+  async copyUrlToClipboard() {
+    if (!this.src) return;
+    const e = `${this.src}&secret=`;
+    try {
+      await navigator.clipboard.writeText(e);
+    } catch (t) {
+      console.error("Failed to copy URL to clipboard:", t);
+    }
+  }
   // This is a LitElement specific method that is called when the element is first rendered
   firstUpdated() {
     this.updateIframeDevice();
@@ -581,13 +590,22 @@ let k = class extends $e {
   render() {
     return this.src ? u`
       <div id="wrapper">
-          <p>${this.src}&secret=</p>
+          <button
+            id="copy-url-btn"
+            @click=${this.copyUrlToClipboard}
+            title="Copy shareable preview URL to clipboard"
+            aria-label="Copy shareable preview URL to clipboard">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+            </svg>
+          </button>
           <iframe src=${this.src}></iframe>
       </div>
     ` : null;
   }
 };
-k.styles = [
+V.styles = [
   H`
       :host {
         display: block;
@@ -604,6 +622,37 @@ k.styles = [
         position: relative;
       }
 
+      #copy-url-btn {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        z-index: 1000;
+        background-color: #6b7280;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 12px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 14px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.2s ease;
+      }
+
+      #copy-url-btn:hover {
+        background-color: #4b5563;
+      }
+
+      #copy-url-btn:active {
+        background-color: #374151;
+      }
+
+      #copy-url-btn svg {
+        flex-shrink: 0;
+      }
+
       iframe {
         border: none;
         inset: 0;
@@ -614,32 +663,32 @@ k.styles = [
     `
 ];
 O([
-  ge({ type: String })
-], k.prototype, "src", 2);
+  we({ type: String })
+], V.prototype, "src", 2);
 O([
-  $()
-], k.prototype, "_device", 2);
+  x()
+], V.prototype, "_device", 2);
 O([
   G("iframe")
-], k.prototype, "iframe", 2);
-k = O([
+], V.prototype, "iframe", 2);
+V = O([
   J("rp-iframe")
-], k);
+], V);
 var He = Object.defineProperty, Je = Object.getOwnPropertyDescriptor, he = (e) => {
   throw TypeError(e);
 }, Q = (e, t, i, r) => {
   for (var s = r > 1 ? void 0 : r ? Je(t, i) : t, l = e.length - 1, o; l >= 0; l--)
     (o = e[l]) && (s = (r ? o(t, i, s) : o(s)) || s);
   return r && s && He(t, i, s), s;
-}, K = (e, t, i) => t.has(e) || he("Cannot " + i), _ = (e, t, i) => (K(e, t, "read from private field"), i ? i.call(e) : t.get(e)), N = (e, t, i) => t.has(e) ? he("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, i), pe = (e, t, i, r) => (K(e, t, "write to private field"), t.set(e, i), i), P = (e, t, i) => (K(e, t, "access private method"), i), v, D, g, fe, ve, Z, me;
+}, K = (e, t, i) => t.has(e) || he("Cannot " + i), _ = (e, t, i) => (K(e, t, "read from private field"), i ? i.call(e) : t.get(e)), L = (e, t, i) => t.has(e) ? he("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, i), pe = (e, t, i, r) => (K(e, t, "write to private field"), t.set(e, i), i), P = (e, t, i) => (K(e, t, "access private method"), i), f, D, w, ve, fe, Z, be;
 let E = class extends h {
   constructor() {
-    super(), N(this, g), N(this, v, !1), N(this, D, ""), P(this, g, fe).call(this);
+    super(), L(this, w), L(this, f, !1), L(this, D, ""), P(this, w, ve).call(this);
   }
   // This is a LitElement specific method that is called when the element is first rendered
   updated() {
     setTimeout(() => {
-      P(this, g, Z).call(this);
+      P(this, w, Z).call(this);
     }, 300);
   }
   renderSelectedVersionVisualPreview() {
@@ -680,17 +729,17 @@ let E = class extends h {
     return u`
       <umb-body-layout
         headline="Visual Rollback Preview"
-        class=${_(this, v) ? "json-view" : "preview-view"}
+        class=${_(this, f) ? "json-view" : "preview-view"}
       >
         <uui-button
           slot="action-menu"
           look="secondary"
-          @click=${P(this, g, ve)}
+          @click=${P(this, w, fe)}
           style="margin-right:24px"
-          label=${_(this, v) ? "Visual difference" : "JSON difference"}
+          label=${_(this, f) ? "Visual difference" : "JSON difference"}
         >
           <uui-icon name="icon-repeat" style="margin-right:4px"></uui-icon>
-          ${_(this, v) ? "Visual difference" : "JSON difference"}</uui-button
+          ${_(this, f) ? "Visual difference" : "JSON difference"}</uui-button
         >
 
         <div id="main">
@@ -702,11 +751,11 @@ let E = class extends h {
                   >
                     ${this.renderCultureSelect()}
                   </uui-box>
-                ` : L}
+                ` : N}
             ${this.renderVersions()}
           </div>
           <div id="box-right">
-            ${_(this, v) ? u` ${this.renderSelectedVersion()} ` : u` ${this.renderSelectedVersionVisualPreview()} `}
+            ${_(this, f) ? u` ${this.renderSelectedVersion()} ` : u` ${this.renderSelectedVersionVisualPreview()} `}
           </div>
         </div>
         <umb-footer-layout slot="footer">
@@ -728,15 +777,15 @@ let E = class extends h {
     `;
   }
 };
-v = /* @__PURE__ */ new WeakMap();
+f = /* @__PURE__ */ new WeakMap();
 D = /* @__PURE__ */ new WeakMap();
-g = /* @__PURE__ */ new WeakSet();
-fe = async function() {
+w = /* @__PURE__ */ new WeakSet();
+ve = async function() {
   pe(this, D, window.location.origin);
 };
-ve = async function() {
-  pe(this, v, !_(this, v)), this.requestUpdate(), _(this, v) || (await this.updateComplete, setTimeout(() => {
-    P(this, g, Z).call(this);
+fe = async function() {
+  pe(this, f, !_(this, f)), this.requestUpdate(), _(this, f) || (await this.updateComplete, setTimeout(() => {
+    P(this, w, Z).call(this);
   }, 300));
 };
 Z = function() {
@@ -756,7 +805,7 @@ Z = function() {
       o && ((n = o.contentWindow) == null || n.removeEventListener(
         "scroll",
         t
-      ), P(this, g, me).call(this, s, o), window.requestAnimationFrame(() => {
+      ), P(this, w, be).call(this, s, o), window.requestAnimationFrame(() => {
         var a;
         (a = o == null ? void 0 : o.contentWindow) == null || a.addEventListener(
           "scroll",
@@ -770,15 +819,15 @@ Z = function() {
     (s = (r = i.iframe) == null ? void 0 : r.contentWindow) == null || s.addEventListener("scroll", t);
   });
 };
-me = function(e, t) {
+be = function(e, t) {
   var i, r, s;
   if (!(!e || !t))
     try {
       const l = e.contentDocument || ((i = e.contentWindow) == null ? void 0 : i.document), o = t.contentDocument || ((r = t.contentWindow) == null ? void 0 : r.document);
       if (!l || !o) return;
-      const n = l.documentElement || l.body, a = o.documentElement || o.body, p = n.scrollHeight - n.clientHeight, b = p > 0 ? n.scrollTop / p : 0, I = a.scrollHeight - a.clientHeight, M = b * I, ee = n.scrollWidth - n.clientWidth, be = ee > 0 ? n.scrollLeft / ee : 0, _e = a.scrollWidth - a.clientWidth, ye = be * _e;
+      const n = l.documentElement || l.body, a = o.documentElement || o.body, p = n.scrollHeight - n.clientHeight, m = p > 0 ? n.scrollTop / p : 0, M = a.scrollHeight - a.clientHeight, W = m * M, ee = n.scrollWidth - n.clientWidth, me = ee > 0 ? n.scrollLeft / ee : 0, _e = a.scrollWidth - a.clientWidth, ye = me * _e;
       (s = t.contentWindow) == null || s.scrollTo({
-        top: M,
+        top: W,
         left: ye,
         behavior: "instant"
       });
@@ -801,4 +850,4 @@ export {
   E as RpRollbackModalElement,
   at as default
 };
-//# sourceMappingURL=rollback-previewer-modal.element-C8IIYbFq.js.map
+//# sourceMappingURL=rollback-previewer-modal.element-DOO1U8-A.js.map
