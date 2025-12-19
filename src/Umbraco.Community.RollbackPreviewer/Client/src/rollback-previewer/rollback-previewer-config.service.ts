@@ -4,6 +4,8 @@
 export interface RollbackPreviewerConfiguration {
     enableFrontendPreviewAuthorisation: boolean;
     frontendPreviewAuthorisationSecret: string | null;
+    isTimeLimited: boolean;
+    expirationMinutes: number | null;
 }
 
 /**
@@ -36,6 +38,8 @@ export class RollbackPreviewerConfigService {
             return {
                 enableFrontendPreviewAuthorisation: data.enableFrontendPreviewAuthorisation ?? false,
                 frontendPreviewAuthorisationSecret: data.frontendPreviewAuthorisationSecret ?? null,
+                isTimeLimited: data.isTimeLimited ?? false,
+                expirationMinutes: data.expirationMinutes ?? null,
             };
         } catch (error) {
             console.error('Error fetching Rollback Previewer configuration:', error);
