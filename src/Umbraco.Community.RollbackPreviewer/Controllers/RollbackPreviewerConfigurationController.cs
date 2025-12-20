@@ -1,10 +1,12 @@
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Umbraco.Cms.Api.Common.Attributes;
 using Umbraco.Cms.Api.Management.Controllers;
 using Umbraco.Cms.Core;
+using Umbraco.Cms.Web.Common.Authorization;
 using Umbraco.Community.RollbackPreviewer.Configuration;
 
 namespace Umbraco.Community.RollbackPreviewer.Controllers
@@ -12,11 +14,9 @@ namespace Umbraco.Community.RollbackPreviewer.Controllers
     /// <summary>
     /// API controller for accessing Rollback Previewer configuration settings
     /// </summary>
-    [ApiController]
     [ApiVersion("1.0")]
-    [MapToApi("umbraco-community-rollback-previewer")]
-    [Authorize(Policy = AuthorizationPolicies.BackOfficeAccess)]
-    public class RollbackPreviewerConfigurationController : ManagementApiControllerBase
+    [ApiExplorerSettings(GroupName = "UmbracoCommunityRollbackPreviewer")]
+    public class RollbackPreviewerConfigurationController : RollbackPreviewerConfigurationControllerBase
     {
         private readonly RollbackPreviewerOptions _options;
 

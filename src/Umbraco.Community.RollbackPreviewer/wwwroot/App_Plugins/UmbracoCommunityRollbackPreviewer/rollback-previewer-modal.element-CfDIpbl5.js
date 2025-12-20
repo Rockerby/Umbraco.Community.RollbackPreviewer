@@ -2,8 +2,8 @@ var re = (e) => {
   throw TypeError(e);
 };
 var se = (e, t, i) => t.has(e) || re("Cannot " + i);
-var v = (e, t, i) => (se(e, t, "read from private field"), i ? i.call(e) : t.get(e)), N = (e, t, i) => t.has(e) ? re("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, i), A = (e, t, i, r) => (se(e, t, "write to private field"), r ? r.call(e, i) : t.set(e, i), i);
-import { html as u, repeat as oe, unsafeHTML as Ce, nothing as L, css as G, state as $, customElement as J, property as ue, query as X, LitElement as $e } from "@umbraco-cms/backoffice/external/lit";
+var v = (e, t, i) => (se(e, t, "read from private field"), i ? i.call(e) : t.get(e)), N = (e, t, i) => t.has(e) ? re("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, i), L = (e, t, i, r) => (se(e, t, "write to private field"), r ? r.call(e, i) : t.set(e, i), i);
+import { html as u, repeat as oe, unsafeHTML as Ce, nothing as A, css as F, state as $, customElement as G, property as ue, query as X, LitElement as $e } from "@umbraco-cms/backoffice/external/lit";
 import { UMB_DOCUMENT_ENTITY_TYPE as ne, UmbDocumentDetailRepository as ke } from "@umbraco-cms/backoffice/document";
 import { DocumentVersionService as R } from "@umbraco-cms/backoffice/external/backend-api";
 import { tryExecute as U } from "@umbraco-cms/backoffice/resources";
@@ -18,8 +18,9 @@ import { UMB_ENTITY_CONTEXT as Re } from "@umbraco-cms/backoffice/entity";
 import { UmbVariantId as Ue } from "@umbraco-cms/backoffice/variant";
 import { UMB_ACTION_EVENT_CONTEXT as qe } from "@umbraco-cms/backoffice/action";
 import { UmbRequestReloadStructureForEntityEvent as ze, UmbEntityUpdatedEvent as Oe } from "@umbraco-cms/backoffice/entity-action";
+import { c as We } from "./client.gen-CSWNPGiu.js";
 var y;
-class We {
+class Ie {
   /**
    * Creates an instance of UmbRollbackServerDataSource.
    * @param {UmbControllerHost} host - The controller host for this controller to be appended to
@@ -27,7 +28,7 @@ class We {
    */
   constructor(t) {
     N(this, y);
-    A(this, y, t);
+    L(this, y, t);
   }
   /**
    * Get a list of versions for a document
@@ -66,11 +67,11 @@ class We {
 }
 y = new WeakMap();
 var w;
-class Ie extends xe {
+class Me extends xe {
   constructor(i) {
     super(i);
     N(this, w);
-    A(this, w, new We(this));
+    L(this, w, new Ie(this));
   }
   async requestVersionsByDocumentId(i, r) {
     return await v(this, w).getVersionsByDocumentId(i, r);
@@ -86,16 +87,16 @@ class Ie extends xe {
   }
 }
 w = new WeakMap();
-var Me = Object.defineProperty, Be = Object.getOwnPropertyDescriptor, ce = (e) => {
+var Be = Object.defineProperty, Ne = Object.getOwnPropertyDescriptor, ce = (e) => {
   throw TypeError(e);
 }, k = (e, t, i, r) => {
-  for (var s = r > 1 ? void 0 : r ? Be(t, i) : t, n = e.length - 1, o; n >= 0; n--)
+  for (var s = r > 1 ? void 0 : r ? Ne(t, i) : t, n = e.length - 1, o; n >= 0; n--)
     (o = e[n]) && (s = (r ? o(t, i, s) : o(s)) || s);
-  return r && s && Me(t, i, s), s;
+  return r && s && Be(t, i, s), s;
 }, Y = (e, t, i) => t.has(e) || ce("Cannot " + i), m = (e, t, i) => (Y(e, t, "read from private field"), i ? i.call(e) : t.get(e)), x = (e, t, i) => t.has(e) ? ce("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, i), ae = (e, t, i, r) => (Y(e, t, "write to private field"), t.set(e, i), i), d = (e, t, i) => (Y(e, t, "access private method"), i), V, j, z, W, I, c, O, Q, K, de, he, pe, H, fe;
 let h = class extends Ve {
   constructor() {
-    super(), x(this, c), this._versions = [], this._selectedCulture = null, this._isInvariant = !0, this._availableVariants = [], this._diffs = [], x(this, V, new Ie(this)), x(this, j, new Pe(this)), x(this, z, {
+    super(), x(this, c), this._versions = [], this._selectedCulture = null, this._isInvariant = !0, this._availableVariants = [], this._diffs = [], x(this, V, new Me(this)), x(this, j, new Pe(this)), x(this, z, {
       day: "numeric",
       month: "long",
       hour: "numeric",
@@ -208,7 +209,7 @@ let h = class extends Ve {
 									<uui-table-cell>
 										${t ? t.diff.map(
           (i) => i.added ? u`<span class="diff-added">${i.value}</span>` : i.removed ? u`<span class="diff-removed">${i.value}</span>` : i.value
-        ) : L}
+        ) : A}
 									</uui-table-cell>
 								</uui-table-row>
 							`;
@@ -235,7 +236,7 @@ let h = class extends Ve {
 									<uui-box id="language-box" headline=${this.localize.term("general_language")}>
 										${this.renderCultureSelect()}
 									</uui-box>
-								` : L}
+								` : A}
 						${this.renderVersions()}
 					</div>
 					${this.renderSelectedVersion()}
@@ -349,7 +350,7 @@ fe = async function() {
 };
 h.styles = [
   Ee,
-  G`
+  F`
 			:host {
 				color: var(--uui-color-text);
 			}
@@ -480,12 +481,12 @@ k([
   $()
 ], h.prototype, "_diffs", 2);
 h = k([
-  J("umb-rollback-modal")
+  G("umb-rollback-modal")
 ], h);
-const Ne = [
+const Le = [
   ...h.styles,
   // Importing the base styles from UmbRollbackModalElement
-  G`
+  F`
     .preview-view {
       #main {
         display: grid;
@@ -537,12 +538,12 @@ const Ne = [
     }
   `
 ];
-var Ae = Object.defineProperty, Le = Object.getOwnPropertyDescriptor, T = (e, t, i, r) => {
-  for (var s = r > 1 ? void 0 : r ? Le(t, i) : t, n = e.length - 1, o; n >= 0; n--)
+var Ae = Object.defineProperty, He = Object.getOwnPropertyDescriptor, T = (e, t, i, r) => {
+  for (var s = r > 1 ? void 0 : r ? He(t, i) : t, n = e.length - 1, o; n >= 0; n--)
     (o = e[n]) && (s = (r ? o(t, i, s) : o(s)) || s);
   return r && s && Ae(t, i, s), s;
 };
-const He = {
+const Je = {
   alias: "desktop",
   label: "Desktop",
   demensions: {
@@ -552,7 +553,7 @@ const He = {
 };
 let C = class extends $e {
   constructor() {
-    super(...arguments), this.src = "", this.secret = null, this._device = He;
+    super(...arguments), this.src = "", this.secret = null, this._device = Je;
   }
   connectedCallback() {
     super.connectedCallback(), this.src || console.error("No src provided for rollback previewer iframe"), new ResizeObserver(() => {
@@ -604,7 +605,7 @@ let C = class extends $e {
   }
 };
 C.styles = [
-  G`
+  F`
       :host {
         display: block;
         height: var(--rp-height, auto);
@@ -649,45 +650,35 @@ T([
   X("iframe")
 ], C.prototype, "iframe", 2);
 C = T([
-  J("rp-iframe")
+  G("rp-iframe")
 ], C);
-class Fe {
+const Fe = (e) => ((e == null ? void 0 : e.client) ?? We).get({
+  security: [
+    {
+      scheme: "bearer",
+      type: "http"
+    }
+  ],
+  url: "/umbraco/rollbackpreviewer/api/v1/configuration",
+  ...e
+});
+class Ge {
   /**
    * Fetches the configuration settings from the backend API
    * @returns Promise with configuration data
    */
   static async getConfiguration() {
-    try {
-      const t = await fetch(
-        "/umbraco/management/api/v1/umbraco-community-rollback-previewer/configuration",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          credentials: "include"
-          // Include cookies for authentication
-        }
-      );
-      if (!t.ok)
-        return console.error("Failed to fetch Rollback Previewer configuration:", t.statusText), null;
-      const i = await t.json();
-      return {
-        enableFrontendPreviewAuthorisation: i.enableFrontendPreviewAuthorisation ?? !1,
-        frontendPreviewAuthorisationSecret: i.frontendPreviewAuthorisationSecret ?? null
-      };
-    } catch (t) {
-      return console.error("Error fetching Rollback Previewer configuration:", t), null;
-    }
+    const { data: t, error: i } = await Fe();
+    return i ? (console.error(i), null) : t !== void 0 ? t : null;
   }
 }
-var Ge = Object.defineProperty, Je = Object.getOwnPropertyDescriptor, ve = (e) => {
+var Xe = Object.defineProperty, Ye = Object.getOwnPropertyDescriptor, ve = (e) => {
   throw TypeError(e);
 }, Z = (e, t, i, r) => {
-  for (var s = r > 1 ? void 0 : r ? Je(t, i) : t, n = e.length - 1, o; n >= 0; n--)
+  for (var s = r > 1 ? void 0 : r ? Ye(t, i) : t, n = e.length - 1, o; n >= 0; n--)
     (o = e[n]) && (s = (r ? o(t, i, s) : o(s)) || s);
-  return r && s && Ge(t, i, s), s;
-}, ee = (e, t, i) => t.has(e) || ve("Cannot " + i), f = (e, t, i) => (ee(e, t, "read from private field"), i ? i.call(e) : t.get(e)), q = (e, t, i) => t.has(e) ? ve("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, i), F = (e, t, i, r) => (ee(e, t, "write to private field"), t.set(e, i), i), P = (e, t, i) => (ee(e, t, "access private method"), i), b, S, D, g, be, me, te, _e;
+  return r && s && Xe(t, i, s), s;
+}, ee = (e, t, i) => t.has(e) || ve("Cannot " + i), f = (e, t, i) => (ee(e, t, "read from private field"), i ? i.call(e) : t.get(e)), q = (e, t, i) => t.has(e) ? ve("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, i), J = (e, t, i, r) => (ee(e, t, "write to private field"), t.set(e, i), i), P = (e, t, i) => (ee(e, t, "access private method"), i), b, S, D, g, be, me, te, _e;
 let E = class extends h {
   constructor() {
     super(), q(this, g), q(this, b, !1), q(this, S, ""), q(this, D, null), P(this, g, be).call(this);
@@ -760,7 +751,7 @@ let E = class extends h {
                   >
                     ${this.renderCultureSelect()}
                   </uui-box>
-                ` : L}
+                ` : A}
             ${this.renderVersions()}
           </div>
           <div id="box-right">
@@ -791,12 +782,12 @@ S = /* @__PURE__ */ new WeakMap();
 D = /* @__PURE__ */ new WeakMap();
 g = /* @__PURE__ */ new WeakSet();
 be = async function() {
-  F(this, S, window.location.origin);
-  const e = await Fe.getConfiguration();
-  e != null && e.enableFrontendPreviewAuthorisation && F(this, D, e.frontendPreviewAuthorisationSecret);
+  J(this, S, window.location.origin);
+  const e = await Ge.getConfiguration();
+  e != null && e.enableFrontendPreviewAuthorisation && J(this, D, e.frontendPreviewAuthorisationSecret);
 };
 me = async function() {
-  F(this, b, !f(this, b)), this.requestUpdate(), f(this, b) || (await this.updateComplete, setTimeout(() => {
+  J(this, b, !f(this, b)), this.requestUpdate(), f(this, b) || (await this.updateComplete, setTimeout(() => {
     P(this, g, te).call(this);
   }, 300));
 };
@@ -847,7 +838,7 @@ _e = function(e, t) {
       console.error("Error syncing scroll:", n);
     }
 };
-E.styles = Ne;
+E.styles = Le;
 Z([
   X("#rollbackPreviewerLeft")
 ], E.prototype, "rollbackPreviewerLeft", 2);
@@ -855,11 +846,11 @@ Z([
   X("#rollbackPreviewerRight")
 ], E.prototype, "rollbackPreviewerRight", 2);
 E = Z([
-  J("rp-rollback-modal")
+  G("rp-rollback-modal")
 ], E);
-const ct = E;
+const pt = E;
 export {
   E as RpRollbackModalElement,
-  ct as default
+  pt as default
 };
-//# sourceMappingURL=rollback-previewer-modal.element-C9dSykk1.js.map
+//# sourceMappingURL=rollback-previewer-modal.element-CfDIpbl5.js.map
