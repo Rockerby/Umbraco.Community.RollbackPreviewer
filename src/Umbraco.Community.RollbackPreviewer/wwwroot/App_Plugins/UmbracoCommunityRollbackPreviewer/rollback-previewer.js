@@ -5,7 +5,7 @@ const a = [
     name: "Rollback Previewer",
     alias: "Umb.Modal.Rollback",
     type: "modal",
-    element: () => import("./rollback-previewer-modal.element-CfDIpbl5.js")
+    element: () => import("./rollback-previewer-modal.element-BmChvHbd.js")
   }
 ], t = [
   {

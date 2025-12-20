@@ -29,13 +29,6 @@ namespace Umbraco.Community.RollbackPreviewer.Composers
             // Set the options from configuration
             builder.Services.Configure<Configuration.RollbackPreviewerOptions>(builder.Config.GetSection(Configuration.RollbackPreviewerOptions.SectionName));
 
-            // Configure Swagger/OpenAPI for the custom API
-            //builder.Services.Configure<UmbSwaggerGenOptions>(options =>
-            //{
-            //    options.DocumentName = "UmbracoCommunityRollbackPreviewer";
-            //    options.ApiName = "Umbraco Community Rollback Previewer API";
-            //    options.ApiVersion = "Latest";
-            //});
             builder.Services.AddSingleton<IOperationIdHandler, CustomOperationHandler>();
 
             builder.Services.Configure<SwaggerGenOptions>(opt =>

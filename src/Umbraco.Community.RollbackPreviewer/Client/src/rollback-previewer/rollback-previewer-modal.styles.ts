@@ -53,5 +53,11 @@ export const rpRollbackStyles = [
         grid-area: selected;
       }
     }
+
+    .selected-version-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
   `,
 ];
