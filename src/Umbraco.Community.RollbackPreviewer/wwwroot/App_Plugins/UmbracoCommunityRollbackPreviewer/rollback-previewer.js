@@ -1,16 +1,24 @@
 import { umbExtensionsRegistry as e } from "@umbraco-cms/backoffice/extension-registry";
 e.unregister("Umb.Modal.Rollback");
-const o = [
+const a = [
   {
     name: "Rollback Previewer",
     alias: "Umb.Modal.Rollback",
     type: "modal",
-    element: () => import("./rollback-previewer-modal.element-C8IIYbFq.js")
+    element: () => import("./rollback-previewer-modal.element-BmChvHbd.js")
   }
-], a = [
-  ...o
+], t = [
+  {
+    name: "Your Package Name Entrypoint",
+    alias: "YourPackageName.Entrypoint",
+    type: "backofficeEntryPoint",
+    js: () => import("./entrypoint-BNhqvFJl.js")
+  }
+], n = [
+  ...a,
+  ...t
 ];
 export {
-  a as manifests
+  n as manifests
 };
 //# sourceMappingURL=rollback-previewer.js.map

@@ -1,6 +1,7 @@
 import {
   customElement,
   html,
+  ifDefined,
   nothing,
   query,
 } from "@umbraco-cms/backoffice/external/lit";
@@ -8,11 +9,15 @@ import UmbRollbackModalElement from "../umbraco/rollback/modal/rollback-modal.el
 import { rpRollbackStyles } from "./rollback-previewer-modal.styles.js";
 import "./rollback-previewer-iframe.element.js";
 import RpIframe from "./rollback-previewer-iframe.element.js";
+import { RollbackPreviewerConfigService } from "./rollback-previewer-config.service.js";
+import { UUIButtonElement } from "@umbraco-cms/backoffice/external/uui";
 
 @customElement("rp-rollback-modal")
 export class RpRollbackModalElement extends UmbRollbackModalElement {
   #useJsonView: boolean = false;
   #serverUrl: string = "";
+  #showUrlLink: boolean = false;
+  #previewSecret: string | null | undefined = null;
 
   @query("#rollbackPreviewerLeft")
   rollbackPreviewerLeft: RpIframe | null | undefined;
@@ -29,6 +34,13 @@ export class RpRollbackModalElement extends UmbRollbackModalElement {
     // This is how the server URL is fetched in the Umbraco codebase. See below for ref:
     // https://github.com/umbraco/Umbraco-CMS/blob/fb0f719c7df9da96c514f1ed5bafd511e7218d5a/src/Umbraco.Web.UI.Client/src/apps/app/app.element.ts
     this.#serverUrl = window.location.origin;
+
+    // Fetch the preview configuration to get the secret for shareable URLs
+    const config = await RollbackPreviewerConfigService.getConfiguration();
+    if (config?.enableFrontendPreviewAuthorisation) {
+      this.#previewSecret = config.frontendPreviewAuthorisationSecret;
+      this.#showUrlLink = true;
+    }
   }
 
   async #switchView() {
@@ -39,7 +51,7 @@ export class RpRollbackModalElement extends UmbRollbackModalElement {
       await this.updateComplete;
       setTimeout(() => {
         this.#setupScrollSync();
-    }, 300);
+      }, 300);
     }
   }
 
@@ -135,6 +147,31 @@ export class RpRollbackModalElement extends UmbRollbackModalElement {
     }
   }
 
+  async copyUrlToClipboard(ev: Event) {
+    const buttonElement = ev.target as UUIButtonElement;
+
+    if (!this._selectedVersion) return;
+
+    let culture = this._selectedCulture || '';
+
+    let dataToCopy = `${this.#serverUrl}/ucrbp?cid=${this.currentDocument
+      ?.unique}&vid=${this._selectedVersion.id}&culture=${culture}`;
+
+    // Only append secret if it exists
+    const urlWithSecret = this.#previewSecret
+      ? `${dataToCopy}&secret=${encodeURIComponent(this.#previewSecret)}`
+      : dataToCopy;
+
+    try {
+      await navigator.clipboard.writeText(urlWithSecret);
+      // Could add a toast notification here if desired
+      buttonElement.state = 'success';
+    } catch (err) {
+      console.error('Failed to copy URL to clipboard:', err);
+    }
+
+  }
+
   // This is a LitElement specific method that is called when the element is first rendered
   updated(): void {
     // This is a hack for now to wait for the iframe to load before setting up the scroll sync
@@ -151,6 +188,18 @@ export class RpRollbackModalElement extends UmbRollbackModalElement {
           >No selected version</uui-box
         >
       `;
+    let btnHtml = html``;
+    if (this.#showUrlLink) {
+      btnHtml = html`<uui-button
+                @click=${this.copyUrlToClipboard}
+                look="secondary"
+                compact
+                title="Copy shareable preview URL to clipboard"
+                >
+                <span>Copy shareable URL</span>
+                <uui-icon name="icon-link"></uui-icon>
+              </uui-button>`;
+    }
 
     return html`
       <uui-box id="box-right">
@@ -162,20 +211,25 @@ export class RpRollbackModalElement extends UmbRollbackModalElement {
             <rp-iframe
               id="rollbackPreviewerLeft"
               src="${this.#serverUrl}/${this.currentDocument
-                ?.unique}?culture=${this._selectedCulture}"
+        ?.unique}?culture=${this._selectedCulture}"
             >
             </rp-iframe>
           </div>
           <div class="rp-container selected">
-            <div>
-              <h4 class="uui-h4">Selected version</h4>
-              <p class="uui-text">${this.currentVersionHeader}</p>
+            <div class="selected-version-title">
+              <div>
+                <h4 class="uui-h4">Selected version</h4>
+                <p class="uui-text">${this.currentVersionHeader}</p>
+              </div>
+              <div>
+                ${btnHtml}
+              </div>
             </div>
             <rp-iframe
               id="rollbackPreviewerRight"
               src="${this.#serverUrl}/ucrbp?cid=${this.currentDocument
-                ?.unique}&vid=${this._selectedVersion.id}&culture=${this
-                ._selectedCulture}"
+        ?.unique}&vid=${this._selectedVersion.id}&culture=${this
+          ._selectedCulture}"
             ></rp-iframe>
           </div>
         </div>
@@ -198,14 +252,14 @@ export class RpRollbackModalElement extends UmbRollbackModalElement {
         >
           <uui-icon name="icon-repeat" style="margin-right:4px"></uui-icon>
           ${this.#useJsonView
-            ? "Visual difference"
-            : "JSON difference"}</uui-button
+        ? "Visual difference"
+        : "JSON difference"}</uui-button
         >
 
         <div id="main">
           <div id="box-left">
             ${this._availableVariants.length
-              ? html`
+        ? html`
                   <uui-box
                     id="language-box"
                     headline=${this.localize.term("general_language")}
@@ -213,13 +267,13 @@ export class RpRollbackModalElement extends UmbRollbackModalElement {
                     ${this.renderCultureSelect()}
                   </uui-box>
                 `
-              : nothing}
+        : nothing}
             ${this.renderVersions()}
           </div>
           <div id="box-right">
             ${this.#useJsonView
-              ? html` ${this.renderSelectedVersion()} `
-              : html` ${this.renderSelectedVersionVisualPreview()} `}
+        ? html` ${this.renderSelectedVersion()} `
+        : html` ${this.renderSelectedVersionVisualPreview()} `}
           </div>
         </div>
         <umb-footer-layout slot="footer">
