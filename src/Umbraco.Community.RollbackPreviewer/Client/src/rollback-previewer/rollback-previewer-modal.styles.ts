@@ -59,5 +59,11 @@ export const rpRollbackStyles = [
       justify-content: space-between;
       align-items: center;
     }
+
+    .align-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
   `,
 ];
