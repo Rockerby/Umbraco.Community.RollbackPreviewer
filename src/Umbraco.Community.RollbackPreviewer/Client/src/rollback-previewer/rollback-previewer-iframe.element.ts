@@ -85,7 +85,6 @@ export class RpIframe extends LitElement {
       return null;
     }
 
-    // TODO: Add configurable title attribute for the iframe
     return html`
       <div id="wrapper">
           <iframe src=${this.src}></iframe>
@@ -108,6 +107,13 @@ export class RpIframe extends LitElement {
         transform-origin: 0 0;
         overflow: hidden;
         position: relative;
+      }
+
+      #copy-url-btn {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        z-index: 1000;
       }
 
       iframe {

@@ -6,12 +6,12 @@
   "scripts": {
     "dev": "tsc && vite build --watch",
     "build": "tsc && vite build",
-    "generate-client": "node scripts/generate-openapi.js https://localhost:44363/umbraco/swagger/UmbracoCommunityRollbackPreviewer/swagger.json"
+    "generate-client": "node scripts/generate-openapi.js https://localhost:44365/umbraco/swagger/umbracocommunityrollbackpreviewer/swagger.json"
   },
   "devDependencies": {
     "@hey-api/client-fetch": "^0.4.2",
     "@hey-api/openapi-ts": "^0.85.0",
-    "@umbraco-cms/backoffice": "17.0.0",
+    "@umbraco-cms/backoffice": "17.0.1",
     "chalk": "^5.3.0",
     "cross-env": "^7.0.3",
     "node-fetch": "^3.3.2",

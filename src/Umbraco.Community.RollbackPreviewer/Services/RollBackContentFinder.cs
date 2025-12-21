@@ -22,6 +22,7 @@ using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Services.OperationStatus;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Infrastructure.Scoping;
+using Umbraco.Community.RollbackPreviewer.Configuration;
 using Umbraco.Community.RollbackPreviewer.Extensions;
 using Umbraco.Extensions;
 
@@ -39,7 +40,8 @@ namespace Umbraco.Community.RollbackPreviewer.Services
         private readonly IContentVersionService _contentVersionService;
         private readonly IPublishedModelFactory _publishedModelFactory;
         private readonly IVariationContextAccessor _variationContextAccessor;
-
+        private readonly RollbackPreviewerOptions _options;
+        private readonly ITimeLimitedSecretService _secretService;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ContentFinderByPageIdQuery" /> class.
@@ -51,7 +53,9 @@ namespace Umbraco.Community.RollbackPreviewer.Services
             IServiceScopeFactory scopeFactory, IContentVersionService contentVersionService,
             IPublishedModelFactory publishedModelFactory,
             IVariationContextAccessor variationContextAccessor,
-            PublishedContentConverter publishedContentConverter)
+            PublishedContentConverter publishedContentConverter,
+            IOptions<RollbackPreviewerOptions> options,
+            ITimeLimitedSecretService secretService)
         {
             _contentService = contentService;
             _httpContextAccessor = httpContextAccessor;
@@ -63,6 +67,8 @@ namespace Umbraco.Community.RollbackPreviewer.Services
             _contentVersionService = contentVersionService;
             _publishedModelFactory = publishedModelFactory;
             _variationContextAccessor = variationContextAccessor;
+            _options = options.Value;
+            _secretService = secretService;
         }
 
         /// <inheritdoc />
@@ -93,10 +99,14 @@ namespace Umbraco.Community.RollbackPreviewer.Services
                 }
 #endif
 
-                // Make sure a back office user is logged in. Not concerned about content node permissions
+                var secretFromQueryString = req.Query["secret"].ToString();
+
+                // Make sure a back office user is logged in or front end access is authorised via config.
+                // Not concerned about content node permissions
                 // just yet as we're not performing any write permissions.
                 // This does mean that if a user hits this with the right queries they just see the published content
-                if (!IsBackOfficeUserLoggedIn())
+                bool isAuthorised = CheckIfIsAuthorised(secretFromQueryString);
+                if (!isAuthorised)
                 {
                     return false;
                 }
@@ -166,6 +176,9 @@ namespace Umbraco.Community.RollbackPreviewer.Services
                 // Set the content that we "created" back to the pipeline
                 frequest.SetPublishedContent(pubContent);
 
+                // Only set this if you are about to return true
+                SetRobotsToNoIndexNoFollow();
+
                 // Return true to tell the system we have the content and not try anymore
                 return true;
             }
@@ -176,6 +189,66 @@ namespace Umbraco.Community.RollbackPreviewer.Services
                 return false;
             }
 
+        }
+
+        private void SetRobotsToNoIndexNoFollow()
+        {
+            // Set the X-Robots-Tag headers to noindex, nofollow
+            var response = _httpContextAccessor.HttpContext?.Response;
+            if (response != null)
+            {
+                // Avoid overwriting if already set; ensure noindex/nofollow are present
+                const string headerName = "X-Robots-Tag";
+                const string headerValue = "noindex, nofollow";
+                if (response.Headers.TryGetValue(headerName, out var existing))
+                {
+                    response.Headers[headerName] = headerValue;
+                }
+                else
+                {
+                    response.Headers.Append(headerName, headerValue);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Checks if the current request is authorised to view the preview.
+        /// Validates both static secrets and time-limited secrets depending on configuration.
+        /// </summary>
+        /// <param name="secretFromQueryString"></param>
+        /// <returns></returns>
+        private bool CheckIfIsAuthorised(string? secretFromQueryString)
+        {
+            var isAuthorised = false;
+            var isAuthorisedForFrontend = _options.EnableFrontendPreviewAuthorisation;
+
+            if(isAuthorisedForFrontend)
+            {
+                if (_options.EnableTimeLimitedSecrets)
+                {
+                    // Validate time-limited secret
+                    if (!string.IsNullOrWhiteSpace(secretFromQueryString))
+                    {
+                        isAuthorised = _secretService.ValidateSecret(secretFromQueryString);
+                    }
+                }
+                else
+                {
+                    // Validate static secret
+                    var hasSecret = !string.IsNullOrWhiteSpace(_options.FrontendPreviewAuthorisationSecret);
+                    if(hasSecret)
+                    {
+                        isAuthorised = secretFromQueryString == _options.FrontendPreviewAuthorisationSecret;
+                    }
+                    else
+                    {
+                        // No secret configured, allow all frontend access
+                        isAuthorised = true;
+                    }
+                }
+            }
+
+            return isAuthorised || IsBackOfficeUserLoggedIn();
         }
 
         /// <summary>

@@ -1,33 +1,34 @@
-var te = (e) => {
+var re = (e) => {
   throw TypeError(e);
 };
-var ie = (e, t, i) => t.has(e) || te("Cannot " + i);
-var f = (e, t, i) => (ie(e, t, "read from private field"), i ? i.call(e) : t.get(e)), W = (e, t, i) => t.has(e) ? te("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, i), B = (e, t, i, r) => (ie(e, t, "write to private field"), r ? r.call(e, i) : t.set(e, i), i);
-import { html as u, repeat as re, unsafeHTML as we, nothing as L, css as H, state as $, customElement as J, property as ge, query as G, LitElement as $e } from "@umbraco-cms/backoffice/external/lit";
-import { UMB_DOCUMENT_ENTITY_TYPE as se, UmbDocumentDetailRepository as Ce } from "@umbraco-cms/backoffice/document";
-import { DocumentVersionService as S } from "@umbraco-cms/backoffice/external/backend-api";
-import { tryExecute as T } from "@umbraco-cms/backoffice/resources";
-import { UmbControllerBase as xe } from "@umbraco-cms/backoffice/class-api";
-import { diffWords as oe } from "@umbraco-cms/backoffice/utils";
+var se = (e, t, i) => t.has(e) || re("Cannot " + i);
+var v = (e, t, i) => (se(e, t, "read from private field"), i ? i.call(e) : t.get(e)), B = (e, t, i) => t.has(e) ? re("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, i), N = (e, t, i, r) => (se(e, t, "write to private field"), r ? r.call(e, i) : t.set(e, i), i);
+import { html as u, repeat as oe, unsafeHTML as we, nothing as A, css as F, state as $, customElement as G, property as Ce, query as X, LitElement as $e } from "@umbraco-cms/backoffice/external/lit";
+import { UMB_DOCUMENT_ENTITY_TYPE as ne, UmbDocumentDetailRepository as xe } from "@umbraco-cms/backoffice/document";
+import { DocumentVersionService as T } from "@umbraco-cms/backoffice/external/backend-api";
+import { tryExecute as R } from "@umbraco-cms/backoffice/resources";
+import { UmbControllerBase as ke } from "@umbraco-cms/backoffice/class-api";
+import { diffWords as le } from "@umbraco-cms/backoffice/utils";
 import { UmbModalBaseElement as Ve } from "@umbraco-cms/backoffice/modal";
-import { UmbTextStyles as ke } from "@umbraco-cms/backoffice/style";
-import { UmbUserItemRepository as Ee } from "@umbraco-cms/backoffice/user";
-import { UMB_PROPERTY_DATASET_CONTEXT as Pe } from "@umbraco-cms/backoffice/property";
-import { UMB_APP_LANGUAGE_CONTEXT as De, UmbLanguageItemRepository as Se } from "@umbraco-cms/backoffice/language";
-import { UMB_ENTITY_CONTEXT as Te } from "@umbraco-cms/backoffice/entity";
-import { UmbVariantId as qe } from "@umbraco-cms/backoffice/variant";
-import { UMB_ACTION_EVENT_CONTEXT as Re } from "@umbraco-cms/backoffice/action";
-import { UmbRequestReloadStructureForEntityEvent as ze, UmbEntityUpdatedEvent as Ue } from "@umbraco-cms/backoffice/entity-action";
-var y;
-class Oe {
+import { UmbTextStyles as Ee } from "@umbraco-cms/backoffice/style";
+import { UmbUserItemRepository as Pe } from "@umbraco-cms/backoffice/user";
+import { UMB_PROPERTY_DATASET_CONTEXT as De } from "@umbraco-cms/backoffice/property";
+import { UMB_APP_LANGUAGE_CONTEXT as Se, UmbLanguageItemRepository as Te } from "@umbraco-cms/backoffice/language";
+import { UMB_ENTITY_CONTEXT as Re } from "@umbraco-cms/backoffice/entity";
+import { UmbVariantId as Ue } from "@umbraco-cms/backoffice/variant";
+import { UMB_ACTION_EVENT_CONTEXT as qe } from "@umbraco-cms/backoffice/action";
+import { UmbRequestReloadStructureForEntityEvent as ze, UmbEntityUpdatedEvent as Oe } from "@umbraco-cms/backoffice/entity-action";
+import { c as Me } from "./client.gen-CSWNPGiu.js";
+var g;
+class We {
   /**
    * Creates an instance of UmbRollbackServerDataSource.
    * @param {UmbControllerHost} host - The controller host for this controller to be appended to
    * @memberof UmbRollbackServerDataSource
    */
   constructor(t) {
-    W(this, y);
-    B(this, y, t);
+    B(this, g);
+    N(this, g, t);
   }
   /**
    * Get a list of versions for a document
@@ -37,7 +38,7 @@ class Oe {
    * @memberof UmbRollbackServerDataSource
    */
   getVersionsByDocumentId(t, i) {
-    return T(f(this, y), S.getDocumentVersion({ query: { documentId: t, culture: i } }));
+    return R(v(this, g), T.getDocumentVersion({ query: { documentId: t, culture: i } }));
   }
   /**
    * Get a specific version by id
@@ -46,100 +47,100 @@ class Oe {
    * @memberof UmbRollbackServerDataSource
    */
   getVersionById(t) {
-    return T(f(this, y), S.getDocumentVersionById({ path: { id: t } }));
+    return R(v(this, g), T.getDocumentVersionById({ path: { id: t } }));
   }
   setPreventCleanup(t, i) {
-    return T(
-      f(this, y),
-      S.putDocumentVersionByIdPreventCleanup({
+    return R(
+      v(this, g),
+      T.putDocumentVersionByIdPreventCleanup({
         path: { id: t },
         query: { preventCleanup: i }
       })
     );
   }
   rollback(t, i) {
-    return T(
-      f(this, y),
-      S.postDocumentVersionByIdRollback({ path: { id: t }, query: { culture: i } })
+    return R(
+      v(this, g),
+      T.postDocumentVersionByIdRollback({ path: { id: t }, query: { culture: i } })
     );
   }
 }
-y = new WeakMap();
+g = new WeakMap();
 var w;
-class Ie extends xe {
+class Ie extends ke {
   constructor(i) {
     super(i);
-    W(this, w);
-    B(this, w, new Oe(this));
+    B(this, w);
+    N(this, w, new We(this));
   }
   async requestVersionsByDocumentId(i, r) {
-    return await f(this, w).getVersionsByDocumentId(i, r);
+    return await v(this, w).getVersionsByDocumentId(i, r);
   }
   async requestVersionById(i) {
-    return await f(this, w).getVersionById(i);
+    return await v(this, w).getVersionById(i);
   }
   async setPreventCleanup(i, r) {
-    return await f(this, w).setPreventCleanup(i, r);
+    return await v(this, w).setPreventCleanup(i, r);
   }
   async rollback(i, r) {
-    return await f(this, w).rollback(i, r);
+    return await v(this, w).rollback(i, r);
   }
 }
 w = new WeakMap();
-var Me = Object.defineProperty, We = Object.getOwnPropertyDescriptor, ne = (e) => {
+var Le = Object.defineProperty, Be = Object.getOwnPropertyDescriptor, ue = (e) => {
   throw TypeError(e);
-}, C = (e, t, i, r) => {
-  for (var s = r > 1 ? void 0 : r ? We(t, i) : t, l = e.length - 1, o; l >= 0; l--)
-    (o = e[l]) && (s = (r ? o(t, i, s) : o(s)) || s);
-  return r && s && Me(t, i, s), s;
-}, X = (e, t, i) => t.has(e) || ne("Cannot " + i), m = (e, t, i) => (X(e, t, "read from private field"), i ? i.call(e) : t.get(e)), x = (e, t, i) => t.has(e) ? ne("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, i), le = (e, t, i, r) => (X(e, t, "write to private field"), t.set(e, i), i), d = (e, t, i) => (X(e, t, "access private method"), i), V, Y, q, z, U, c, R, F, j, ae, ue, ce, A, de;
-let h = class extends Ve {
+}, x = (e, t, i, r) => {
+  for (var s = r > 1 ? void 0 : r ? Be(t, i) : t, n = e.length - 1, o; n >= 0; n--)
+    (o = e[n]) && (s = (r ? o(t, i, s) : o(s)) || s);
+  return r && s && Le(t, i, s), s;
+}, Y = (e, t, i) => t.has(e) || ue("Cannot " + i), m = (e, t, i) => (Y(e, t, "read from private field"), i ? i.call(e) : t.get(e)), k = (e, t, i) => t.has(e) ? ue("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, i), ae = (e, t, i, r) => (Y(e, t, "write to private field"), t.set(e, i), i), h = (e, t, i) => (Y(e, t, "access private method"), i), E, j, q, O, M, c, z, Q, K, ce, de, he, H, pe;
+let p = class extends Ve {
   constructor() {
-    super(), x(this, c), this._versions = [], this._selectedCulture = null, this._isInvariant = !0, this._availableVariants = [], this._diffs = [], x(this, V, new Ie(this)), x(this, Y, new Ee(this)), x(this, q, {
+    super(), k(this, c), this._versions = [], this._selectedCulture = null, this._isInvariant = !0, this._availableVariants = [], this._diffs = [], k(this, E, new Ie(this)), k(this, j, new Pe(this)), k(this, q, {
       day: "numeric",
       month: "long",
       hour: "numeric",
       minute: "2-digit"
-    }), x(this, z), x(this, U), this.consumeContext(Pe, (e) => {
-      le(this, U, (e == null ? void 0 : e.getVariantId().culture) ?? void 0), d(this, c, R).call(this);
-    }), this.consumeContext(De, (e) => {
-      le(this, z, e == null ? void 0 : e.getAppCulture()), d(this, c, R).call(this);
-    }), this.consumeContext(Te, async (e) => {
+    }), k(this, O), k(this, M), this.consumeContext(De, (e) => {
+      ae(this, M, (e == null ? void 0 : e.getVariantId().culture) ?? void 0), h(this, c, z).call(this);
+    }), this.consumeContext(Se, (e) => {
+      ae(this, O, e == null ? void 0 : e.getAppCulture()), h(this, c, z).call(this);
+    }), this.consumeContext(Re, async (e) => {
       var o;
       if (!e) return;
-      if (e.getEntityType() !== se)
-        throw new Error(`Entity type is not ${se}`);
+      if (e.getEntityType() !== ne)
+        throw new Error(`Entity type is not ${ne}`);
       const t = e.getUnique();
       if (!t)
         throw new Error("Document unique is not set");
-      const { data: i } = await new Ce(this).requestByUnique(t);
+      const { data: i } = await new xe(this).requestByUnique(t);
       if (!i) return;
       this.currentDocument = i;
       const r = ((o = this.currentDocument) == null ? void 0 : o.variants) ?? [];
-      this._isInvariant = r.length === 1 && new qe(r[0].culture).isInvariant(), d(this, c, R).call(this);
-      const s = r.map((n) => n.culture).filter((n) => n !== null), { data: l } = await new Se(this).requestItems(s);
-      l ? this._availableVariants = l.map((n) => ({
-        name: n.name,
-        value: n.unique,
-        selected: n.unique === this._selectedCulture
-      })) : this._availableVariants = [], d(this, c, F).call(this);
+      this._isInvariant = r.length === 1 && new Ue(r[0].culture).isInvariant(), h(this, c, z).call(this);
+      const s = r.map((l) => l.culture).filter((l) => l !== null), { data: n } = await new Te(this).requestItems(s);
+      n ? this._availableVariants = n.map((l) => ({
+        name: l.name,
+        value: l.unique,
+        selected: l.unique === this._selectedCulture
+      })) : this._availableVariants = [], h(this, c, Q).call(this);
     });
   }
   async onRollback() {
-    var a, p, b;
+    var a, f, _;
     if (!this._selectedVersion) return;
-    const e = this._selectedVersion.id, t = this._selectedCulture ?? void 0, { error: i } = await m(this, V).rollback(e, t);
+    const e = this._selectedVersion.id, t = this._selectedCulture ?? void 0, { error: i } = await m(this, E).rollback(e, t);
     if (i) return;
-    const r = (a = this.currentDocument) == null ? void 0 : a.unique, s = (p = this.currentDocument) == null ? void 0 : p.entityType;
+    const r = (a = this.currentDocument) == null ? void 0 : a.unique, s = (f = this.currentDocument) == null ? void 0 : f.entityType;
     if (!r || !s)
       throw new Error("Document unique or entity type is not set");
-    const l = await this.getContext(Re);
-    if (!l)
+    const n = await this.getContext(qe);
+    if (!n)
       throw new Error("Action event context not found");
     const o = new ze({ unique: r, entityType: s });
-    l.dispatchEvent(o);
-    const n = new Ue({ unique: r, entityType: s });
-    l.dispatchEvent(n), this.value = {}, (b = this.modalContext) == null || b.submit();
+    n.dispatchEvent(o);
+    const l = new Oe({ unique: r, entityType: s });
+    n.dispatchEvent(l), this.value = {}, (_ = this.modalContext) == null || _.submit();
   }
   onCancel() {
     var e;
@@ -150,20 +151,20 @@ let h = class extends Ve {
     return u`
 			<uui-select
 				id="language-select"
-				@change=${d(this, c, ce)}
+				@change=${h(this, c, he)}
 				.options=${this._availableVariants}></uui-select>
 		`;
   }
   renderVersions() {
     return this._versions.length ? u` <uui-box id="versions-box" headline=${this.localize.term("rollback_versions")}>
-			${re(
+			${oe(
       this._versions,
       (e) => e.id,
       (e) => {
         var t;
         return u`
 						<div
-							@click=${() => d(this, c, ae).call(this, e.id)}
+							@click=${() => h(this, c, ce).call(this, e.id)}
 							@keydown=${() => {
         }}
 							class="rollback-item ${((t = this._selectedVersion) == null ? void 0 : t.id) === e.id ? "active" : ""}">
@@ -176,7 +177,7 @@ let h = class extends Ve {
 							</div>
 							<uui-button
 								look="secondary"
-								@click=${(i) => d(this, c, ue).call(this, i, e.id, !e.preventCleanup)}
+								@click=${(i) => h(this, c, de).call(this, i, e.id, !e.preventCleanup)}
 								label=${e.preventCleanup ? this.localize.term("contentTypeEditor_historyCleanupEnableCleanup") : this.localize.term("contentTypeEditor_historyCleanupPreventCleanup")}></uui-button>
 						</div>
 					`;
@@ -197,7 +198,7 @@ let h = class extends Ve {
 						<uui-table-head-cell>${this.localize.term("general_alias")}</uui-table-head-cell>
 						<uui-table-head-cell>${this.localize.term("general_value")}</uui-table-head-cell>
 					</uui-table-head>
-					${re(
+					${oe(
       this._diffs,
       (e) => e.alias,
       (e) => {
@@ -208,7 +209,7 @@ let h = class extends Ve {
 									<uui-table-cell>
 										${t ? t.diff.map(
           (i) => i.added ? u`<span class="diff-added">${i.value}</span>` : i.removed ? u`<span class="diff-removed">${i.value}</span>` : i.value
-        ) : L}
+        ) : A}
 									</uui-table-cell>
 								</uui-table-row>
 							`;
@@ -235,7 +236,7 @@ let h = class extends Ve {
 									<uui-box id="language-box" headline=${this.localize.term("general_language")}>
 										${this.renderCultureSelect()}
 									</uui-box>
-								` : L}
+								` : A}
 						${this.renderVersions()}
 					</div>
 					${this.renderSelectedVersion()}
@@ -257,47 +258,47 @@ let h = class extends Ve {
 		`;
   }
 };
-V = /* @__PURE__ */ new WeakMap();
-Y = /* @__PURE__ */ new WeakMap();
+E = /* @__PURE__ */ new WeakMap();
+j = /* @__PURE__ */ new WeakMap();
 q = /* @__PURE__ */ new WeakMap();
-z = /* @__PURE__ */ new WeakMap();
-U = /* @__PURE__ */ new WeakMap();
+O = /* @__PURE__ */ new WeakMap();
+M = /* @__PURE__ */ new WeakMap();
 c = /* @__PURE__ */ new WeakSet();
-R = function() {
-  const e = m(this, U) ?? m(this, z) ?? null;
+z = function() {
+  const e = m(this, M) ?? m(this, O) ?? null;
   this._selectedCulture = this._isInvariant ? null : e;
 };
-F = async function() {
-  var l, o, n;
-  if (!((l = this.currentDocument) != null && l.unique))
+Q = async function() {
+  var n, o, l;
+  if (!((n = this.currentDocument) != null && n.unique))
     throw new Error("Document unique is not set");
-  const { data: e } = await m(this, V).requestVersionsByDocumentId(
+  const { data: e } = await m(this, E).requestVersionsByDocumentId(
     (o = this.currentDocument) == null ? void 0 : o.unique,
     this._selectedCulture ?? void 0
   );
   if (!e) return;
-  const t = [], i = [...new Set(e == null ? void 0 : e.items.map((a) => a.user.id))], { data: r } = await m(this, Y).requestItems(i);
+  const t = [], i = [...new Set(e == null ? void 0 : e.items.map((a) => a.user.id))], { data: r } = await m(this, j).requestItems(i);
   e == null || e.items.forEach((a) => {
-    var p;
+    var f;
     a.isCurrentDraftVersion || t.push({
       date: a.versionDate,
-      user: ((p = r == null ? void 0 : r.find((b) => b.unique === a.user.id)) == null ? void 0 : p.name) || this.localize.term("general_unknownUser"),
+      user: ((f = r == null ? void 0 : r.find((_) => _.unique === a.user.id)) == null ? void 0 : f.name) || this.localize.term("general_unknownUser"),
       isCurrentlyPublishedVersion: a.isCurrentPublishedVersion,
       id: a.id,
       preventCleanup: a.preventCleanup
     });
   }), this._versions = t;
-  const s = (n = t.find((a) => a.isCurrentlyPublishedVersion)) == null ? void 0 : n.id;
-  s && d(this, c, j).call(this, s);
+  const s = (l = t.find((a) => a.isCurrentlyPublishedVersion)) == null ? void 0 : l.id;
+  s && h(this, c, K).call(this, s);
 };
-j = async function(e) {
+K = async function(e) {
   var r;
   const t = this._versions.find((s) => s.id === e);
   if (!t) {
     this._selectedVersion = void 0, this._diffs = [];
     return;
   }
-  const { data: i } = await m(this, V).requestVersionById(e);
+  const { data: i } = await m(this, E).requestVersionById(e);
   if (!i) {
     this._selectedVersion = void 0, this._diffs = [];
     return;
@@ -311,45 +312,45 @@ j = async function(e) {
       alias: s.alias,
       value: s.value
     }))
-  }, await d(this, c, de).call(this);
+  }, await h(this, c, pe).call(this);
 };
-ae = function(e) {
-  d(this, c, j).call(this, e);
+ce = function(e) {
+  h(this, c, K).call(this, e);
 };
-ue = function(e, t, i) {
-  e.preventDefault(), e.stopImmediatePropagation(), m(this, V).setPreventCleanup(t, i);
+de = function(e, t, i) {
+  e.preventDefault(), e.stopImmediatePropagation(), m(this, E).setPreventCleanup(t, i);
   const r = this._versions.find((s) => s.id === t);
   r && (r.preventCleanup = i, this.requestUpdate("_versions"));
 };
-ce = function(e) {
+he = function(e) {
   const t = e.target.value;
-  this._selectedCulture = t.toString(), d(this, c, F).call(this);
+  this._selectedCulture = t.toString(), h(this, c, Q).call(this);
 };
-A = function(e) {
+H = function(e) {
   return e.replace(/^['"]|['"]$/g, "");
 };
-de = async function() {
-  var s, l, o;
+pe = async function() {
+  var s, n, o;
   if (!this._selectedVersion) return;
   const e = (s = this.currentDocument) == null ? void 0 : s.values.filter(
-    (n) => n.culture === this._selectedCulture || !n.culture
+    (l) => l.culture === this._selectedCulture || !l.culture
   );
   if (!e)
     throw new Error("Current property values are not set");
-  const t = (o = (l = this.currentDocument) == null ? void 0 : l.variants.find((n) => n.culture === this._selectedCulture)) == null ? void 0 : o.name;
+  const t = (o = (n = this.currentDocument) == null ? void 0 : n.variants.find((l) => l.culture === this._selectedCulture)) == null ? void 0 : o.name;
   if (!t)
     throw new Error("Current name is not set");
-  const i = [], r = oe(t, this._selectedVersion.name);
-  i.push({ alias: "name", diff: r }), this._selectedVersion.properties.forEach((n) => {
-    const a = e.find((M) => M.alias === n.alias);
+  const i = [], r = le(t, this._selectedVersion.name);
+  i.push({ alias: "name", diff: r }), this._selectedVersion.properties.forEach((l) => {
+    const a = e.find((L) => L.alias === l.alias);
     if (!a) return;
-    const p = d(this, c, A).call(this, JSON.stringify(a.value)), b = d(this, c, A).call(this, JSON.stringify(n.value)), I = oe(p, b);
-    i.push({ alias: n.alias, diff: I });
+    const f = h(this, c, H).call(this, JSON.stringify(a.value)), _ = h(this, c, H).call(this, JSON.stringify(l.value)), I = le(f, _);
+    i.push({ alias: l.alias, diff: I });
   }), this._diffs = [...i];
 };
-h.styles = [
-  ke,
-  H`
+p.styles = [
+  Ee,
+  F`
 			:host {
 				color: var(--uui-color-text);
 			}
@@ -461,31 +462,31 @@ h.styles = [
 			}
 		`
 ];
-C([
+x([
   $()
-], h.prototype, "_versions", 2);
-C([
+], p.prototype, "_versions", 2);
+x([
   $()
-], h.prototype, "_selectedVersion", 2);
-C([
+], p.prototype, "_selectedVersion", 2);
+x([
   $()
-], h.prototype, "_selectedCulture", 2);
-C([
+], p.prototype, "_selectedCulture", 2);
+x([
   $()
-], h.prototype, "_isInvariant", 2);
-C([
+], p.prototype, "_isInvariant", 2);
+x([
   $()
-], h.prototype, "_availableVariants", 2);
-C([
+], p.prototype, "_availableVariants", 2);
+x([
   $()
-], h.prototype, "_diffs", 2);
-h = C([
-  J("umb-rollback-modal")
-], h);
-const Be = [
-  ...h.styles,
+], p.prototype, "_diffs", 2);
+p = x([
+  G("umb-rollback-modal")
+], p);
+const Ne = [
+  ...p.styles,
   // Importing the base styles from UmbRollbackModalElement
-  H`
+  F`
     .preview-view {
       #main {
         display: grid;
@@ -535,14 +536,26 @@ const Be = [
         grid-area: selected;
       }
     }
+
+    .selected-version-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .align-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
   `
 ];
-var Ne = Object.defineProperty, Le = Object.getOwnPropertyDescriptor, O = (e, t, i, r) => {
-  for (var s = r > 1 ? void 0 : r ? Le(t, i) : t, l = e.length - 1, o; l >= 0; l--)
-    (o = e[l]) && (s = (r ? o(t, i, s) : o(s)) || s);
-  return r && s && Ne(t, i, s), s;
+var Ae = Object.defineProperty, He = Object.getOwnPropertyDescriptor, W = (e, t, i, r) => {
+  for (var s = r > 1 ? void 0 : r ? He(t, i) : t, n = e.length - 1, o; n >= 0; n--)
+    (o = e[n]) && (s = (r ? o(t, i, s) : o(s)) || s);
+  return r && s && Ae(t, i, s), s;
 };
-const Ae = {
+const Je = {
   alias: "desktop",
   label: "Desktop",
   demensions: {
@@ -550,9 +563,9 @@ const Ae = {
     height: 1080
   }
 };
-let k = class extends $e {
+let P = class extends $e {
   constructor() {
-    super(...arguments), this.src = "", this._device = Ae;
+    super(...arguments), this.src = "", this._device = Je;
   }
   connectedCallback() {
     super.connectedCallback(), this.src || console.error("No src provided for rollback previewer iframe"), new ResizeObserver(() => {
@@ -586,8 +599,8 @@ let k = class extends $e {
     ` : null;
   }
 };
-k.styles = [
-  H`
+P.styles = [
+  F`
       :host {
         display: block;
         height: var(--rp-height, auto);
@@ -603,6 +616,13 @@ k.styles = [
         position: relative;
       }
 
+      #copy-url-btn {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        z-index: 1000;
+      }
+
       iframe {
         border: none;
         inset: 0;
@@ -612,38 +632,86 @@ k.styles = [
       }
     `
 ];
-O([
-  ge({ type: String })
-], k.prototype, "src", 2);
-O([
+W([
+  Ce({ type: String })
+], P.prototype, "src", 2);
+W([
   $()
-], k.prototype, "_device", 2);
-O([
-  G("iframe")
-], k.prototype, "iframe", 2);
-k = O([
-  J("rp-iframe")
-], k);
-var He = Object.defineProperty, Je = Object.getOwnPropertyDescriptor, he = (e) => {
+], P.prototype, "_device", 2);
+W([
+  X("iframe")
+], P.prototype, "iframe", 2);
+P = W([
+  G("rp-iframe")
+], P);
+const Fe = (e) => ((e == null ? void 0 : e.client) ?? Me).get({
+  security: [
+    {
+      scheme: "bearer",
+      type: "http"
+    }
+  ],
+  url: "/umbraco/rollbackpreviewer/api/v1/configuration",
+  ...e
+});
+class Ge {
+  /**
+   * Fetches the configuration settings from the backend API
+   * @returns Promise with configuration data
+   */
+  static async getConfiguration() {
+    const { data: t, error: i } = await Fe();
+    return i ? (console.error(i), null) : t !== void 0 ? t : null;
+  }
+}
+var Xe = Object.defineProperty, Ye = Object.getOwnPropertyDescriptor, fe = (e) => {
   throw TypeError(e);
-}, Q = (e, t, i, r) => {
-  for (var s = r > 1 ? void 0 : r ? Je(t, i) : t, l = e.length - 1, o; l >= 0; l--)
-    (o = e[l]) && (s = (r ? o(t, i, s) : o(s)) || s);
-  return r && s && He(t, i, s), s;
-}, K = (e, t, i) => t.has(e) || he("Cannot " + i), _ = (e, t, i) => (K(e, t, "read from private field"), i ? i.call(e) : t.get(e)), N = (e, t, i) => t.has(e) ? he("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, i), pe = (e, t, i, r) => (K(e, t, "write to private field"), t.set(e, i), i), P = (e, t, i) => (K(e, t, "access private method"), i), v, D, g, fe, ve, Z, me;
-let E = class extends h {
+}, Z = (e, t, i, r) => {
+  for (var s = r > 1 ? void 0 : r ? Ye(t, i) : t, n = e.length - 1, o; n >= 0; n--)
+    (o = e[n]) && (s = (r ? o(t, i, s) : o(s)) || s);
+  return r && s && Xe(t, i, s), s;
+}, ee = (e, t, i) => t.has(e) || fe("Cannot " + i), d = (e, t, i) => (ee(e, t, "read from private field"), i ? i.call(e) : t.get(e)), U = (e, t, i) => t.has(e) ? fe("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, i), J = (e, t, i, r) => (ee(e, t, "write to private field"), t.set(e, i), i), S = (e, t, i) => (ee(e, t, "access private method"), i), b, V, y, C, ve, be, te, me;
+let D = class extends p {
   constructor() {
-    super(), N(this, g), N(this, v, !1), N(this, D, ""), P(this, g, fe).call(this);
+    super(), U(this, C), U(this, b, !1), U(this, V, ""), U(this, y, null), S(this, C, ve).call(this);
+  }
+  async copyUrlToClipboard(e) {
+    var n, o, l;
+    const t = e.target;
+    if (!this._selectedVersion) return;
+    let i = this._selectedCulture || "", r = `${d(this, V)}/ucrbp?cid=${(n = this.currentDocument) == null ? void 0 : n.unique}&vid=${this._selectedVersion.id}&culture=${i}`;
+    const s = (o = d(this, y)) != null && o.frontendPreviewAuthorisationSecret ? `${r}&secret=${encodeURIComponent((l = d(this, y)) == null ? void 0 : l.frontendPreviewAuthorisationSecret)}` : r;
+    try {
+      await navigator.clipboard.writeText(s), t.state = "success";
+    } catch (a) {
+      console.error("Failed to copy URL to clipboard:", a);
+    }
   }
   // This is a LitElement specific method that is called when the element is first rendered
   updated() {
     setTimeout(() => {
-      P(this, g, Z).call(this);
+      S(this, C, te).call(this);
     }, 300);
   }
   renderSelectedVersionVisualPreview() {
-    var e, t;
-    return this._selectedVersion ? u`
+    var t, i, r, s, n;
+    if (!this._selectedVersion)
+      return u`
+        <uui-box
+          style="display: flex; align-items: center; justify-content: center;"
+          >No selected version</uui-box
+        >
+      `;
+    let e = u``;
+    return (t = d(this, y)) != null && t.enableFrontendPreviewAuthorisation && (e = u`<uui-button
+                @click=${this.copyUrlToClipboard}
+                look="secondary"
+                compact
+                title="Copy shareable preview URL to clipboard"
+                >
+                <span>Copy shareable URL</span>
+                <uui-icon name="icon-link"></uui-icon>
+              </uui-button>`, (i = d(this, y)) != null && i.isTimeLimited && (e = u`${e}<p class="uui-text" style="font-size: 0.8rem; margin-top:4px;">This link is valid for ${(r = d(this, y)) == null ? void 0 : r.expirationMinutes} minutes</p>`)), u`
       <uui-box id="box-right">
         <div class="rp-wrapper">
           <div class="rp-container current">
@@ -652,44 +720,44 @@ let E = class extends h {
             </div>
             <rp-iframe
               id="rollbackPreviewerLeft"
-              src="${_(this, D)}/${(e = this.currentDocument) == null ? void 0 : e.unique}?culture=${this._selectedCulture}"
+              src="${d(this, V)}/${(s = this.currentDocument) == null ? void 0 : s.unique}?culture=${this._selectedCulture}"
             >
             </rp-iframe>
           </div>
           <div class="rp-container selected">
-            <div>
-              <h4 class="uui-h4">Selected version</h4>
-              <p class="uui-text">${this.currentVersionHeader}</p>
+            <div class="selected-version-title">
+              <div>
+                <h4 class="uui-h4">Selected version</h4>
+                <p class="uui-text">${this.currentVersionHeader}</p>
+              </div>
+              <div class="align-right">
+                ${e}
+              </div>
             </div>
             <rp-iframe
               id="rollbackPreviewerRight"
-              src="${_(this, D)}/ucrbp?cid=${(t = this.currentDocument) == null ? void 0 : t.unique}&vid=${this._selectedVersion.id}&culture=${this._selectedCulture}"
+              src="${d(this, V)}/ucrbp?cid=${(n = this.currentDocument) == null ? void 0 : n.unique}&vid=${this._selectedVersion.id}&culture=${this._selectedCulture}"
             ></rp-iframe>
           </div>
         </div>
       </uui-box>
-    ` : u`
-        <uui-box
-          style="display: flex; align-items: center; justify-content: center;"
-          >No selected version</uui-box
-        >
-      `;
+    `;
   }
   render() {
     return u`
       <umb-body-layout
         headline="Visual Rollback Preview"
-        class=${_(this, v) ? "json-view" : "preview-view"}
+        class=${d(this, b) ? "json-view" : "preview-view"}
       >
         <uui-button
           slot="action-menu"
           look="secondary"
-          @click=${P(this, g, ve)}
+          @click=${S(this, C, be)}
           style="margin-right:24px"
-          label=${_(this, v) ? "Visual difference" : "JSON difference"}
+          label=${d(this, b) ? "Visual difference" : "JSON difference"}
         >
           <uui-icon name="icon-repeat" style="margin-right:4px"></uui-icon>
-          ${_(this, v) ? "Visual difference" : "JSON difference"}</uui-button
+          ${d(this, b) ? "Visual difference" : "JSON difference"}</uui-button
         >
 
         <div id="main">
@@ -701,11 +769,11 @@ let E = class extends h {
                   >
                     ${this.renderCultureSelect()}
                   </uui-box>
-                ` : L}
+                ` : A}
             ${this.renderVersions()}
           </div>
           <div id="box-right">
-            ${_(this, v) ? u` ${this.renderSelectedVersion()} ` : u` ${this.renderSelectedVersionVisualPreview()} `}
+            ${d(this, b) ? u` ${this.renderSelectedVersion()} ` : u` ${this.renderSelectedVersionVisualPreview()} `}
           </div>
         </div>
         <umb-footer-layout slot="footer">
@@ -727,18 +795,19 @@ let E = class extends h {
     `;
   }
 };
-v = /* @__PURE__ */ new WeakMap();
-D = /* @__PURE__ */ new WeakMap();
-g = /* @__PURE__ */ new WeakSet();
-fe = async function() {
-  pe(this, D, window.location.origin);
-};
+b = /* @__PURE__ */ new WeakMap();
+V = /* @__PURE__ */ new WeakMap();
+y = /* @__PURE__ */ new WeakMap();
+C = /* @__PURE__ */ new WeakSet();
 ve = async function() {
-  pe(this, v, !_(this, v)), this.requestUpdate(), _(this, v) || (await this.updateComplete, setTimeout(() => {
-    P(this, g, Z).call(this);
+  J(this, V, window.location.origin), J(this, y, await Ge.getConfiguration());
+};
+be = async function() {
+  J(this, b, !d(this, b)), this.requestUpdate(), d(this, b) || (await this.updateComplete, setTimeout(() => {
+    S(this, C, te).call(this);
   }, 300));
 };
-Z = function() {
+te = function() {
   if (!this.rollbackPreviewerLeft || !this.rollbackPreviewerRight) return;
   const e = [this.rollbackPreviewerLeft, this.rollbackPreviewerRight];
   e.forEach((i) => {
@@ -747,15 +816,15 @@ Z = function() {
     });
   });
   const t = (i) => {
-    const r = i.currentTarget, s = r == null ? void 0 : r.frameElement, l = e.filter(
+    const r = i.currentTarget, s = r == null ? void 0 : r.frameElement, n = e.filter(
       (o) => o.iframe !== s
     ).map((o) => o.iframe);
-    s && l.forEach((o) => {
-      var n;
-      o && ((n = o.contentWindow) == null || n.removeEventListener(
+    s && n.forEach((o) => {
+      var l;
+      o && ((l = o.contentWindow) == null || l.removeEventListener(
         "scroll",
         t
-      ), P(this, g, me).call(this, s, o), window.requestAnimationFrame(() => {
+      ), S(this, C, me).call(this, s, o), window.requestAnimationFrame(() => {
         var a;
         (a = o == null ? void 0 : o.contentWindow) == null || a.addEventListener(
           "scroll",
@@ -773,31 +842,31 @@ me = function(e, t) {
   var i, r, s;
   if (!(!e || !t))
     try {
-      const l = e.contentDocument || ((i = e.contentWindow) == null ? void 0 : i.document), o = t.contentDocument || ((r = t.contentWindow) == null ? void 0 : r.document);
-      if (!l || !o) return;
-      const n = l.documentElement || l.body, a = o.documentElement || o.body, p = n.scrollHeight - n.clientHeight, b = p > 0 ? n.scrollTop / p : 0, I = a.scrollHeight - a.clientHeight, M = b * I, ee = n.scrollWidth - n.clientWidth, be = ee > 0 ? n.scrollLeft / ee : 0, _e = a.scrollWidth - a.clientWidth, ye = be * _e;
+      const n = e.contentDocument || ((i = e.contentWindow) == null ? void 0 : i.document), o = t.contentDocument || ((r = t.contentWindow) == null ? void 0 : r.document);
+      if (!n || !o) return;
+      const l = n.documentElement || n.body, a = o.documentElement || o.body, f = l.scrollHeight - l.clientHeight, _ = f > 0 ? l.scrollTop / f : 0, I = a.scrollHeight - a.clientHeight, L = _ * I, ie = l.scrollWidth - l.clientWidth, _e = ie > 0 ? l.scrollLeft / ie : 0, ye = a.scrollWidth - a.clientWidth, ge = _e * ye;
       (s = t.contentWindow) == null || s.scrollTo({
-        top: M,
-        left: ye,
+        top: L,
+        left: ge,
         behavior: "instant"
       });
-    } catch (l) {
-      console.error("Error syncing scroll:", l);
+    } catch (n) {
+      console.error("Error syncing scroll:", n);
     }
 };
-E.styles = Be;
-Q([
-  G("#rollbackPreviewerLeft")
-], E.prototype, "rollbackPreviewerLeft", 2);
-Q([
-  G("#rollbackPreviewerRight")
-], E.prototype, "rollbackPreviewerRight", 2);
-E = Q([
-  J("rp-rollback-modal")
-], E);
-const at = E;
+D.styles = Ne;
+Z([
+  X("#rollbackPreviewerLeft")
+], D.prototype, "rollbackPreviewerLeft", 2);
+Z([
+  X("#rollbackPreviewerRight")
+], D.prototype, "rollbackPreviewerRight", 2);
+D = Z([
+  G("rp-rollback-modal")
+], D);
+const pt = D;
 export {
-  E as RpRollbackModalElement,
-  at as default
+  D as RpRollbackModalElement,
+  pt as default
 };
-//# sourceMappingURL=rollback-previewer-modal.element-DCHM2ZUs.js.map
+//# sourceMappingURL=rollback-previewer-modal.element-CCHuM_NZ.js.map
