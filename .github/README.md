@@ -7,7 +7,7 @@
 > [!NOTE]
 > With the release of Umbraco 17 we will be following the Umbraco release version numbers - so RollBackPreviewer v2 is for Umbraco 16 and under, the rest will follow v17, v18 etc
 
-Enhance Umbraco's rollback functionality with visual rollback previews. This extension builds ontop of the existing Umbraco Rollback modal and allows for the JSON diff to be viewed as well as the visual diff.
+Enhance Umbraco's rollback functionality with visual rollback previews. This extension builds ontop of the existing Umbraco Rollback modal and allows for the JSON diff to be viewed as well as the visual diff. **NEW FEATURE!** You can now share the preview as a publicly available URL. With configurable outputs for a secret key to lock this down, and have an expiration time on the URL, this is the perfect way to share content with externals.
 
 <img alt="Visual difference" src="https://github.com/Rockerby/Umbraco.Community.RollbackPreviewer/blob/develop/docs/screenshots/visual_diff.png"> 
 <img alt="JSON difference" src="https://github.com/Rockerby/Umbraco.Community.RollbackPreviewer/blob/develop/docs/screenshots/json_diff.png">
@@ -22,6 +22,22 @@ Once the package installed it will automatically replace the current Rollback mo
 
 > [!IMPORTANT]  
 > The Rollback Previewer uses iFrames to function so you may need to adjust X-Frame-Options to see the preview
+
+## Configuration
+Add the configuration to the `appsettings.json` file as per below:
+
+```JSON
+  "RollbackPreviewer": {
+    // Set to true to enable the shareable button, appearing within the rollback modal
+    "EnableFrontendPreviewAuthorisation": true,
+    // Set as a string to use as a standard secret key (appended in the query string)
+    "FrontendPreviewAuthorisationSecret": "super-secret-key",
+    // Set to true to enable the shared URL to be time limited
+    "EnableTimeLimitedSecrets": true,
+    // Set to expire the link after this many minutes
+    "SecretExpirationMinutes": 60
+  }
+```
 
 ## Running locally (v15/v16/v17)
 
