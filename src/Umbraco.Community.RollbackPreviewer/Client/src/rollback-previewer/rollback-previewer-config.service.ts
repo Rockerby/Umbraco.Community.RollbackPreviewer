@@ -13,13 +13,13 @@ export class RollbackPreviewerConfigService {
         const { data, error } = await getUmbracoRollbackpreviewerApiV1Configuration();
         if (error) {
             console.error(error);
-            return null;
-        }
+                return null;
+            }
 
         if (data !== undefined) {
             return data;
         }
 
-        return null;
-    }
+            return null;
+        }
 }

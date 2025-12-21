@@ -26,6 +26,9 @@ namespace Umbraco.Community.RollbackPreviewer.Composers
 #endif
             builder.Services.AddTransient<PublishedContentConverter>();
 
+            // Register time-limited secret service
+            builder.Services.AddSingleton<ITimeLimitedSecretService, TimeLimitedSecretService>();
+
             // Set the options from configuration
             builder.Services.Configure<Configuration.RollbackPreviewerOptions>(builder.Config.GetSection(Configuration.RollbackPreviewerOptions.SectionName));
 

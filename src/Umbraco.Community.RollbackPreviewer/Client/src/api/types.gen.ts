@@ -7,6 +7,8 @@ export type ClientOptions = {
 export type RollbackPreviewerConfigurationResponse = {
     enableFrontendPreviewAuthorisation: boolean;
     frontendPreviewAuthorisationSecret?: string | null;
+    isTimeLimited: boolean;
+    expirationMinutes?: number | null;
 };
 
 export type GetUmbracoRollbackpreviewerApiV1ConfigurationData = {

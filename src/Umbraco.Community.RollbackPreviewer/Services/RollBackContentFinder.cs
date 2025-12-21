@@ -41,6 +41,7 @@ namespace Umbraco.Community.RollbackPreviewer.Services
         private readonly IPublishedModelFactory _publishedModelFactory;
         private readonly IVariationContextAccessor _variationContextAccessor;
         private readonly RollbackPreviewerOptions _options;
+        private readonly ITimeLimitedSecretService _secretService;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ContentFinderByPageIdQuery" /> class.
@@ -53,7 +54,8 @@ namespace Umbraco.Community.RollbackPreviewer.Services
             IPublishedModelFactory publishedModelFactory,
             IVariationContextAccessor variationContextAccessor,
             PublishedContentConverter publishedContentConverter,
-            IOptions<RollbackPreviewerOptions> options)
+            IOptions<RollbackPreviewerOptions> options,
+            ITimeLimitedSecretService secretService)
         {
             _contentService = contentService;
             _httpContextAccessor = httpContextAccessor;
@@ -66,6 +68,7 @@ namespace Umbraco.Community.RollbackPreviewer.Services
             _publishedModelFactory = publishedModelFactory;
             _variationContextAccessor = variationContextAccessor;
             _options = options.Value;
+            _secretService = secretService;
         }
 
         /// <inheritdoc />
@@ -210,6 +213,7 @@ namespace Umbraco.Community.RollbackPreviewer.Services
 
         /// <summary>
         /// Checks if the current request is authorised to view the preview.
+        /// Validates both static secrets and time-limited secrets depending on configuration.
         /// </summary>
         /// <param name="secretFromQueryString"></param>
         /// <returns></returns>
@@ -220,14 +224,27 @@ namespace Umbraco.Community.RollbackPreviewer.Services
 
             if(isAuthorisedForFrontend)
             {
-                var hasSecret = !string.IsNullOrWhiteSpace(_options.FrontendPreviewAuthorisationSecret);
-                if(hasSecret)
+                if (_options.EnableTimeLimitedSecrets)
                 {
-                    isAuthorised = secretFromQueryString == _options.FrontendPreviewAuthorisationSecret;
+                    // Validate time-limited secret
+                    if (!string.IsNullOrWhiteSpace(secretFromQueryString))
+                    {
+                        isAuthorised = _secretService.ValidateSecret(secretFromQueryString);
+                    }
                 }
                 else
                 {
-                    isAuthorised = true;
+                    // Validate static secret
+                    var hasSecret = !string.IsNullOrWhiteSpace(_options.FrontendPreviewAuthorisationSecret);
+                    if(hasSecret)
+                    {
+                        isAuthorised = secretFromQueryString == _options.FrontendPreviewAuthorisationSecret;
+                    }
+                    else
+                    {
+                        // No secret configured, allow all frontend access
+                        isAuthorised = true;
+                    }
                 }
             }
 

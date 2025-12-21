@@ -1,7 +1,6 @@
 import {
   customElement,
   html,
-  ifDefined,
   nothing,
   query,
 } from "@umbraco-cms/backoffice/external/lit";
@@ -11,13 +10,13 @@ import "./rollback-previewer-iframe.element.js";
 import RpIframe from "./rollback-previewer-iframe.element.js";
 import { RollbackPreviewerConfigService } from "./rollback-previewer-config.service.js";
 import { UUIButtonElement } from "@umbraco-cms/backoffice/external/uui";
+import { RollbackPreviewerConfigurationResponse } from "../api/index.js";
 
 @customElement("rp-rollback-modal")
 export class RpRollbackModalElement extends UmbRollbackModalElement {
   #useJsonView: boolean = false;
   #serverUrl: string = "";
-  #showUrlLink: boolean = false;
-  #previewSecret: string | null | undefined = null;
+  #sharingConfig: RollbackPreviewerConfigurationResponse | null = null;
 
   @query("#rollbackPreviewerLeft")
   rollbackPreviewerLeft: RpIframe | null | undefined;
@@ -36,11 +35,7 @@ export class RpRollbackModalElement extends UmbRollbackModalElement {
     this.#serverUrl = window.location.origin;
 
     // Fetch the preview configuration to get the secret for shareable URLs
-    const config = await RollbackPreviewerConfigService.getConfiguration();
-    if (config?.enableFrontendPreviewAuthorisation) {
-      this.#previewSecret = config.frontendPreviewAuthorisationSecret;
-      this.#showUrlLink = true;
-    }
+    this.#sharingConfig = await RollbackPreviewerConfigService.getConfiguration();
   }
 
   async #switchView() {
@@ -158,13 +153,12 @@ export class RpRollbackModalElement extends UmbRollbackModalElement {
       ?.unique}&vid=${this._selectedVersion.id}&culture=${culture}`;
 
     // Only append secret if it exists
-    const urlWithSecret = this.#previewSecret
-      ? `${dataToCopy}&secret=${encodeURIComponent(this.#previewSecret)}`
+    const urlWithSecret = this.#sharingConfig?.frontendPreviewAuthorisationSecret
+      ? `${dataToCopy}&secret=${encodeURIComponent(this.#sharingConfig?.frontendPreviewAuthorisationSecret)}`
       : dataToCopy;
 
     try {
       await navigator.clipboard.writeText(urlWithSecret);
-      // Could add a toast notification here if desired
       buttonElement.state = 'success';
     } catch (err) {
       console.error('Failed to copy URL to clipboard:', err);
@@ -189,7 +183,7 @@ export class RpRollbackModalElement extends UmbRollbackModalElement {
         >
       `;
     let btnHtml = html``;
-    if (this.#showUrlLink) {
+    if (this.#sharingConfig?.enableFrontendPreviewAuthorisation) {
       btnHtml = html`<uui-button
                 @click=${this.copyUrlToClipboard}
                 look="secondary"
@@ -199,6 +193,10 @@ export class RpRollbackModalElement extends UmbRollbackModalElement {
                 <span>Copy shareable URL</span>
                 <uui-icon name="icon-link"></uui-icon>
               </uui-button>`;
+
+      if(this.#sharingConfig?.isTimeLimited){
+        btnHtml = html`${btnHtml}<p class="uui-text" style="font-size: 0.8rem; margin-top:4px;">This link is valid for ${this.#sharingConfig?.expirationMinutes} minutes</p>`;
+      }
     }
 
     return html`
@@ -221,7 +219,7 @@ export class RpRollbackModalElement extends UmbRollbackModalElement {
                 <h4 class="uui-h4">Selected version</h4>
                 <p class="uui-text">${this.currentVersionHeader}</p>
               </div>
-              <div>
+              <div class="align-right">
                 ${btnHtml}
               </div>
             </div>
