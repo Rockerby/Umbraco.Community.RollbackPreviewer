@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+#if NET9_0_OR_GREATER
 using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Umbraco.Cms.Api.Common.OpenApi;
 using Umbraco.Cms.Api.Management.OpenApi;
+#endif
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Routing;
@@ -32,6 +34,8 @@ namespace Umbraco.Community.RollbackPreviewer.Composers
             // Set the options from configuration
             builder.Services.Configure<Configuration.RollbackPreviewerOptions>(builder.Config.GetSection(Configuration.RollbackPreviewerOptions.SectionName));
 
+#if NET9_0_OR_GREATER
+
             builder.Services.AddSingleton<IOperationIdHandler, CustomOperationHandler>();
 
             builder.Services.Configure<SwaggerGenOptions>(opt =>
@@ -55,8 +59,11 @@ namespace Umbraco.Community.RollbackPreviewer.Composers
                 // PR: https://github.com/umbraco/Umbraco-CMS/pull/15699
                 opt.OperationFilter<UmbracoCommunityRollbackPreviewerOperationSecurityFilter>();
             });
+#endif
+
         }
 
+#if NET9_0_OR_GREATER
         public class UmbracoCommunityRollbackPreviewerOperationSecurityFilter : BackOfficeSecurityRequirementsOperationFilterBase
         {
             protected override string ApiName => Constants.ApiName;
@@ -78,5 +85,7 @@ namespace Umbraco.Community.RollbackPreviewer.Composers
 
             public override string Handle(ApiDescription apiDescription) => $"{apiDescription.ActionDescriptor.RouteValues["action"]}";
         }
+#endif
+
     }
 }

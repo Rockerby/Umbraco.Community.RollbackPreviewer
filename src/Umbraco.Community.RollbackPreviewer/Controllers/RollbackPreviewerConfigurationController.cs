@@ -3,10 +3,18 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+
+#if NET9_0_OR_GREATER
 using Umbraco.Cms.Api.Common.Attributes;
 using Umbraco.Cms.Api.Management.Controllers;
+#endif
+
 using Umbraco.Cms.Core;
+using Umbraco.Cms.Web.Common.Attributes;
 using Umbraco.Cms.Web.Common.Authorization;
+
+using Umbraco.Cms.Web.Common.Controllers;
+
 using Umbraco.Community.RollbackPreviewer.Configuration;
 using Umbraco.Community.RollbackPreviewer.Services;
 
@@ -15,9 +23,17 @@ namespace Umbraco.Community.RollbackPreviewer.Controllers
     /// <summary>
     /// API controller for accessing Rollback Previewer configuration settings
     /// </summary>
+#if NET9_0_OR_GREATER
     [ApiVersion("1.0")]
     [ApiExplorerSettings(GroupName = "UmbracoCommunityRollbackPreviewer")]
-    public class RollbackPreviewerConfigurationController : RollbackPreviewerConfigurationControllerBase
+#else
+#endif
+    public class RollbackPreviewerConfigurationController
+#if NET9_0_OR_GREATER
+        : RollbackPreviewerConfigurationControllerBase
+#else
+        : Umbraco.Cms.Web.BackOffice.Controllers.UmbracoAuthorizedApiController
+#endif
     {
         private readonly RollbackPreviewerOptions _options;
         private readonly ITimeLimitedSecretService _secretService;
@@ -35,8 +51,12 @@ namespace Umbraco.Community.RollbackPreviewer.Controllers
         /// If time-limited secrets are enabled, a new secret is generated with each request.
         /// </summary>
         /// <returns>Configuration object with authorization settings</returns>
+#if NET9_0_OR_GREATER
         [HttpGet("configuration")]
         [ProducesResponseType(typeof(RollbackPreviewerConfigurationResponse), StatusCodes.Status200OK)]
+#else
+        [Route("umbraco/backoffice/RollbackPreviewerConfiguration/GetConfiguration")]
+#endif
         public IActionResult GetConfiguration()
         {
             string? secret = null;

@@ -24,7 +24,7 @@
 }
 
 .rp-container {
-  display: grid;
+  display: block;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr auto;
   overflow: hidden;
@@ -57,6 +57,7 @@
   display: block;
   height: var(--rp-height, auto);
   width: 100cqw;
+  margin-top:10px;
 }
 
 .iframe-wrapper {
@@ -91,4 +92,15 @@ iframe {
 .empty-padd {
   padding-top:40px;
   padding-bottom:40px;
+}
+
+.rp-title-block {
+  display:flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom:10px;
+}
+
+.rp-share-active .rp-title-block {
+  height: 70px;
 }

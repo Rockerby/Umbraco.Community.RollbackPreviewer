@@ -1,7 +1,8 @@
 (function () {
   "use strict";
 
-  function RollbackPreviewerController($scope, contentResource, localizationService, assetsService, dateHelper, userService, notificationsService) {
+  function RollbackPreviewerController($scope, contentResource, localizationService,
+    assetsService, dateHelper, userService, notificationsService, rollbackResource) {
 
     var vm = this;
 
@@ -20,6 +21,10 @@
     vm.visualDiffContainerStyles = "";
     vm.currentIframeUrl = '';
 
+    vm.copyShareableUrl = copyShareableUrl;
+
+    vm.shareableConfig = null;
+
     //////////
 
     function onInit() {
@@ -35,8 +40,22 @@
       vm.pageNumber = 1;
       vm.totalPages = 1;
       vm.totalItems = 0;
+      vm.showPreviewCopyButton = false;
+      vm.shareableExpirationMinutes = 0;
 
       let baseUrl = '/';
+
+      rollbackResource.getConfiguration().then(function (config) {
+        console.log("config loaded", config);
+        
+        vm.shareableConfig = config;
+        vm.showPreviewCopyButton = config.EnableFrontendPreviewAuthorisation;
+        if(config.IsTimeLimited)
+          vm.shareableExpirationMinutes = config.ExpirationMinutes;
+        // ExpirationMinutes
+        // FrontendPreviewAuthorisationSecret
+        // IsTimeLimited
+      });
 
       // find the current version for invariant nodes
       if ($scope.model.node.variants.length === 1) {
@@ -450,7 +469,25 @@
       vm.visualDiffContainerStyles += `--rp-iframe-scale: ${scale};`;
       vm.visualDiffContainerStyles += `--rp-height: ${this._device.demensions.height * scale}px;`;
     }
-      onInit();
+
+    async function copyShareableUrl($event) {
+      const buttonElement = $event.currentTarget;
+
+      let dataToCopy = window.location.origin + vm.previousVersion.iframeUrl;
+
+      const urlWithSecret = vm.shareableConfig.FrontendPreviewAuthorisationSecret
+        ? `${dataToCopy}&secret=${encodeURIComponent(vm.shareableConfig.FrontendPreviewAuthorisationSecret)}`
+        : dataToCopy;
+
+      try {
+        await navigator.clipboard.writeText(urlWithSecret);
+        buttonElement.state = 'success';
+      } catch (err) {
+        console.error('Failed to copy URL to clipboard:', err);
+      }
+    };
+    
+    onInit();
 
     window.addEventListener('resize', updateIframeDevice);
     updateIframeDevice();
