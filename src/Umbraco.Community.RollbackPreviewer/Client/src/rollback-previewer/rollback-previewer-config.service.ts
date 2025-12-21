@@ -1,12 +1,4 @@
-/**
- * Configuration response from the Rollback Previewer API
- */
-export interface RollbackPreviewerConfiguration {
-    enableFrontendPreviewAuthorisation: boolean;
-    frontendPreviewAuthorisationSecret: string | null;
-    isTimeLimited: boolean;
-    expirationMinutes: number | null;
-}
+import { getUmbracoRollbackpreviewerApiV1Configuration, RollbackPreviewerConfigurationResponse } from "../api/index.js";
 
 /**
  * Service for fetching Rollback Previewer configuration from the backend
@@ -16,34 +8,18 @@ export class RollbackPreviewerConfigService {
      * Fetches the configuration settings from the backend API
      * @returns Promise with configuration data
      */
-    static async getConfiguration(): Promise<RollbackPreviewerConfiguration | null> {
-        try {
-            const response = await fetch(
-                '/umbraco/management/api/v1/umbraco-community-rollback-previewer/configuration',
-                {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    credentials: 'include', // Include cookies for authentication
-                }
-            );
+    static async getConfiguration(): Promise<RollbackPreviewerConfigurationResponse | null> {
 
-            if (!response.ok) {
-                console.error('Failed to fetch Rollback Previewer configuration:', response.statusText);
+        const { data, error } = await getUmbracoRollbackpreviewerApiV1Configuration();
+        if (error) {
+            console.error(error);
                 return null;
             }
 
-            const data = await response.json();
-            return {
-                enableFrontendPreviewAuthorisation: data.enableFrontendPreviewAuthorisation ?? false,
-                frontendPreviewAuthorisationSecret: data.frontendPreviewAuthorisationSecret ?? null,
-                isTimeLimited: data.isTimeLimited ?? false,
-                expirationMinutes: data.expirationMinutes ?? null,
-            };
-        } catch (error) {
-            console.error('Error fetching Rollback Previewer configuration:', error);
+        if (data !== undefined) {
+            return data;
+        }
+
             return null;
         }
-    }
 }

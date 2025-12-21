@@ -31,9 +31,6 @@ export class RpIframe extends LitElement {
   @property({ type: String })
   public src = "";
 
-  @property({ type: String })
-  public secret: string | null = null;
-
   @state()
   _device: RollbackPreviewDevice = device;
 
@@ -78,22 +75,6 @@ export class RpIframe extends LitElement {
     });
   }
 
-  async copyUrlToClipboard() {
-    if (!this.src) return;
-
-    // Only append secret if it exists
-    const urlWithSecret = this.secret
-      ? `${this.src}&secret=${encodeURIComponent(this.secret)}`
-      : this.src;
-
-    try {
-      await navigator.clipboard.writeText(urlWithSecret);
-      // Could add a toast notification here if desired
-    } catch (err) {
-      console.error('Failed to copy URL to clipboard:', err);
-    }
-  }
-
   // This is a LitElement specific method that is called when the element is first rendered
   firstUpdated(): void {
     this.updateIframeDevice();
@@ -106,14 +87,6 @@ export class RpIframe extends LitElement {
 
     return html`
       <div id="wrapper">
-          <uui-button
-            id="copy-url-btn"
-            @click=${this.copyUrlToClipboard}
-            look="secondary"
-            label="Copy shareable preview URL to clipboard"
-            compact>
-            <uui-icon name="icon-link"></uui-icon>
-          </uui-button>
           <iframe src=${this.src}></iframe>
       </div>
     `;
