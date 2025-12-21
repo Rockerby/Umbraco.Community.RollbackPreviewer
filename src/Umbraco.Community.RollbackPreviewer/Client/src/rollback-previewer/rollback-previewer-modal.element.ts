@@ -188,9 +188,10 @@ export class RpRollbackModalElement extends UmbRollbackModalElement {
                 @click=${this.copyUrlToClipboard}
                 look="secondary"
                 compact
+                label="Copy shareable preview URL to clipboard"
                 title="Copy shareable preview URL to clipboard"
                 >
-                <span>Copy shareable URL</span>
+                Copy shareable URL
                 <uui-icon name="icon-link"></uui-icon>
               </uui-button>`;
 

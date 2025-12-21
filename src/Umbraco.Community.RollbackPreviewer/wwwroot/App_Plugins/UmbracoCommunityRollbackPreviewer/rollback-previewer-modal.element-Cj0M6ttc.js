@@ -707,9 +707,10 @@ let D = class extends p {
                 @click=${this.copyUrlToClipboard}
                 look="secondary"
                 compact
+                label="Copy shareable preview URL to clipboard"
                 title="Copy shareable preview URL to clipboard"
                 >
-                <span>Copy shareable URL</span>
+                Copy shareable URL
                 <uui-icon name="icon-link"></uui-icon>
               </uui-button>`, (i = d(this, y)) != null && i.isTimeLimited && (e = u`${e}<p class="uui-text" style="font-size: 0.8rem; margin-top:4px;">This link is valid for ${(r = d(this, y)) == null ? void 0 : r.expirationMinutes} minutes</p>`)), u`
       <uui-box id="box-right">
@@ -869,4 +870,4 @@ export {
   D as RpRollbackModalElement,
   pt as default
 };
-//# sourceMappingURL=rollback-previewer-modal.element-CCHuM_NZ.js.map
+//# sourceMappingURL=rollback-previewer-modal.element-Cj0M6ttc.js.map
