@@ -17,7 +17,6 @@
     });
 
     eventsService.on('content.saved', function (evt, data) {
-      console.log("Saved");
 
       update(data.content);
 

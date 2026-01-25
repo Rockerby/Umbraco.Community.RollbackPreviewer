@@ -1,24 +1,28 @@
 {
-    "$schema": "https://marketplace.umbraco.com/umbraco-marketplace-schema.json", 
-    "AuthorDetails": {
-      "Name": "Richard Ockerby and Mike Masey",
-      "ImageUrl": "https://raw.githubusercontent.com/Rockerby/Umbraco.Community.RollbackPreviewer/main/docs/images/richardandmike.jpg"
+  "$schema": "https://marketplace.umbraco.com/umbraco-marketplace-schema.json",
+  "AuthorDetails": {
+    "Name": "Richard Ockerby and Mike Masey",
+    "ImageUrl": "https://raw.githubusercontent.com/Rockerby/Umbraco.Community.RollbackPreviewer/main/docs/images/richardandmike.jpg"
+  },
+  "Category": "Editor Tools",
+  "Description": "**NOW** with public shareable preview links!  Enhance Umbraco's rollback functionality with visual rollback previews. This extension builds ontop of the existing Umbraco Rollback modal and allows for the JSON diff to be viewed as well as the visual diff.",
+  "LicenseTypes": [ "Free" ],
+  "IssueTrackerUrl": "https://github.com/Rockerby/Umbraco.Community.RollbackPreviewer/issues",
+  "PackageType": "Package",
+  "Tags": [ "rollback modal preview" ],
+  "Title": "Umbraco Rollback Previewer",
+  "Screenshots": [
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/Rockerby/Umbraco.Community.RollbackPreviewer/dev/v13/docs/screenshots/Save_and_share.png",
+      "Caption": "Rollback preview - Share preview URL"
     },
-    "Category": "Editor Tools",
-    "Description": "Enhance Umbraco's rollback functionality with visual rollback previews. This extension builds ontop of the existing Umbraco Rollback modal and allows for the JSON diff to be viewed as well as the visual diff.",
-    "LicenseTypes": [ "Free" ],
-    "IssueTrackerUrl": "https://github.com/Rockerby/Umbraco.Community.RollbackPreviewer/issues",
-    "PackageType": "Package",
-    "Tags": ["rollback modal"],
-    "Title": "Umbraco Rollback Previewer",
-	"Screenshots": [
-		{
-		  "ImageUrl": "https://raw.githubusercontent.com/Rockerby/Umbraco.Community.RollbackPreviewer/main/docs/screenshots/visual_diff.png",
-		  "Caption": "Rollback preview - visual difference"
-		},
-		{
-		  "ImageUrl": "https://raw.githubusercontent.com/Rockerby/Umbraco.Community.RollbackPreviewer/main/docs/screenshots/json_diff.png",
-		  "Caption": "Rollback preview - JSON difference"
-		}
-	]
-  }
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/Rockerby/Umbraco.Community.RollbackPreviewer/main/docs/screenshots/visual_diff.png",
+      "Caption": "Rollback preview - visual difference"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/Rockerby/Umbraco.Community.RollbackPreviewer/main/docs/screenshots/json_diff.png",
+      "Caption": "Rollback preview - JSON difference"
+    }
+  ]
+}

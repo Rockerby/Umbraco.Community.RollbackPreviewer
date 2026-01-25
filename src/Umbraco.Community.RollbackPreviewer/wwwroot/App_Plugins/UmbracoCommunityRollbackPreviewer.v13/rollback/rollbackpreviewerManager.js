@@ -16,10 +16,6 @@
 
     function insertPublishCmds(content) {
 
-      if (content !== undefined) {
-        //mgr.content = content;
-      }
-
       var contentForm = angular.element(document).find('[name="contentForm"]');
       if (contentForm != null) {
         var formScope = findScope($rootScope);
@@ -38,7 +34,7 @@
                       label: 'Save and Share Preview',
                       handler: fetchAndCopyPreviewUrl,
                       alias: 'rollbackPreview',
-                      addEllipsis: 'true'
+                      addEllipsis: 'false'
                     };
 
                     formScope.previewSubButtons.splice(1, 0, button);
@@ -74,11 +70,9 @@
     function fetchAndCopyPreviewUrl(outerE) {
       var formScope = findScope($rootScope);
 
-      console.log("Saving", outerE);
-
       // Save it first
       formScope.save().then(function (e) {
-        console.log("Saved", e);
+
         //Then go fetch the share URL
         rollbackResource.getPreviewUrl(formScope.contentId).then(function (data) {
 

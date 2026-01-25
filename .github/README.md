@@ -7,10 +7,14 @@
 > [!NOTE]
 > With the release of Umbraco 17 we will be following the Umbraco release version numbers - so RollBackPreviewer v2 is for Umbraco 16 and under, the rest will follow v17, v18 etc
 
-Enhance Umbraco's rollback functionality with visual rollback previews. This extension builds ontop of the existing Umbraco Rollback modal and allows for the JSON diff to be viewed as well as the visual diff. **NEW FEATURE!** You can now share the preview as a publicly available URL. With configurable outputs for a secret key to lock this down, and have an expiration time on the URL, this is the perfect way to share content with externals.
+Enhance Umbraco's rollback functionality with visual rollback previews. This extension builds ontop of the existing Umbraco Rollback modal and allows for the JSON diff to be viewed as well as the visual diff.
 
-<img alt="Visual difference" src="https://github.com/Rockerby/Umbraco.Community.RollbackPreviewer/blob/develop/docs/screenshots/visual_diff.png"> 
-<img alt="JSON difference" src="https://github.com/Rockerby/Umbraco.Community.RollbackPreviewer/blob/develop/docs/screenshots/json_diff.png">
+**NEW FEATURE!** You can now share the preview as a publicly available URL. With configurable outputs for a secret key to lock this down, and have an expiration time on the URL, this is the perfect way to share content with externals.
+
+<img alt="Visual difference" src="https://github.com/Rockerby/Umbraco.Community.RollbackPreviewer/blob/main/docs/screenshots/visual_diff.png"> 
+<img alt="JSON difference" src="https://github.com/Rockerby/Umbraco.Community.RollbackPreviewer/blob/main/docs/screenshots/json_diff.png">
+<img alt="Share preview URLs" src="https://github.com/Rockerby/Umbraco.Community.RollbackPreviewer/blob/dev/v13/docs/screenshots/Save_and_share.png">
+
 
 ## Installation
 
@@ -28,7 +32,7 @@ Add the configuration to the `appsettings.json` file as per below:
 
 ```JSON
   "RollbackPreviewer": {
-    // Set to true to enable the shareable button, appearing within the rollback modal
+    // Set to true to enable the shareable button, appearing within the rollback modal and in the Save and Preview button group
     "EnableFrontendPreviewAuthorisation": true,
     // Set as a string to use as a standard secret key (appended in the query string)
     "FrontendPreviewAuthorisationSecret": "super-secret-key",
