@@ -6,6 +6,8 @@
         "/App_Plugins/UmbracoCommunityRollbackPreviewer.v13/rollback/rollback.css"
     ],
     "javascript": [
+        "/App_Plugins/UmbracoCommunityRollbackPreviewer.v13/rollback/loader.js",
+        "/App_Plugins/UmbracoCommunityRollbackPreviewer.v13/rollback/rollbackpreviewerManager.js",
         "/App_Plugins/UmbracoCommunityRollbackPreviewer.v13/rollback/rollback.resource.js",
         "/App_Plugins/UmbracoCommunityRollbackPreviewer.v13/rollback/rollback.controller.js",
         "/App_Plugins/UmbracoCommunityRollbackPreviewer.v13/rollback/rollback.decorator.service.js"

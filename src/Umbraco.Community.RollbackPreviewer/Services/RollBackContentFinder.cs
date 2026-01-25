@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Umbraco.Cms.Core;
+using Umbraco.Cms.Core.Configuration.Models;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
@@ -25,6 +26,7 @@ using Umbraco.Cms.Infrastructure.Scoping;
 using Umbraco.Community.RollbackPreviewer.Configuration;
 using Umbraco.Community.RollbackPreviewer.Extensions;
 using Umbraco.Extensions;
+using static Umbraco.Cms.Core.Collections.TopoGraph;
 
 namespace Umbraco.Community.RollbackPreviewer.Services
 {
@@ -42,6 +44,8 @@ namespace Umbraco.Community.RollbackPreviewer.Services
         private readonly IVariationContextAccessor _variationContextAccessor;
         private readonly RollbackPreviewerOptions _options;
         private readonly ITimeLimitedSecretService _secretService;
+        private readonly IRequestAccessor _requestAccessor;
+        private readonly IUmbracoContextAccessor _umbracoContextAccessor;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ContentFinderByPageIdQuery" /> class.
@@ -55,7 +59,9 @@ namespace Umbraco.Community.RollbackPreviewer.Services
             IVariationContextAccessor variationContextAccessor,
             PublishedContentConverter publishedContentConverter,
             IOptions<RollbackPreviewerOptions> options,
-            ITimeLimitedSecretService secretService)
+            ITimeLimitedSecretService secretService,
+            IRequestAccessor requestAccessor,
+            IUmbracoContextAccessor umbracoContextAccessor)
         {
             _contentService = contentService;
             _httpContextAccessor = httpContextAccessor;
@@ -69,6 +75,8 @@ namespace Umbraco.Community.RollbackPreviewer.Services
             _variationContextAccessor = variationContextAccessor;
             _options = options.Value;
             _secretService = secretService;
+            _requestAccessor = requestAccessor;
+            _umbracoContextAccessor = umbracoContextAccessor;
         }
 
         /// <inheritdoc />
@@ -77,6 +85,7 @@ namespace Umbraco.Community.RollbackPreviewer.Services
             try
             {
                 var req = _httpContextAccessor.HttpContext?.Request;
+
 
                 // Make sure we have what we need
                 if (req?.Query == null || !req.Query.ContainsKey("cid") || !req.Query.ContainsKey("vid"))
@@ -116,6 +125,33 @@ namespace Umbraco.Community.RollbackPreviewer.Services
                 if (culture.IsNullOrWhiteSpace())
                 {
                     culture = null;
+                }
+
+                if (!String.IsNullOrEmpty(req.Query["preview"]))
+                {
+
+                    if (!_umbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext? umbracoContext))
+                    {
+                        return false;
+                    }
+#if NET8_0
+                    var contentNode = umbracoContext.Content?.GetById(true, contentId);
+
+                    if (contentNode == null)
+                    {
+                        _logger.LogWarning("Unable to find preview content with ID {0}", contentId.ToString());
+                        return false;
+                    }
+
+                    // Set the content that we "created" back to the pipeline
+                    frequest.SetPublishedContent(contentNode);
+
+                    // Only set this if you are about to return true
+                    SetRobotsToNoIndexNoFollow();
+
+                    // Return true to tell the system we have the content and not try anymore
+                    return true;
+#endif
                 }
 
                 // Get the current copy of the node
@@ -222,7 +258,7 @@ namespace Umbraco.Community.RollbackPreviewer.Services
             var isAuthorised = false;
             var isAuthorisedForFrontend = _options.EnableFrontendPreviewAuthorisation;
 
-            if(isAuthorisedForFrontend)
+            if (isAuthorisedForFrontend)
             {
                 if (_options.EnableTimeLimitedSecrets)
                 {
@@ -236,7 +272,7 @@ namespace Umbraco.Community.RollbackPreviewer.Services
                 {
                     // Validate static secret
                     var hasSecret = !string.IsNullOrWhiteSpace(_options.FrontendPreviewAuthorisationSecret);
-                    if(hasSecret)
+                    if (hasSecret)
                     {
                         isAuthorised = secretFromQueryString == _options.FrontendPreviewAuthorisationSecret;
                     }
