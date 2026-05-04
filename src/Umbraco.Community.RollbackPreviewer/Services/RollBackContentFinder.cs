@@ -42,6 +42,8 @@ namespace Umbraco.Community.RollbackPreviewer.Services
         private readonly IVariationContextAccessor _variationContextAccessor;
         private readonly RollbackPreviewerOptions _options;
         private readonly ITimeLimitedSecretService _secretService;
+        private readonly IRequestAccessor _requestAccessor;
+        private readonly IUmbracoContextAccessor _umbracoContextAccessor;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ContentFinderByPageIdQuery" /> class.
@@ -55,7 +57,9 @@ namespace Umbraco.Community.RollbackPreviewer.Services
             IVariationContextAccessor variationContextAccessor,
             PublishedContentConverter publishedContentConverter,
             IOptions<RollbackPreviewerOptions> options,
-            ITimeLimitedSecretService secretService)
+            ITimeLimitedSecretService secretService,
+            IRequestAccessor requestAccessor,
+            IUmbracoContextAccessor umbracoContextAccessor)
         {
             _contentService = contentService;
             _httpContextAccessor = httpContextAccessor;
@@ -69,6 +73,8 @@ namespace Umbraco.Community.RollbackPreviewer.Services
             _variationContextAccessor = variationContextAccessor;
             _options = options.Value;
             _secretService = secretService;
+            _requestAccessor = requestAccessor;
+            _umbracoContextAccessor = umbracoContextAccessor;
         }
 
         /// <inheritdoc />
@@ -116,6 +122,32 @@ namespace Umbraco.Community.RollbackPreviewer.Services
                 if (culture.IsNullOrWhiteSpace())
                 {
                     culture = null;
+                }
+                if (!String.IsNullOrEmpty(req.Query["preview"]))
+                {
+
+                    if (!_umbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext? umbracoContext))
+                    {
+                        return false;
+                    }
+#if NET8_0
+                    var contentNode = umbracoContext.Content?.GetById(true, contentId);
+
+                    if (contentNode == null)
+                    {
+                        _logger.LogWarning("Unable to find preview content with ID {0}", contentId.ToString());
+                        return false;
+                    }
+
+                    // Set the content that we "created" back to the pipeline
+                    frequest.SetPublishedContent(contentNode);
+
+                    // Only set this if you are about to return true
+                    SetRobotsToNoIndexNoFollow();
+
+                    // Return true to tell the system we have the content and not try anymore
+                    return true;
+#endif
                 }
 
                 // Get the current copy of the node
