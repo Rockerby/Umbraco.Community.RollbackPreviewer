@@ -148,6 +148,19 @@ namespace Umbraco.Community.RollbackPreviewer.Services
                     // Return true to tell the system we have the content and not try anymore
                     return true;
 #endif
+#if NET9_0_OR_GREATER
+                    var contentNode = umbracoContext.Content?.GetById(true, contentId);
+
+                    if (contentNode == null)
+                    {
+                        _logger.LogWarning("Unable to find preview content with GUID {0}", contentId.ToString());
+                        return false;
+                    }
+
+                    frequest.SetPublishedContent(contentNode);
+                    SetRobotsToNoIndexNoFollow();
+                    return true;
+#endif
                 }
 
                 // Get the current copy of the node
