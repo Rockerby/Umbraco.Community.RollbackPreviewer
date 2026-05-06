@@ -5,9 +5,6 @@ import { umbExtensionsRegistry } from '@umbraco-cms/backoffice/extension-registr
 umbExtensionsRegistry.unregister('Umb.EntityAction.Document.Rollback');
 umbExtensionsRegistry.unregister('Umb.AuditLogAction.Document.Rollback');
 
-
-
-
 export const manifests: Array<UmbExtensionManifest> = [
 	{
 		type: 'entityAction',
