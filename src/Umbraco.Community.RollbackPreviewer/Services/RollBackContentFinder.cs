@@ -190,8 +190,6 @@ namespace Umbraco.Community.RollbackPreviewer.Services
                         _variationContextAccessor.VariationContext = new VariationContext(culture);
                         frequest.SetCulture(culture);
                     }
-                    // Copy the changes from the version
-                    content.CopyFrom(version, culture);
                 }
                 catch (CultureNotFoundException cnfe)
                 {
@@ -199,8 +197,16 @@ namespace Umbraco.Community.RollbackPreviewer.Services
                     return false;
                 }
 
-                // Convert the IContent to IPublishedContent.
-                IPublishedContent? pubContent = _publishedContentConverter.ToPublishedContent(content, culture)?
+                // Convert the version's IContent directly to IPublishedContent.
+                // We deliberately do NOT call content.CopyFrom(version, culture) here:
+                // when the requested versionId matches content.VersionId (the latest
+                // draft, which is what the share-URL controller uses), CopyFrom's
+                // internal flag (content.Id == other.Id && content.VersionId == other.VersionId)
+                // makes it copy PublishedValue rather than EditedValue, silently
+                // stripping any unpublished edits from the preview. Using the
+                // version's IContent straight from IContentVersionService.GetAsync
+                // gives us the correct EditedValue per property.
+                IPublishedContent? pubContent = _publishedContentConverter.ToPublishedContent(version, culture, isPreview: true)?
                     .CreateModel(_publishedModelFactory);
 
                 if (pubContent == null)

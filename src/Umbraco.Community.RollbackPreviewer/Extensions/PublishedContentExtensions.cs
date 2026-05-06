@@ -183,12 +183,17 @@ namespace Umbraco.Community.RollbackPreviewer.Extensions
             public PublishedPropertyWrapper(IPublishedContent content,  IPublishedPropertyType propertyType, IProperty property, string? culture, bool isPreviewing)
                 : this(propertyType, PropertyCacheLevel.Unknown) // cache level is ignored
             {
-                _sourceValue = property?.GetValue(culture);
+                // IProperty.GetValue requires a null culture for invariant properties and the
+                // matching culture for variant ones; passing the wrong one returns null.
+                var propertyCulture = propertyType.VariesByCulture() ? culture : null;
+                _sourceValue = property?.GetValue(propertyCulture);
 
-                if (_sourceValue == null)
+                if (_sourceValue == null && property != null)
                 {
-                    // Block properties return null for GetValue...
-                    _sourceValue = property?.Values?.FirstOrDefault()?.EditedValue;
+                    var matchingValue = property.Values.FirstOrDefault(v =>
+                        string.Equals(v.Culture ?? string.Empty, propertyCulture ?? string.Empty, StringComparison.OrdinalIgnoreCase)
+                        && string.IsNullOrEmpty(v.Segment));
+                    _sourceValue = matchingValue?.EditedValue ?? matchingValue?.PublishedValue;
                 }
 
                 _content = content;
