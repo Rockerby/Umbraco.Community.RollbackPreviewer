@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Umbraco.Cms.Api.Common.Attributes;
 using Umbraco.Cms.Api.Management.Controllers;
 using Umbraco.Cms.Core;
+using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Web.Common.Authorization;
 using Umbraco.Community.RollbackPreviewer.Configuration;
 using Umbraco.Community.RollbackPreviewer.Services;
@@ -21,13 +22,19 @@ namespace Umbraco.Community.RollbackPreviewer.Controllers
     {
         private readonly RollbackPreviewerOptions _options;
         private readonly ITimeLimitedSecretService _secretService;
+        private readonly IContentService _contentService;
+        private readonly IContentVersionService _contentVersionService;
 
         public RollbackPreviewerConfigurationController(
             IOptions<RollbackPreviewerOptions> options,
-            ITimeLimitedSecretService secretService)
+            ITimeLimitedSecretService secretService,
+            IContentService contentService,
+            IContentVersionService contentVersionService)
         {
             _options = options.Value;
             _secretService = secretService;
+            _contentService = contentService;
+            _contentVersionService = contentVersionService;
         }
 
         /// <summary>
@@ -65,6 +72,38 @@ namespace Umbraco.Community.RollbackPreviewer.Controllers
 
             return Ok(response);
         }
+
+#if NET9_0_OR_GREATER
+        [HttpGet("previewurl")]
+        [ProducesResponseType(typeof(RollbackPreviewerUrlResponse), StatusCodes.Status200OK)]
+#else
+        [Route("umbraco/backoffice/RollbackPreviewerConfiguration/GetPreviewUrl")]
+#endif
+        public IActionResult GetPreviewUrl(int contentId)
+        {
+            if (_options.EnableFrontendPreviewAuthorisation)
+            {
+                // Because we're loading in the latest content but "preview"
+                // we can just use the latest version ID.
+                var content = _contentService.GetById(contentId);
+                int? versionId = content?.VersionId;
+
+                if (versionId == null)
+                {
+                    return BadRequest("Content not found");
+                }
+
+                // Add the new query param of "preview=true" which loads the latest preview version in
+                string url = "/ucrbp?cid=" + contentId + "&vid=" + versionId + "&preview=true";
+                return Ok(new RollbackPreviewerUrlResponse()
+                {
+                    Url = url
+                });
+            }
+
+            return BadRequest("Front end preview not enabled");
+        }
+
     }
 
     /// <summary>
@@ -94,5 +133,17 @@ namespace Umbraco.Community.RollbackPreviewer.Controllers
         /// The expiration time in minutes for time-limited secrets (null if not using time-limited secrets)
         /// </summary>
         public int? ExpirationMinutes { get; set; }
+    }
+
+    /// <summary>
+    /// Response model for Rollback Previewer URL Preview
+    /// </summary>
+    public class RollbackPreviewerUrlResponse
+    {
+        /// <summary>
+        /// The preview URL (without domain)
+        /// </summary>
+        public string Url { get; set; }
+
     }
 }

@@ -3,7 +3,7 @@ var re = (e) => {
 };
 var se = (e, t, i) => t.has(e) || re("Cannot " + i);
 var v = (e, t, i) => (se(e, t, "read from private field"), i ? i.call(e) : t.get(e)), B = (e, t, i) => t.has(e) ? re("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, i), N = (e, t, i, r) => (se(e, t, "write to private field"), r ? r.call(e, i) : t.set(e, i), i);
-import { html as u, repeat as oe, unsafeHTML as we, nothing as A, css as F, state as $, customElement as G, property as Ce, query as X, LitElement as $e } from "@umbraco-cms/backoffice/external/lit";
+import { html as u, repeat as oe, unsafeHTML as we, nothing as A, css as F, state as C, customElement as G, property as $e, query as X, LitElement as Ce } from "@umbraco-cms/backoffice/external/lit";
 import { UMB_DOCUMENT_ENTITY_TYPE as ne, UmbDocumentDetailRepository as xe } from "@umbraco-cms/backoffice/document";
 import { DocumentVersionService as T } from "@umbraco-cms/backoffice/external/backend-api";
 import { tryExecute as R } from "@umbraco-cms/backoffice/resources";
@@ -18,7 +18,7 @@ import { UMB_ENTITY_CONTEXT as Re } from "@umbraco-cms/backoffice/entity";
 import { UmbVariantId as Ue } from "@umbraco-cms/backoffice/variant";
 import { UMB_ACTION_EVENT_CONTEXT as qe } from "@umbraco-cms/backoffice/action";
 import { UmbRequestReloadStructureForEntityEvent as ze, UmbEntityUpdatedEvent as Oe } from "@umbraco-cms/backoffice/entity-action";
-import { c as Me } from "./client.gen-CSWNPGiu.js";
+import { R as Me } from "./bundle.manifests-CCn6FmEI.js";
 var g;
 class We {
   /**
@@ -463,22 +463,22 @@ p.styles = [
 		`
 ];
 x([
-  $()
+  C()
 ], p.prototype, "_versions", 2);
 x([
-  $()
+  C()
 ], p.prototype, "_selectedVersion", 2);
 x([
-  $()
+  C()
 ], p.prototype, "_selectedCulture", 2);
 x([
-  $()
+  C()
 ], p.prototype, "_isInvariant", 2);
 x([
-  $()
+  C()
 ], p.prototype, "_availableVariants", 2);
 x([
-  $()
+  C()
 ], p.prototype, "_diffs", 2);
 p = x([
   G("umb-rollback-modal")
@@ -563,7 +563,7 @@ const Je = {
     height: 1080
   }
 };
-let P = class extends $e {
+let P = class extends Ce {
   constructor() {
     super(...arguments), this.src = "", this._device = Je;
   }
@@ -633,10 +633,10 @@ P.styles = [
     `
 ];
 W([
-  Ce({ type: String })
+  $e({ type: String })
 ], P.prototype, "src", 2);
 W([
-  $()
+  C()
 ], P.prototype, "_device", 2);
 W([
   X("iframe")
@@ -644,36 +644,16 @@ W([
 P = W([
   G("rp-iframe")
 ], P);
-const Fe = (e) => ((e == null ? void 0 : e.client) ?? Me).get({
-  security: [
-    {
-      scheme: "bearer",
-      type: "http"
-    }
-  ],
-  url: "/umbraco/rollbackpreviewer/api/v1/configuration",
-  ...e
-});
-class Ge {
-  /**
-   * Fetches the configuration settings from the backend API
-   * @returns Promise with configuration data
-   */
-  static async getConfiguration() {
-    const { data: t, error: i } = await Fe();
-    return i ? (console.error(i), null) : t !== void 0 ? t : null;
-  }
-}
-var Xe = Object.defineProperty, Ye = Object.getOwnPropertyDescriptor, fe = (e) => {
+var Fe = Object.defineProperty, Ge = Object.getOwnPropertyDescriptor, fe = (e) => {
   throw TypeError(e);
 }, Z = (e, t, i, r) => {
-  for (var s = r > 1 ? void 0 : r ? Ye(t, i) : t, n = e.length - 1, o; n >= 0; n--)
+  for (var s = r > 1 ? void 0 : r ? Ge(t, i) : t, n = e.length - 1, o; n >= 0; n--)
     (o = e[n]) && (s = (r ? o(t, i, s) : o(s)) || s);
-  return r && s && Xe(t, i, s), s;
-}, ee = (e, t, i) => t.has(e) || fe("Cannot " + i), d = (e, t, i) => (ee(e, t, "read from private field"), i ? i.call(e) : t.get(e)), U = (e, t, i) => t.has(e) ? fe("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, i), J = (e, t, i, r) => (ee(e, t, "write to private field"), t.set(e, i), i), S = (e, t, i) => (ee(e, t, "access private method"), i), b, V, y, C, ve, be, te, me;
+  return r && s && Fe(t, i, s), s;
+}, ee = (e, t, i) => t.has(e) || fe("Cannot " + i), d = (e, t, i) => (ee(e, t, "read from private field"), i ? i.call(e) : t.get(e)), U = (e, t, i) => t.has(e) ? fe("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, i), J = (e, t, i, r) => (ee(e, t, "write to private field"), t.set(e, i), i), S = (e, t, i) => (ee(e, t, "access private method"), i), b, V, y, $, ve, be, te, me;
 let D = class extends p {
   constructor() {
-    super(), U(this, C), U(this, b, !1), U(this, V, ""), U(this, y, null), S(this, C, ve).call(this);
+    super(), U(this, $), U(this, b, !1), U(this, V, ""), U(this, y, null), S(this, $, ve).call(this);
   }
   async copyUrlToClipboard(e) {
     var n, o, l;
@@ -690,7 +670,7 @@ let D = class extends p {
   // This is a LitElement specific method that is called when the element is first rendered
   updated() {
     setTimeout(() => {
-      S(this, C, te).call(this);
+      S(this, $, te).call(this);
     }, 300);
   }
   renderSelectedVersionVisualPreview() {
@@ -753,7 +733,7 @@ let D = class extends p {
         <uui-button
           slot="action-menu"
           look="secondary"
-          @click=${S(this, C, be)}
+          @click=${S(this, $, be)}
           style="margin-right:24px"
           label=${d(this, b) ? "Visual difference" : "JSON difference"}
         >
@@ -799,13 +779,13 @@ let D = class extends p {
 b = /* @__PURE__ */ new WeakMap();
 V = /* @__PURE__ */ new WeakMap();
 y = /* @__PURE__ */ new WeakMap();
-C = /* @__PURE__ */ new WeakSet();
+$ = /* @__PURE__ */ new WeakSet();
 ve = async function() {
-  J(this, V, window.location.origin), J(this, y, await Ge.getConfiguration());
+  J(this, V, window.location.origin), J(this, y, await Me.getConfiguration());
 };
 be = async function() {
   J(this, b, !d(this, b)), this.requestUpdate(), d(this, b) || (await this.updateComplete, setTimeout(() => {
-    S(this, C, te).call(this);
+    S(this, $, te).call(this);
   }, 300));
 };
 te = function() {
@@ -825,7 +805,7 @@ te = function() {
       o && ((l = o.contentWindow) == null || l.removeEventListener(
         "scroll",
         t
-      ), S(this, C, me).call(this, s, o), window.requestAnimationFrame(() => {
+      ), S(this, $, me).call(this, s, o), window.requestAnimationFrame(() => {
         var a;
         (a = o == null ? void 0 : o.contentWindow) == null || a.addEventListener(
           "scroll",
@@ -865,9 +845,9 @@ Z([
 D = Z([
   G("rp-rollback-modal")
 ], D);
-const pt = D;
+const dt = D;
 export {
   D as RpRollbackModalElement,
-  pt as default
+  dt as default
 };
-//# sourceMappingURL=rollback-previewer-modal.element-Cj0M6ttc.js.map
+//# sourceMappingURL=rollback-previewer-modal.element-CbGVxFFs.js.map
