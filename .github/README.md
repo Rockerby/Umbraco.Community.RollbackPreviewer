@@ -9,8 +9,8 @@
 
 Enhance Umbraco's rollback functionality with visual rollback previews. This extension builds ontop of the existing Umbraco Rollback modal and allows for the JSON diff to be viewed as well as the visual diff. **NEW FEATURE!** You can now share the preview as a publicly available URL. With configurable outputs for a secret key to lock this down, and have an expiration time on the URL, this is the perfect way to share content with externals.
 
-<img alt="Visual difference" src="https://github.com/Rockerby/Umbraco.Community.RollbackPreviewer/blob/develop/docs/screenshots/visual_diff.png"> 
-<img alt="JSON difference" src="https://github.com/Rockerby/Umbraco.Community.RollbackPreviewer/blob/develop/docs/screenshots/json_diff.png">
+<img alt="Visual difference" src="https://github.com/Rockerby/Umbraco.Community.RollbackPreviewer/blob/main/docs/screenshots/visual_diff.png"> 
+<img alt="JSON difference" src="https://github.com/Rockerby/Umbraco.Community.RollbackPreviewer/blob/main/docs/screenshots/json_diff.png">
 
 ## Installation
 
