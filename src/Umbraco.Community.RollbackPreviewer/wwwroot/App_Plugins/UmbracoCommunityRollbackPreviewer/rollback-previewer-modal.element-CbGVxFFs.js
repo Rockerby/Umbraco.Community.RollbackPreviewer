@@ -18,7 +18,7 @@ import { UMB_ENTITY_CONTEXT as Re } from "@umbraco-cms/backoffice/entity";
 import { UmbVariantId as Ue } from "@umbraco-cms/backoffice/variant";
 import { UMB_ACTION_EVENT_CONTEXT as qe } from "@umbraco-cms/backoffice/action";
 import { UmbRequestReloadStructureForEntityEvent as ze, UmbEntityUpdatedEvent as Oe } from "@umbraco-cms/backoffice/entity-action";
-import { R as Me } from "./bundle.manifests-Causo6f7.js";
+import { R as Me } from "./bundle.manifests-CCn6FmEI.js";
 var g;
 class We {
   /**
@@ -850,4 +850,4 @@ export {
   D as RpRollbackModalElement,
   dt as default
 };
-//# sourceMappingURL=rollback-previewer-modal.element-B9XauE1o.js.map
+//# sourceMappingURL=rollback-previewer-modal.element-CbGVxFFs.js.map

@@ -5,7 +5,7 @@ var w = (e, t, r) => t.has(e) || v("Cannot " + r);
 var n = (e, t, r) => (w(e, t, "read from private field"), r ? r.call(e) : t.get(e)), d = (e, t, r) => t.has(e) ? v("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, r), h = (e, t, r, i) => (w(e, t, "write to private field"), i ? i.call(e, r) : t.set(e, r), r);
 import { UMB_DOCUMENT_WORKSPACE_CONTEXT as l } from "@umbraco-cms/backoffice/document";
 import { UMB_NOTIFICATION_CONTEXT as f } from "@umbraco-cms/backoffice/notification";
-import { R as m } from "./bundle.manifests-Causo6f7.js";
+import { R as m } from "./bundle.manifests-CCn6FmEI.js";
 import { UmbWorkspaceActionBase as g } from "@umbraco-cms/backoffice/workspace";
 var o;
 class u extends g {
@@ -60,4 +60,4 @@ export {
   u as RpSaveAndShareActionElement,
   x as api
 };
-//# sourceMappingURL=save-and-share-action.element-DiyynW2A.js.map
+//# sourceMappingURL=save-and-share-action.element-B3H7AIdH.js.map
